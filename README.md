@@ -2,7 +2,14 @@
 
 Let's see how hard it would be to create web framework 
 like Ruby on Rails but in Kotlin. 
-Kales run on top of [Ktor](https://ktor.io/)
+Kales run on top of [Ktor](https://ktor.io/).
+
+## Running 
+
+```
+./gradlew sampleapp:run
+```
+then open `http://localhost:8080` on your browser.
 
 ## Usage
 
@@ -12,24 +19,26 @@ some of the features exposed by Kales.
 `ExampleController.kt`
 ```kotlin
 class ExampleController : ApplicationController() {
-  override fun <T : ActionView> index() = 
-      ExampleIndexView::class as KClass<T>
+  override fun index() = { html: HTML ->
+    val bindings = ExampleIndexViewModel("Felipe")
+    ExampleIndexView(html).render(bindings)
+  }
 }
 ```
 
-`ExampleIndexView`
+`ExampleIndexView.kt`
 ```kotlin
-class ExampleIndexView(html: HTML) : ActionView(html) {
-  override fun render() {
+class ExampleIndexView(html: HTML) : ActionView<ExampleIndexViewModel>(html) {
+  override fun render(bindings: ExampleIndexViewModel?) {
     html.head {
-      title { +"Hello World" }
+      title { +"Kales sample app" }
     }
     html.body {
       h1 {
-        +"Title"
+        +"Hello, ${bindings?.name}"
       }
       p {
-        +"Hello from Kales"
+        +"Greetings from Kales"
       }
     }
   }

@@ -1,16 +1,15 @@
 package kales.actionpack
 
-import kales.actionview.ActionView
-import kotlin.reflect.KClass
+import kotlinx.html.HTML
 
-abstract class ApplicationController() {
-  open fun <T : ActionView> index(): KClass<T>? = null
+abstract class ApplicationController {
+  open fun index(): ((HTML) -> Unit)? = null
 
-  open fun <T : ActionView> show(): KClass<T>? = null
+  open fun show(): ((HTML) -> Unit)? = null
 
-  open fun <T : ActionView> create(): KClass<T>? = null
+  open fun create(): ((HTML) -> Unit)? = null
 
-  open fun <T : ActionView> new(): KClass<T>? = null
+  open fun new(): ((HTML) -> Unit)? = null
 
   companion object {
     fun newInstance() {
