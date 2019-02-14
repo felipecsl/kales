@@ -10,7 +10,7 @@ Check the `sampleapp` directory for an application that uses
 some of the features exposed by Kales.
 
 `ExampleController.kt`
-```$kotlin
+```kotlin
 class ExampleController : ApplicationController() {
   override fun <T : ActionView> index() = 
       ExampleIndexView::class as KClass<T>
