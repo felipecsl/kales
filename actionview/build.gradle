@@ -22,5 +22,7 @@ publishing {
 
 dependencies {
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
+  api "io.ktor:ktor-server-core:$ktorVersion"
+  api "io.ktor:ktor-html-builder:$ktorVersion"
   testImplementation "com.google.truth:truth:$truthVersion"
 }

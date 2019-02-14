@@ -21,6 +21,9 @@ publishing {
 }
 
 dependencies {
+  api project(":actionpack")
+  api project(":actionview")
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
+  implementation "ch.qos.logback:logback-classic:1.2.3"
   testImplementation "com.google.truth:truth:$truthVersion"
 }
