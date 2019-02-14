@@ -1,0 +1,7 @@
+.idea/
+out/
+.gradle/
+.DS_Store
+build/
+jd-gui.cfg
+*.iml

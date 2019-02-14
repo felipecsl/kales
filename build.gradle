@@ -1,0 +1,14 @@
+buildscript {
+  repositories {
+    mavenLocal()
+    jcenter()
+  }
+}
+
+allprojects {
+  apply from: "$rootDir/gradle/deps.gradle"
+
+  repositories {
+    jcenter()
+  }
+}

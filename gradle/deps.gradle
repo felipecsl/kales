@@ -1,0 +1,4 @@
+ext {
+  kotlinVersion = '1.3.20'
+  truthVersion = '0.42'
+}

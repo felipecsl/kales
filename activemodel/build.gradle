@@ -1,0 +1,26 @@
+plugins {
+  id 'java-library'
+  id 'maven-publish'
+  id "org.jetbrains.kotlin.jvm" version "1.3.20"
+}
+
+group = 'krails'
+version = '1.0'
+
+sourceSets {
+  main.java.srcDirs += 'src/main/kotlin'
+  test.java.srcDirs += 'src/test/kotlin'
+}
+
+publishing {
+  publications {
+    maven(MavenPublication) {
+      from components.java
+    }
+  }
+}
+
+dependencies {
+  implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
+  testImplementation "com.google.truth:truth:$truthVersion"
+}
