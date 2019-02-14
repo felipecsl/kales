@@ -1,7 +1,7 @@
-package krails.sample.views.example
+package kales.sample.views.example
 
 import kotlinx.html.*
-import krails.actionview.ActionView
+import kales.actionview.ActionView
 
 class ExampleIndexView(html: HTML) : ActionView(html) {
   override fun render() {
@@ -11,6 +11,9 @@ class ExampleIndexView(html: HTML) : ActionView(html) {
     html.body {
       h1 {
         +"Title"
+      }
+      p {
+        +"Hello from Kales"
       }
     }
   }

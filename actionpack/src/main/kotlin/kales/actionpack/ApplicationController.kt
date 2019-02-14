@@ -1,6 +1,6 @@
-package krails.actionpack
+package kales.actionpack
 
-import krails.actionview.ActionView
+import kales.actionview.ActionView
 import kotlin.reflect.KClass
 
 abstract class ApplicationController() {

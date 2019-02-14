@@ -1,4 +1,4 @@
-package krails.actionview
+package kales.actionview
 
 import kotlinx.html.HTML
 

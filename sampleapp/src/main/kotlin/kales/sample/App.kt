@@ -1,15 +1,15 @@
-package krails.sample
+package kales.sample
 
 import io.ktor.application.Application
 import io.ktor.application.install
 import io.ktor.features.CallLogging
 import io.ktor.features.DefaultHeaders
 import io.ktor.routing.Routing
-import krails.get
+import kales.get
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
-import krails.sample.controllers.ExampleController
-import krails.sample.views.example.ExampleIndexView
+import kales.sample.controllers.ExampleController
+import kales.sample.views.example.ExampleIndexView
 
 fun Application.module() {
   install(DefaultHeaders)
@@ -22,7 +22,7 @@ fun Application.module() {
 fun main(args: Array<String>) {
   embeddedServer(
       Netty, 8080,
-      watchPaths = listOf("krails"),
+      watchPaths = listOf("kales"),
       module = Application::module
   ).start()
 }

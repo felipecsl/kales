@@ -1,11 +1,11 @@
-package krails
+package kales
 
 import io.ktor.application.call
 import io.ktor.html.respondHtml
 import io.ktor.routing.Route
 import io.ktor.routing.get
-import krails.actionpack.ApplicationController
-import krails.actionview.ActionView
+import kales.actionpack.ApplicationController
+import kales.actionview.ActionView
 import java.lang.reflect.Constructor
 import kotlin.reflect.KClass
 
