@@ -5,10 +5,10 @@ import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
 import kales.kalesApplication
 import kales.sample.app.controllers.ExampleController
-import kales.sample.app.views.layouts.SampleApplicationLayout
+import kales.sample.app.views.layouts.ExampleApplicationLayout
 
 fun Application.module() {
-  kalesApplication(SampleApplicationLayout::class) {
+  kalesApplication(ExampleApplicationLayout::class) {
     get("/", ExampleController::index)
     get("/foo", ExampleController::foo)
   }

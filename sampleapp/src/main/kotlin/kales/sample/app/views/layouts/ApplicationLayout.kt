@@ -4,7 +4,7 @@ import io.ktor.html.insert
 import kales.actionview.ApplicationLayout
 import kotlinx.html.*
 
-class SampleApplicationLayout : ApplicationLayout() {
+class ExampleApplicationLayout : ApplicationLayout() {
   override fun HTML.apply() {
     head {
       title { +"Kales sample app" }
