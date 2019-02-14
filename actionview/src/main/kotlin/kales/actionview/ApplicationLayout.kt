@@ -5,6 +5,6 @@ import io.ktor.html.Template
 import kotlinx.html.FlowContent
 import kotlinx.html.HTML
 
-interface ApplicationLayout : Template<HTML> {
-  val body: Placeholder<FlowContent>
+abstract class ApplicationLayout : Template<HTML> {
+  val body = Placeholder<FlowContent>()
 }
