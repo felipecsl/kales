@@ -2,7 +2,7 @@
 
 Let's see how hard it would be to create web framework 
 like Ruby on Rails but in Kotlin. 
-Kales run on top of [Ktor](ktor.io)
+Kales run on top of [Ktor](https://ktor.io/)
 
 ## Usage
 
