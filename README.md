@@ -44,6 +44,14 @@ class ExampleIndexView(
 }
 ```
 
+#### View Model
+`ExampleIndexViewModel.kt`
+```kotlin
+data class ExampleIndexViewModel(
+    val name: String
+) : ViewModel
+```
+
 #### Application layout class
 `ExampleApplicationLayout.kt`
 ```kotlin
