@@ -1,7 +1,7 @@
 package kales.actionview
 
-import kotlinx.html.HTML
+import kotlinx.html.FlowContent
 
-abstract class ActionView<T : ViewModel>(val html: HTML) {
-  abstract fun render(bindings: T? = null)
+abstract class ActionView<T : ViewModel>(val bindings: T? = null) {
+  abstract fun render(content: FlowContent)
 }

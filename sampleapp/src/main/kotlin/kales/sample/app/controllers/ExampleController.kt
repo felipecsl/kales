@@ -1,14 +1,19 @@
 package kales.sample.app.controllers
 
 import kales.actionpack.ApplicationController
+import kales.actionview.ActionView
 import kales.sample.app.views.example.ExampleIndexView
 import kales.sample.app.views.example.ExampleIndexViewModel
-import kotlinx.html.HTML
 
 class ExampleController : ApplicationController() {
   @Suppress("UNCHECKED_CAST")
-  override fun index() = { html: HTML ->
+  override fun index(): ActionView<*>? {
     val bindings = ExampleIndexViewModel("Felipe")
-    ExampleIndexView(html).render(bindings)
+    return ExampleIndexView(bindings)
+  }
+
+  fun foo(): ActionView<*>? {
+    val bindings = ExampleIndexViewModel("Foo")
+    return ExampleIndexView(bindings)
   }
 }

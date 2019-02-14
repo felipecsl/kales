@@ -44,7 +44,3 @@ class ExampleIndexView(html: HTML) : ActionView<ExampleIndexViewModel>(html) {
   }
 }
 ```
-
-# License 
-
-MIT

@@ -1,21 +1,19 @@
 package kales.sample.app.views.example
 
-import kotlinx.html.*
 import kales.actionview.ActionView
-import kales.actionview.ViewModel
+import kotlinx.html.FlowContent
+import kotlinx.html.h2
+import kotlinx.html.p
 
-class ExampleIndexView(html: HTML) : ActionView<ExampleIndexViewModel>(html) {
-  override fun render(bindings: ExampleIndexViewModel?) {
-    html.head {
-      title { +"Kales sample app" }
+class ExampleIndexView(
+    bindings: ExampleIndexViewModel?
+) : ActionView<ExampleIndexViewModel>(bindings) {
+  override fun render(content: FlowContent) {
+    content.h2 {
+      +"Hello, ${bindings?.name}"
     }
-    html.body {
-      h1 {
-        +"Hello, ${bindings?.name}"
-      }
-      p {
-        +"Greetings from Kales"
-      }
+    content.p {
+      +"Greetings from Kales"
     }
   }
 }

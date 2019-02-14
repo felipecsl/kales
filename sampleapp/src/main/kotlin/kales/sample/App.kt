@@ -1,27 +1,23 @@
 package kales.sample
 
 import io.ktor.application.Application
-import io.ktor.application.install
-import io.ktor.features.CallLogging
-import io.ktor.features.DefaultHeaders
-import io.ktor.routing.Routing
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
-import kales.get
+import kales.kalesApplication
 import kales.sample.app.controllers.ExampleController
+import kales.sample.app.views.layouts.SampleApplicationLayout
 
 fun Application.module() {
-  install(DefaultHeaders)
-  install(CallLogging)
-  install(Routing) {
+  kalesApplication(SampleApplicationLayout::class) {
     get("/", ExampleController::index)
+    get("/foo", ExampleController::foo)
   }
 }
 
-fun main(args: Array<String>) {
+fun main() {
   embeddedServer(
       Netty, 8080,
-      watchPaths = listOf("kales"),
+      watchPaths = listOf("sampleapp"),
       module = Application::module
   ).start()
 }
