@@ -15,10 +15,11 @@ abstract class ApplicationRecord {
       val data = yaml.load<Map<String, Any>>(stream)
       val devData = data["development"] as Map<String, String>
       val host = devData["host"]
+      val adapter = devData["adapter"]
       val database = devData["database"]
       val username = devData["username"]
       val password = devData["password"]
-      return "jdbc:postgresql://$host/$database?user=$username&password=$password"
+      return "jdbc:$adapter://$host/$database?user=$username&password=$password"
     }
 
     inline fun <reified T : ApplicationRecord> allRecords(): List<T> {

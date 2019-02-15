@@ -4,6 +4,9 @@ Let's see how hard it would be to create web framework
 like Ruby on Rails but in Kotlin. 
 Kales run on top of [Ktor](https://ktor.io/).
 
+It uses a Model-View-Controller architecture. Database access is
+done via [JDBI](http://jdbi.org/) and configured from a `database.yml` resource file (similar to Rails).
+
 ## Running 
 
 ```
@@ -16,18 +19,33 @@ then open `http://localhost:8080` on your browser.
 Check the `sampleapp` directory for an application that uses
 some of the features exposed by Kales.
 
-#### Controller class
-`ExampleController.kt`
+#### Model
+`Video.kt`
 ```kotlin
-class ExampleController : ApplicationController() {
-  override fun index(): ActionView<*>? {
-    val bindings = ExampleIndexViewModel("Felipe")
-    return ExampleIndexView(bindings)
+data class Video(
+    val id: Int,
+    val title: String
+) : ApplicationRecord() {
+  companion object {
+    // Returns all records in the table
+    fun all() = allRecords<Video>()
   }
 }
 ```
 
-#### View class
+#### Controller
+`ExampleController.kt`
+```kotlin
+class ExampleController : ApplicationController() {
+  override fun index(): ExampleIndexView =
+      ExampleIndexView(ExampleIndexViewModel("Felipe", Video.all()))
+
+  fun details() =
+      ExampleIndexView(ExampleIndexViewModel("Details", listOf()))
+}
+```
+
+#### View
 `ExampleIndexView.kt`
 ```kotlin
 class ExampleIndexView(
@@ -52,23 +70,32 @@ data class ExampleIndexViewModel(
 ) : ViewModel
 ```
 
-#### Application layout class
+#### Application layout
 `ExampleApplicationLayout.kt`
 ```kotlin
-class ExampleApplicationLayout : ApplicationLayout() {
-  override fun HTML.apply() {
-    head {
-      title { +"Kales sample app" }
+class ExampleIndexView(
+    bindings: ExampleIndexViewModel?
+) : ActionView<ExampleIndexViewModel>(bindings) {
+  override fun render(content: FlowContent) {
+    content.h2 {
+      +"Hello, ${bindings?.name}"
     }
-    body {
-      h1 { +"Kales sample app" }
-      insert(body)
+    content.p {
+      +"Greetings from Kales"
+    }
+    content.h3 { +"Videos" }
+    content.ul {
+      bindings?.videos?.forEach { v ->
+        li {
+          +v.title
+        }
+      }
     }
   }
 }
 ```
 
-#### Main function
+#### Main
 `App.kt`
 ```kotlin
 fun main() {
@@ -78,7 +105,7 @@ fun main() {
       module = {
         kalesApplication(ExampleApplicationLayout::class) {
           get("/", ExampleController::index)
-          get("/foo", ExampleController::foo)
+          get("/details", ExampleController::details)
         }
       }
   ).start()

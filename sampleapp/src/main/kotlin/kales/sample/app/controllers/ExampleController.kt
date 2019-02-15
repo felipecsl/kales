@@ -6,10 +6,8 @@ import kales.sample.app.views.example.ExampleIndexView
 import kales.sample.app.views.example.ExampleIndexViewModel
 
 class ExampleController : ApplicationController() {
-  @Suppress("UNCHECKED_CAST")
-  override fun index(): ExampleIndexView {
-    return ExampleIndexView(ExampleIndexViewModel("Felipe", Video.all()))
-  }
+  override fun index(): ExampleIndexView =
+      ExampleIndexView(ExampleIndexViewModel("Felipe", Video.all()))
 
   fun foo() =
       ExampleIndexView(ExampleIndexViewModel("Foo", listOf()))
