@@ -31,5 +31,6 @@ dependencies {
   api "org.jdbi:jdbi3-core:$jdbiVersion"
   api "org.jdbi:jdbi3-kotlin:$jdbiVersion"
   api "org.jdbi:jdbi3-postgres:$jdbiVersion"
+  implementation 'org.yaml:snakeyaml:1.23'
   testImplementation "com.google.truth:truth:$truthVersion"
 }
