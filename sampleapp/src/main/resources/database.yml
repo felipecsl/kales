@@ -1,0 +1,5 @@
+development:
+  host: localhost
+  database: kales_sample
+  username: felipecsl
+  password:

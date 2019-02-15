@@ -23,7 +23,9 @@ publishing {
 dependencies {
   api project(":actionpack")
   api project(":actionview")
+  api project(":activemodel")
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
   implementation "ch.qos.logback:logback-classic:1.2.3"
+  implementation 'org.yaml:snakeyaml:1.23'
   testImplementation "com.google.truth:truth:$truthVersion"
 }
