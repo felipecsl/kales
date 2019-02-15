@@ -37,7 +37,7 @@ data class Video(
 `ExampleController.kt`
 ```kotlin
 class ExampleController : ApplicationController() {
-  override fun index(): ExampleIndexView =
+  override fun index() =
       ExampleIndexView(ExampleIndexViewModel("Felipe", Video.all()))
 
   fun details() =
@@ -58,6 +58,14 @@ class ExampleIndexView(
     content.p {
       +"Greetings from Kales"
     }
+    content.h3 { +"Videos" }
+    content.ul {
+      bindings?.videos?.forEach { v ->
+        li {
+          +v.title
+        }
+      }
+    }
   }
 }
 ```
@@ -73,23 +81,14 @@ data class ExampleIndexViewModel(
 #### Application layout
 `ExampleApplicationLayout.kt`
 ```kotlin
-class ExampleIndexView(
-    bindings: ExampleIndexViewModel?
-) : ActionView<ExampleIndexViewModel>(bindings) {
-  override fun render(content: FlowContent) {
-    content.h2 {
-      +"Hello, ${bindings?.name}"
+class ExampleApplicationLayout : ApplicationLayout() {
+  override fun HTML.apply() {
+    head {
+      title { +"Kales sample app" }
     }
-    content.p {
-      +"Greetings from Kales"
-    }
-    content.h3 { +"Videos" }
-    content.ul {
-      bindings?.videos?.forEach { v ->
-        li {
-          +v.title
-        }
-      }
+    body {
+      h1 { +"Kales sample app" }
+      insert(body)
     }
   }
 }

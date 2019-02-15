@@ -6,7 +6,7 @@ import kales.sample.app.views.example.ExampleIndexView
 import kales.sample.app.views.example.ExampleIndexViewModel
 
 class ExampleController : ApplicationController() {
-  override fun index(): ExampleIndexView =
+  override fun index() =
       ExampleIndexView(ExampleIndexViewModel("Felipe", Video.all()))
 
   fun foo() =
