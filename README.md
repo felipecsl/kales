@@ -14,6 +14,15 @@ done via [JDBI](http://jdbi.org/) and configured from a `database.yml` resource 
 ```
 then open `http://localhost:8080` on your browser.
 
+## Download
+
+```
+  implementation 'com.felipecsl.kales:kales:0.0.1-SNAPSHOT'`
+```
+
+Snapshots of the development version are available in
+[Sonatype's `snapshots` repository](https://oss.sonatype.org/content/repositories/snapshots/).
+
 ## Usage
 
 Check the `sampleapp` directory for an application that uses

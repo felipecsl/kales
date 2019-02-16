@@ -96,8 +96,8 @@ class Index extends React.Component {
       <div
         className="productShowcaseSection paddingBottom"
         style={{textAlign: 'center'}}>
-        <h2>Feature Callout</h2>
-        <MarkdownBlock>These are features of this project</MarkdownBlock>
+        <h2>Batteries-included web development</h2>
+        <MarkdownBlock>Finally the productivity of Ruby on Rails with a type-safe and modern language.</MarkdownBlock>
       </div>
     );
 
@@ -148,13 +148,13 @@ class Index extends React.Component {
             content: 'This is the content of my feature',
             image: `${baseUrl}img/docusaurus.svg`,
             imageAlign: 'top',
-            title: 'Feature One',
+            title: 'Focused on developer productivity',
           },
           {
             content: 'The content of my second feature',
             image: `${baseUrl}img/docusaurus.svg`,
             imageAlign: 'top',
-            title: 'Feature Two',
+            title: 'Opinionated with sane defaults',
           },
         ]}
       </Block>

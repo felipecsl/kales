@@ -1,0 +1,149 @@
+// Reference: https://medium.com/@nmauti/sign-and-publish-on-maven-central-a-project-with-the-new-maven-publish-gradle-plugin-22a72a4bfd4b
+
+ext.isReleaseVersion = !VERSION.endsWith("SNAPSHOT")
+
+String getReleaseRepositoryUrl() {
+  return hasProperty('RELEASE_REPOSITORY_URL') ? RELEASE_REPOSITORY_URL
+      : "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+}
+
+String getSnapshotRepositoryUrl() {
+  return hasProperty('SNAPSHOT_REPOSITORY_URL') ? SNAPSHOT_REPOSITORY_URL
+      : "https://oss.sonatype.org/content/repositories/snapshots/"
+}
+
+String getRepositoryUrl() {
+  return isReleaseVersion ? getReleaseRepositoryUrl() : getSnapshotRepositoryUrl()
+}
+
+String getRepositoryUsername() {
+  return hasProperty('SONATYPE_USERNAME') ? SONATYPE_USERNAME : ""
+}
+
+String getRepositoryPassword() {
+  return hasProperty('SONATYPE_PASSWORD') ? SONATYPE_PASSWORD : ""
+}
+
+def customizePom(pom) {
+  pom.withXml {
+    def root = asNode()
+
+    // eliminate test-scoped dependencies (no need in maven central POMs)
+    root.dependencies.removeAll { dep ->
+      dep.scope == "test"
+    }
+
+    // add all items necessary for maven central publication
+    root.children().last() + {
+      resolveStrategy = Closure.DELEGATE_FIRST
+
+      description 'Kotlin on Rails'
+      name 'Kales'
+      url 'https://github.com/felipecsl/kales'
+      organization {
+        name GROUP_ID
+        url 'https://github.com/felipecsl'
+      }
+      issueManagement {
+        system 'GitHub'
+        url 'https://github.com/felipecsl/kales/issues'
+      }
+      licenses {
+        license {
+          name 'Apache License 2.0'
+          url 'https://github.com/felipecsl/kales/blob/master/LICENSE'
+          distribution 'repo'
+        }
+      }
+      scm {
+        url 'https://github.com/felipecsl/kales'
+        connection 'scm:git:git://github.com/felipecsl/kales.git'
+        developerConnection 'scm:git:ssh://git@github.com:felipecsl/kales.git'
+      }
+      developers {
+        developer {
+          name 'Mautini'
+        }
+      }
+    }
+  }
+}
+
+group = GROUP_ID
+version = VERSION
+
+task sourceJar(type: Jar) {
+  classifier "sources"
+  from sourceSets.main.allJava
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+  classifier "javadoc"
+  from javadoc.destinationDir
+}
+
+signing {
+  required { isReleaseVersion && gradle.taskGraph.hasTask("publish") }
+  sign configurations.archives
+}
+
+tasks.withType(Sign) {
+  onlyIf { isReleaseVersion }
+}
+
+artifacts {
+  archives jar
+  archives sourceJar
+  archives javadocJar
+}
+
+publishing {
+  publications {
+    maven(MavenPublication) {
+      customizePom(pom)
+      from components.java
+      artifactId = project.artifact
+
+      // create the sign pom artifact
+      pom.withXml {
+        def pomFile = file("${project.buildDir}/generated-pom.xml")
+        writeTo(pomFile)
+        def pomAscFile = signing.sign(pomFile).signatureFiles[0]
+        artifact(pomAscFile) {
+          classifier = null
+          extension = 'pom.asc'
+        }
+      }
+
+      artifact(sourceJar) {
+        classifier = 'sources'
+      }
+      artifact(javadocJar) {
+        classifier = 'javadoc'
+      }
+
+      // create the signed artifacts
+      project.tasks.signArchives.signatureFiles.each {
+        artifact(it) {
+          def matcher = it.file =~ /-(sources|javadoc)\.jar\.asc$/
+          if (matcher.find()) {
+            classifier = matcher.group(1)
+          } else {
+            classifier = null
+          }
+          extension = 'jar.asc'
+        }
+      }
+    }
+  }
+
+  repositories {
+    maven {
+      url getRepositoryUrl()
+      credentials {
+        username getRepositoryUsername()
+        password getRepositoryPassword()
+      }
+    }
+  }
+}
