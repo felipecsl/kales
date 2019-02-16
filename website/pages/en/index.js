@@ -60,13 +60,12 @@ class HomeSplash extends React.Component {
 
     return (
       <SplashContainer>
-        <Logo img_src={`${baseUrl}img/docusaurus.svg`} />
+        <Logo img_src={`${baseUrl}img/leaf.svg`} />
         <div className="inner">
           <ProjectTitle siteConfig={siteConfig} />
           <PromoSection>
             <Button href="#try">Try It Out</Button>
-            <Button href={docUrl('doc1.html')}>Example Link</Button>
-            <Button href={docUrl('doc2.html')}>Example Link 2</Button>
+            <Button href={docUrl('doc1.html')}>Read the docs</Button>
           </PromoSection>
         </div>
       </SplashContainer>
@@ -105,8 +104,8 @@ class Index extends React.Component {
       <Block id="try">
         {[
           {
-            content: 'Talk about trying this out',
-            image: `${baseUrl}img/docusaurus.svg`,
+            content: 'Coming soon!',
+            image: `${baseUrl}img/leaf.svg`,
             imageAlign: 'left',
             title: 'Try it Out',
           },
@@ -119,8 +118,8 @@ class Index extends React.Component {
         {[
           {
             content:
-              'This is another description of how this project is useful',
-            image: `${baseUrl}img/docusaurus.svg`,
+              'Coming soon!',
+            image: `${baseUrl}img/leaf.svg`,
             imageAlign: 'right',
             title: 'Description',
           },
@@ -132,8 +131,8 @@ class Index extends React.Component {
       <Block background="light">
         {[
           {
-            content: 'Talk about learning how to use this',
-            image: `${baseUrl}img/docusaurus.svg`,
+            content: 'Coming soon!',
+            image: `${baseUrl}img/leaf.svg`,
             imageAlign: 'right',
             title: 'Learn How',
           },
@@ -145,14 +144,14 @@ class Index extends React.Component {
       <Block layout="fourColumn">
         {[
           {
-            content: 'This is the content of my feature',
-            image: `${baseUrl}img/docusaurus.svg`,
+            content: 'Kales is built on top of Ktor which is a powerful Kotlin web framework for building asynchronous servers.',
+            image: `${baseUrl}img/ktor.png`,
             imageAlign: 'top',
-            title: 'Focused on developer productivity',
+            title: 'Powerful & flexible infrastructure',
           },
           {
-            content: 'The content of my second feature',
-            image: `${baseUrl}img/docusaurus.svg`,
+              content: 'Connect your models to relational databases using JDBI',
+            image: `${baseUrl}img/jdbi.png`,
             imageAlign: 'top',
             title: 'Opinionated with sane defaults',
           },
