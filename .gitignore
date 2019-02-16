@@ -5,3 +5,4 @@ out/
 build/
 jd-gui.cfg
 *.iml
+node_modules/
