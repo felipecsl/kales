@@ -1,8 +1,6 @@
 // Reference: https://medium.com/@nmauti/sign-and-publish-on-maven-central-a-project-with-the-new-maven-publish-gradle-plugin-22a72a4bfd4b
 
-boolean isReleaseBuild() {
-  return !VERSION.contains("SNAPSHOT")
-}
+ext.isReleaseVersion = !VERSION.endsWith("SNAPSHOT")
 
 String getReleaseRepositoryUrl() {
   return hasProperty('RELEASE_REPOSITORY_URL') ? RELEASE_REPOSITORY_URL
@@ -15,7 +13,7 @@ String getSnapshotRepositoryUrl() {
 }
 
 String getRepositoryUrl() {
-  return isReleaseBuild() ? getReleaseRepositoryUrl() : getSnapshotRepositoryUrl()
+  return isReleaseVersion ? getReleaseRepositoryUrl() : getSnapshotRepositoryUrl()
 }
 
 String getRepositoryUsername() {
@@ -85,7 +83,12 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
 }
 
 signing {
+  required { isReleaseVersion && gradle.taskGraph.hasTask("publish") }
   sign configurations.archives
+}
+
+tasks.withType(Sign) {
+  onlyIf { isReleaseVersion }
 }
 
 artifacts {
