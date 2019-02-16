@@ -10,7 +10,7 @@ import kales.sample.app.views.layouts.ExampleApplicationLayout
 fun Application.module() {
   kalesApplication(ExampleApplicationLayout::class) {
     get("/", ExampleController::index)
-    get("/foo", ExampleController::foo)
+    get("/video/{id}", ExampleController::show)
   }
 }
 

@@ -14,6 +14,7 @@ import kales.actionview.ActionView
 import kales.actionview.ApplicationLayout
 import kotlin.reflect.KClass
 import kotlin.reflect.full.createInstance
+import kotlin.reflect.full.primaryConstructor
 
 class KalesApplication<T : ApplicationLayout>(
     private val application: Application,
@@ -35,8 +36,9 @@ class KalesApplication<T : ApplicationLayout>(
       crossinline action: (T) -> ActionView<*>?
   ): Route = routing.get(path) {
     @Suppress("UNCHECKED_CAST")
-    val controllerCtor = T::class.java.constructors.first() as java.lang.reflect.Constructor<T>
-    val controller = controllerCtor.newInstance()
+    val controllerCtor = T::class.primaryConstructor ?: throw RuntimeException(
+        "Primary constructor not found for Controller class ${T::class.simpleName}")
+    val controller = controllerCtor.call(call)
     val view = action(controller)
     call.respondHtmlTemplate(layout.createInstance()) {
       body {
