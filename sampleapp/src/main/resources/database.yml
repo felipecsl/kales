@@ -1,6 +1,6 @@
 development:
   adapter: postgresql
   host: localhost
-  database: kales_sample
+  database: norp_development
   username: felipecsl
   password:

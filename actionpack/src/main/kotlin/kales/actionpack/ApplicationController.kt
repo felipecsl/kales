@@ -1,9 +1,9 @@
 package kales.actionpack
 
+import io.ktor.application.ApplicationCall
 import kales.actionview.ActionView
-import kotlinx.html.HTML
 
-abstract class ApplicationController {
+abstract class ApplicationController(val call: ApplicationCall) {
   open fun index(): ActionView<*>? = null
 
   open fun show(): ActionView<*>? = null
