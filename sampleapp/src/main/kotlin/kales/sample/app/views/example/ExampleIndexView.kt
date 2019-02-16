@@ -7,17 +7,21 @@ class ExampleIndexView(
     bindings: ExampleIndexViewModel?
 ) : ActionView<ExampleIndexViewModel>(bindings) {
   override fun render(content: FlowContent) {
-    content.h2 {
-      +"Hello, ${bindings?.name}"
-    }
-    content.p {
-      +"Greetings from Kales"
-    }
-    content.h3 { +"Videos" }
-    content.ul {
-      bindings?.videos?.forEach { v ->
-        li {
-          +v.title
+    content.apply {
+      h2 {
+        +"Hello, ${bindings?.name}"
+      }
+      p {
+        +"Greetings from Kales"
+      }
+      h3 {
+        +"Videos"
+      }
+      ul {
+        bindings?.videos?.forEach { v ->
+          li {
+            +v.title
+          }
         }
       }
     }
