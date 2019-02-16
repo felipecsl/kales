@@ -36,7 +36,7 @@ class KalesApplication<T : ApplicationLayout>(
       path: String,
       actionName: String
   ): Route = routing.get(path) {
-    val view = reflectView<T>(actionName, call)
+    val view = callControllerAction<T>(actionName, call)
     call.respondHtmlTemplate(layout.createInstance()) {
       body {
         view.render(this)
@@ -44,7 +44,7 @@ class KalesApplication<T : ApplicationLayout>(
     }
   }
 
-  inline fun <reified T : ApplicationController> reflectView(
+  inline fun <reified T : ApplicationController> callControllerAction(
       actionName: String,
       call: ApplicationCall
   ): ActionView<*> {
@@ -57,14 +57,44 @@ class KalesApplication<T : ApplicationLayout>(
     val actionMethod = controller.javaClass.getMethod(actionName)
     val view = actionMethod.invoke(controller) as? ActionView<*>
     return if (view != null) {
+      // If the action returned a View object, we'll use that
       view
     } else {
-      val viewClassName = "${actionName.capitalize()}View"
-      val viewFullyQualifiedClassName = "kales.sample.app.views.$controllerClassName.$viewClassName"
-      @Suppress("UNCHECKED_CAST")
-      val viewClass = Class.forName(viewFullyQualifiedClassName) as Class<ActionView<*>>
+      // Otherwise, search for the inferred view class
+      val viewClass = findViewClass<T>(actionName, controllerClassName)
       viewClass.kotlin.primaryConstructor?.call(controller.bindings)
           ?: throw RuntimeException("Unable to find primary constructor for $viewClass")
     }
   }
+
+  /**
+   * Seearches for a view class matching this controller action, for example:
+   * "FooController" controller, "index" action, the searched class is
+   * "com.example.app.views.foo.IndexView"
+   */
+  inline fun <reified T : ApplicationController> findViewClass(
+      actionName: String,
+      controllerClassName: String
+  ): Class<ActionView<*>> {
+    val applicationPackage = extractAppPackageNameFromControllerClass<T>()
+    val viewClassName = "${actionName.capitalize()}View"
+    val viewFullyQualifiedName = "$applicationPackage.views.$controllerClassName.$viewClassName"
+    return try {
+      @Suppress("UNCHECKED_CAST")
+      Class.forName(viewFullyQualifiedName) as Class<ActionView<*>>
+    } catch (e: ClassNotFoundException) {
+      throw RuntimeException("Unable to find view class $viewFullyQualifiedName")
+    }
+  }
+
+  /**
+   * Takes a controller class name, eg: "com.example.app.controllers.FooController".
+   * Returns "com.example.app"
+   * */
+  inline fun <reified T : ApplicationController> extractAppPackageNameFromControllerClass() =
+      (T::class.qualifiedName
+          ?.split(".")
+          ?.takeWhile { it != "controllers" }
+          ?.joinToString(".")
+          ?: throw RuntimeException("Cannot determine the full class name for Controller"))
 }
