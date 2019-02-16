@@ -1,4 +1,6 @@
-String isReleaseBuild() {
+// Reference: https://medium.com/@nmauti/sign-and-publish-on-maven-central-a-project-with-the-new-maven-publish-gradle-plugin-22a72a4bfd4b
+
+boolean isReleaseBuild() {
   return !VERSION.contains("SNAPSHOT")
 }
 
@@ -22,6 +24,51 @@ String getRepositoryUsername() {
 
 String getRepositoryPassword() {
   return hasProperty('SONATYPE_PASSWORD') ? SONATYPE_PASSWORD : ""
+}
+
+def customizePom(pom) {
+  pom.withXml {
+    def root = asNode()
+
+    // eliminate test-scoped dependencies (no need in maven central POMs)
+    root.dependencies.removeAll { dep ->
+      dep.scope == "test"
+    }
+
+    // add all items necessary for maven central publication
+    root.children().last() + {
+      resolveStrategy = Closure.DELEGATE_FIRST
+
+      description 'Kotlin on Rails'
+      name 'Kales'
+      url 'https://github.com/felipecsl/kales'
+      organization {
+        name GROUP_ID
+        url 'https://github.com/felipecsl'
+      }
+      issueManagement {
+        system 'GitHub'
+        url 'https://github.com/felipecsl/kales/issues'
+      }
+      licenses {
+        license {
+          name 'Apache License 2.0'
+          url 'https://github.com/felipecsl/kales/blob/master/LICENSE'
+          distribution 'repo'
+        }
+      }
+      scm {
+        url 'https://github.com/felipecsl/kales'
+        connection 'scm:git:git://github.com/felipecsl/kales.git'
+        developerConnection 'scm:git:ssh://git@github.com:felipecsl/kales.git'
+      }
+      developers {
+        developer {
+          name 'Mautini'
+        }
+      }
+    }
+  }
 }
 
 group = GROUP_ID
@@ -50,8 +97,20 @@ artifacts {
 publishing {
   publications {
     maven(MavenPublication) {
+      customizePom(pom)
       from components.java
       artifactId = project.artifact
+
+      // create the sign pom artifact
+      pom.withXml {
+        def pomFile = file("${project.buildDir}/generated-pom.xml")
+        writeTo(pomFile)
+        def pomAscFile = signing.sign(pomFile).signatureFiles[0]
+        artifact(pomAscFile) {
+          classifier = null
+          extension = 'pom.asc'
+        }
+      }
 
       artifact(sourceJar) {
         classifier = 'sources'
