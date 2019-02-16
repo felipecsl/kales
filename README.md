@@ -55,7 +55,7 @@ class ExampleController : ApplicationController() {
 ```
 
 #### View
-`ExampleIndexView.kt`
+`IndexView.kt`
 ```kotlin
 class ExampleIndexView(
     bindings: ExampleIndexViewModel?
@@ -80,7 +80,7 @@ class ExampleIndexView(
 ```
 
 #### View Model
-`ExampleIndexViewModel.kt`
+`IndexViewModel.kt`
 ```kotlin
 data class ExampleIndexViewModel(
     val name: String

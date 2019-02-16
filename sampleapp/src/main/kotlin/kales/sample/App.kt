@@ -9,8 +9,8 @@ import kales.sample.app.views.layouts.ExampleApplicationLayout
 
 fun Application.module() {
   kalesApplication(ExampleApplicationLayout::class) {
-    get("/", ExampleController::index)
-    get("/video/{id}", ExampleController::show)
+    get<ExampleController>("/", "index")
+    get<ExampleController>("/video/{id}", "show")
   }
 }
 
