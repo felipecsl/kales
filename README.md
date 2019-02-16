@@ -17,7 +17,7 @@ then open `http://localhost:8080` on your browser.
 ## Download
 
 ```
-  implementation 'com.felipecsl.kales:kales:0.0.1-SNAPSHOT'`
+implementation 'com.felipecsl.kales:kales:0.0.1-SNAPSHOT'`
 ```
 
 Snapshots of the development version are available in
@@ -45,33 +45,39 @@ data class Video(
 #### Controller
 `ExampleController.kt`
 ```kotlin
-class ExampleController : ApplicationController() {
-  override fun index() =
-      ExampleIndexView(ExampleIndexViewModel("Felipe", Video.all()))
+class ExampleController(call: ApplicationCall) : ApplicationController(call) {
+  override fun index(): Any? {
+    bindings = IndexViewModel("Felipe", Video.all())
+    return null
+  }
 
-  fun details() =
-      ExampleIndexView(ExampleIndexViewModel("Details", listOf()))
+  override fun show() =
+      IndexView(IndexViewModel(call.parameters["id"] ?: "?", listOf()))
 }
 ```
 
 #### View
 `IndexView.kt`
 ```kotlin
-class ExampleIndexView(
-    bindings: ExampleIndexViewModel?
-) : ActionView<ExampleIndexViewModel>(bindings) {
+class IndexView(
+    bindings: IndexViewModel? = IndexViewModel("Unknown", listOf())
+) : ActionView<IndexViewModel>(bindings) {
   override fun render(content: FlowContent) {
-    content.h2 {
-      +"Hello, ${bindings?.name}"
-    }
-    content.p {
-      +"Greetings from Kales"
-    }
-    content.h3 { +"Videos" }
-    content.ul {
-      bindings?.videos?.forEach { v ->
-        li {
-          +v.title
+    content.apply {
+      h2 {
+        +"Hello, ${bindings?.name}"
+      }
+      p {
+        +"Greetings from Kales"
+      }
+      h3 {
+        +"Videos"
+      }
+      ul {
+        bindings?.videos?.forEach { v ->
+          li {
+            +v.title
+          }
         }
       }
     }
@@ -82,7 +88,7 @@ class ExampleIndexView(
 #### View Model
 `IndexViewModel.kt`
 ```kotlin
-data class ExampleIndexViewModel(
+data class IndexViewModel(
     val name: String
 ) : ViewModel
 ```
@@ -112,8 +118,8 @@ fun main() {
       watchPaths = listOf("sampleapp"),
       module = {
         kalesApplication(ExampleApplicationLayout::class) {
-          get("/", ExampleController::index)
-          get("/details", ExampleController::details)
+          get<ExampleController>("/", "index")
+          get<ExampleController>("/video/{id}", "show")
         }
       }
   ).start()
