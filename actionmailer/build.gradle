@@ -1,24 +1,13 @@
 plugins {
   id 'java-library'
   id 'maven-publish'
+  id 'signing'
   id "org.jetbrains.kotlin.jvm" version "1.3.20"
 }
 
-group = 'kales'
-version = '1.0'
+project.ext.artifact = 'kales-actionmailer'
 
-sourceSets {
-  main.java.srcDirs += 'src/main/kotlin'
-  test.java.srcDirs += 'src/test/kotlin'
-}
-
-publishing {
-  publications {
-    maven(MavenPublication) {
-      from components.java
-    }
-  }
-}
+apply from: "$rootDir/gradle/publish.gradle"
 
 dependencies {
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"

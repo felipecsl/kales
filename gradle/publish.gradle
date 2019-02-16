@@ -1,0 +1,87 @@
+String isReleaseBuild() {
+  return !VERSION.contains("SNAPSHOT")
+}
+
+String getReleaseRepositoryUrl() {
+  return hasProperty('RELEASE_REPOSITORY_URL') ? RELEASE_REPOSITORY_URL
+      : "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+}
+
+String getSnapshotRepositoryUrl() {
+  return hasProperty('SNAPSHOT_REPOSITORY_URL') ? SNAPSHOT_REPOSITORY_URL
+      : "https://oss.sonatype.org/content/repositories/snapshots/"
+}
+
+String getRepositoryUrl() {
+  return isReleaseBuild() ? getReleaseRepositoryUrl() : getSnapshotRepositoryUrl()
+}
+
+String getRepositoryUsername() {
+  return hasProperty('SONATYPE_USERNAME') ? SONATYPE_USERNAME : ""
+}
+
+String getRepositoryPassword() {
+  return hasProperty('SONATYPE_PASSWORD') ? SONATYPE_PASSWORD : ""
+}
+
+group = GROUP_ID
+version = VERSION
+
+task sourceJar(type: Jar) {
+  classifier "sources"
+  from sourceSets.main.allJava
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+  classifier "javadoc"
+  from javadoc.destinationDir
+}
+
+signing {
+  sign configurations.archives
+}
+
+artifacts {
+  archives jar
+  archives sourceJar
+  archives javadocJar
+}
+
+publishing {
+  publications {
+    maven(MavenPublication) {
+      from components.java
+      artifactId = project.artifact
+
+      artifact(sourceJar) {
+        classifier = 'sources'
+      }
+      artifact(javadocJar) {
+        classifier = 'javadoc'
+      }
+
+      // create the signed artifacts
+      project.tasks.signArchives.signatureFiles.each {
+        artifact(it) {
+          def matcher = it.file =~ /-(sources|javadoc)\.jar\.asc$/
+          if (matcher.find()) {
+            classifier = matcher.group(1)
+          } else {
+            classifier = null
+          }
+          extension = 'jar.asc'
+        }
+      }
+    }
+  }
+
+  repositories {
+    maven {
+      url getRepositoryUrl()
+      credentials {
+        username getRepositoryUsername()
+        password getRepositoryPassword()
+      }
+    }
+  }
+}
