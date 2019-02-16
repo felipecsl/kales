@@ -24,7 +24,7 @@ const siteConfig = {
   title: 'Kales', // Title for your website.
   tagline: 'Move fast with confidence',
   url: 'https://felipecsl.github.io/', // Your website URL
-  baseUrl: '/kales', // Base URL for your project */
+  baseUrl: '/kales/', // Base URL for your project */
   // For github.io type URLs, you would set the url and baseUrl like:
   //   url: 'https://facebook.github.io',
   //   baseUrl: '/test-site/',
