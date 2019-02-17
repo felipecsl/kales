@@ -19,4 +19,5 @@ apply from: "$rootDir/gradle/publish.gradle"
 
 dependencies {
   implementation 'com.github.ajalt:clikt:1.6.0'
+  testImplementation 'com.google.truth:truth:0.42'
 }
