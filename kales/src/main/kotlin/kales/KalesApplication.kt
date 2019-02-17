@@ -98,3 +98,10 @@ class KalesApplication<T : ApplicationLayout>(
           ?.joinToString(".")
           ?: throw RuntimeException("Cannot determine the full class name for Controller"))
 }
+
+fun <T : ApplicationLayout> Application.kalesApp(
+    layout: KClass<T>,
+    routes: KalesApplication<T>.() -> Unit
+) {
+  KalesApplication(this, layout).initRoutes(routes)
+}
