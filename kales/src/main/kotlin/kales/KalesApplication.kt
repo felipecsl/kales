@@ -1,6 +1,7 @@
 package kales
 
 import io.ktor.application.Application
+import io.ktor.application.ApplicationCall
 import io.ktor.application.call
 import io.ktor.application.install
 import io.ktor.features.CallLogging
@@ -33,17 +34,67 @@ class KalesApplication<T : ApplicationLayout>(
 
   inline fun <reified T : ApplicationController> get(
       path: String,
-      crossinline action: (T) -> ActionView<*>?
+      actionName: String
   ): Route = routing.get(path) {
-    @Suppress("UNCHECKED_CAST")
-    val controllerCtor = T::class.primaryConstructor ?: throw RuntimeException(
-        "Primary constructor not found for Controller class ${T::class.simpleName}")
-    val controller = controllerCtor.call(call)
-    val view = action(controller)
+    val view = callControllerAction<T>(actionName, call)
     call.respondHtmlTemplate(layout.createInstance()) {
       body {
-        view?.render(this)
+        view.render(this)
       }
     }
   }
+
+  inline fun <reified T : ApplicationController> callControllerAction(
+      actionName: String,
+      call: ApplicationCall
+  ): ActionView<*> {
+    val controllerClassName = T::class.simpleName?.replace("Controller", "")?.toLowerCase()
+        ?: throw RuntimeException("Cannot determine the class name for Controller")
+    @Suppress("UNCHECKED_CAST")
+    val controllerCtor = T::class.primaryConstructor ?: throw RuntimeException(
+        "Primary constructor not found for Controller class $controllerClassName")
+    val controller = controllerCtor.call(call)
+    val actionMethod = controller.javaClass.getMethod(actionName)
+    val view = actionMethod.invoke(controller) as? ActionView<*>
+    return if (view != null) {
+      // If the action returned a View object, we'll use that
+      view
+    } else {
+      // Otherwise, search for the inferred view class
+      val viewClass = findViewClass<T>(actionName, controllerClassName)
+      viewClass.kotlin.primaryConstructor?.call(controller.bindings)
+          ?: throw RuntimeException("Unable to find primary constructor for $viewClass")
+    }
+  }
+
+  /**
+   * Seearches for a view class matching this controller action, for example:
+   * "FooController" controller, "index" action, the searched class is
+   * "com.example.app.views.foo.IndexView"
+   */
+  inline fun <reified T : ApplicationController> findViewClass(
+      actionName: String,
+      controllerClassName: String
+  ): Class<ActionView<*>> {
+    val applicationPackage = extractAppPackageNameFromControllerClass<T>()
+    val viewClassName = "${actionName.capitalize()}View"
+    val viewFullyQualifiedName = "$applicationPackage.views.$controllerClassName.$viewClassName"
+    return try {
+      @Suppress("UNCHECKED_CAST")
+      Class.forName(viewFullyQualifiedName) as Class<ActionView<*>>
+    } catch (e: ClassNotFoundException) {
+      throw RuntimeException("Unable to find view class $viewFullyQualifiedName")
+    }
+  }
+
+  /**
+   * Takes a controller class name, eg: "com.example.app.controllers.FooController".
+   * Returns "com.example.app"
+   * */
+  inline fun <reified T : ApplicationController> extractAppPackageNameFromControllerClass() =
+      (T::class.qualifiedName
+          ?.split(".")
+          ?.takeWhile { it != "controllers" }
+          ?.joinToString(".")
+          ?: throw RuntimeException("Cannot determine the full class name for Controller"))
 }

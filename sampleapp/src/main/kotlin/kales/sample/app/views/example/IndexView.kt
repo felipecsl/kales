@@ -3,9 +3,9 @@ package kales.sample.app.views.example
 import kales.actionview.ActionView
 import kotlinx.html.*
 
-class ExampleIndexView(
-    bindings: ExampleIndexViewModel?
-) : ActionView<ExampleIndexViewModel>(bindings) {
+class IndexView(
+    bindings: IndexViewModel? = IndexViewModel("Unknown", listOf())
+) : ActionView<IndexViewModel>(bindings) {
   override fun render(content: FlowContent) {
     content.apply {
       h2 {
