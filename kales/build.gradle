@@ -22,4 +22,5 @@ dependencies {
   implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
   implementation "ch.qos.logback:logback-classic:1.2.3"
   testImplementation "com.google.truth:truth:$truthVersion"
+  testImplementation "io.ktor:ktor-server-test-host:$ktorVersion"
 }
