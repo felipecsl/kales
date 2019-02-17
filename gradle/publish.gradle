@@ -62,7 +62,7 @@ def customizePom(pom) {
       }
       developers {
         developer {
-          name 'Mautini'
+          name 'Felipe Lima'
         }
       }
     }
