@@ -2,7 +2,6 @@ package kales.sample.app.controllers
 
 import io.ktor.application.ApplicationCall
 import kales.actionpack.ApplicationController
-import kales.actionview.ActionView
 import kales.sample.app.models.Video
 import kales.sample.app.views.example.IndexView
 import kales.sample.app.views.example.IndexViewModel
