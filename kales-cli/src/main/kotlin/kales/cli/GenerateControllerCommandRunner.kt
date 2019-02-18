@@ -27,7 +27,9 @@ class GenerateControllerCommandRunner(
       class $controllerName(call: ApplicationCall) : ApplicationController(call) {
       }
     """.trimIndent())
-    println(controllersDir.list())
+    println("app dir path" + appDirectory.absolutePath)
+    println("app dir=" + appDirectory.list())
+    println("controllers dir=" + controllersDir.list())
   }
 
   /** Returns a File pointing to the application app/`type` directory or null if none found */
