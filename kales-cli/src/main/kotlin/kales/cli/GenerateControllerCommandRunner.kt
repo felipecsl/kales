@@ -28,8 +28,8 @@ class GenerateControllerCommandRunner(
       }
     """.trimIndent())
     println("app dir path" + appDirectory.absolutePath)
-    println("app dir=" + appDirectory.list())
-    println("controllers dir=" + controllersDir.list())
+    println("app dir=" + appDirectory.list().joinToString())
+    println("controllers dir=" + controllersDir.list().joinToString())
   }
 
   /** Returns a File pointing to the application app/`type` directory or null if none found */
