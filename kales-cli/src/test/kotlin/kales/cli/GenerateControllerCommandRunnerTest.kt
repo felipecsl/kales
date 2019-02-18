@@ -11,13 +11,23 @@ import java.io.File
 class GenerateControllerCommandRunnerTest {
   @get:Rule val tempDir = TemporaryFolder()
 
-  @Test fun `test correctly creates controller class`() {
+  @Test fun `test correctly creates an empty controller class`() {
     val root = tempDir.root
     val appName = "com.example.testapp"
-    NewCommandRunner(root.absolutePath, appName).run()
+    NewCommandRunner(root, appName).run()
     GenerateControllerCommandRunner(root, "bar").run()
-    assertThat(File(root,
-        "src/main/kotlin/com/example/testapp/app/controllers/BarController.kt").exists()).isTrue()
+    val controllerFile = File(root,
+        "src/main/kotlin/com/example/testapp/app/controllers/BarController.kt")
+    assertThat(controllerFile.exists()).isTrue()
+    assertThat(controllerFile.readText()).isEqualTo("""
+      package com.example.testapp.app.controllers
+
+      import io.ktor.application.ApplicationCall
+      import kales.actionpack.ApplicationController
+
+      class BarController(call: ApplicationCall) : ApplicationController(call) {
+      }
+    """.trimIndent())
   }
 
   @Test(expected = UsageError::class)

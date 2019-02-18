@@ -12,7 +12,7 @@ class NewCommandRunnerTest {
   @Test fun `creates project files`() {
     val root = tempDir.root
     val appName = "com.example.testapp"
-    NewCommandRunner(root.absolutePath, appName).run()
+    NewCommandRunner(root, appName).run()
     assertThat(File(root, "build.gradle").exists()).isTrue()
     assertThat(File(root, "gradlew").exists()).isTrue()
     assertThat(File(root, "gradle/wrapper/gradle-wrapper.properties").exists()).isTrue()

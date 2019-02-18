@@ -6,7 +6,8 @@ import java.io.File
 /** Generates a controller class */
 class GenerateControllerCommandRunner(
     private val workingDirectory: File,
-    private val name: String
+    private val name: String,
+    private val actions: Set<String> = setOf()
 ) {
   fun run() {
     val appDirectory = findAppDirectory()
@@ -40,14 +41,16 @@ class GenerateControllerCommandRunner(
 
   private fun determinePackageName(appDirectory: File): String? {
     return recursivelyDetermineAppPackageName(appDirectory, appDirectory)
+        ?.split("/")
+        ?.joinToString(".")
   }
 
   private fun recursivelyDetermineAppPackageName(currentDir: File, appDir: File): String? {
     return when {
       currentDir.name == "src" ->
         null
-      currentDir.parentFile.name == "kotlin" ->
-        currentDir.toPath().relativize(appDir.toPath()).toFile().absolutePath
+      currentDir.name == "kotlin" ->
+        currentDir.toPath().relativize(appDir.parentFile.toPath()).toString()
       else ->
         recursivelyDetermineAppPackageName(currentDir.parentFile, appDir)
     }
@@ -63,7 +66,12 @@ class GenerateControllerCommandRunner(
     }
   }
 
+  /** Like list() but returns empty list instead of null */
+  private fun File.safeList(): List<String> {
+    return list()?.asList() ?: emptyList()
+  }
+
   private fun File.childDirectories() =
-      list().map { f -> File(this, f) }.filter { it.isDirectory }
+      safeList().map { f -> File(this, f) }.filter { it.isDirectory }
 
 }
