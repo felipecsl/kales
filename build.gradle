@@ -5,6 +5,10 @@ buildscript {
   }
 }
 
+plugins {
+  id 'com.gradle.build-scan' version '2.1'
+}
+
 allprojects {
   apply from: "$rootDir/gradle/deps.gradle"
 
