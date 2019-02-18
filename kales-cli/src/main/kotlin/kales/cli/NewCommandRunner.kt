@@ -6,6 +6,7 @@ import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.attribute.PosixFilePermissions
 
+/** "kales new" command: Creates a new Kales application */
 class NewCommandRunner(private val appPath: String, private val appName: String) {
   fun run() {
     val appDir = File(appPath)
@@ -13,9 +14,14 @@ class NewCommandRunner(private val appPath: String, private val appName: String)
       throw UsageError("Failed to create directory $appPath")
     }
     File(appDir, "build.gradle").writeText(buildFileContents())
-    val srcDir = (listOf("src", "main", "kotlin") + appName.split(".")).joinToString(File.separator)
-    File(appDir, srcDir).mkdirs()
-    val gradleWrapperDir = listOf("gradle", "wrapper").joinToString(File.separator)
+    val srcDirRelativePath = (setOf("src", "main", "kotlin") + appName.split("."))
+        .joinToString(File.separator)
+    val appSourceDir = File(File(appDir, srcDirRelativePath), "app")
+    appSourceDir.mkdirs()
+    setOf("controllers", "views", "models").forEach {
+      File(appSourceDir, it).mkdirs()
+    }
+    val gradleWrapperDir = setOf("gradle", "wrapper").joinToString(File.separator)
     File(appDir, gradleWrapperDir).mkdirs()
     File(File(appDir, gradleWrapperDir), "gradle-wrapper.properties")
         .writeText(GRADLE_WRAPPER_FILE_CONTENTS)
