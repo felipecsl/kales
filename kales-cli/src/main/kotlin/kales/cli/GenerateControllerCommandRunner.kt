@@ -16,7 +16,7 @@ class GenerateControllerCommandRunner(
       name.endsWith("Controller.kt") -> name.replace(".kt", "")
       name.endsWith("Controller") -> name
       else -> "${name}Controller"
-    }
+    }.capitalize()
     val packageName = determinePackageName(appDirectory)
     File(controllersDir, "$controllerName.kt").writeText("""
       package $packageName.app.controllers
@@ -27,9 +27,6 @@ class GenerateControllerCommandRunner(
       class $controllerName(call: ApplicationCall) : ApplicationController(call) {
       }
     """.trimIndent())
-    println("app dir path" + appDirectory.absolutePath)
-    println("app dir=" + appDirectory.list().joinToString())
-    println("controllers dir=" + controllersDir.list().joinToString())
   }
 
   /** Returns a File pointing to the application app/`type` directory or null if none found */
