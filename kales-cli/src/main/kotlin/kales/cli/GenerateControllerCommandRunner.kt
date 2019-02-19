@@ -7,7 +7,10 @@ import com.squareup.kotlinpoet.TypeSpec
 import com.squareup.kotlinpoet.asTypeName
 import io.ktor.application.ApplicationCall
 import kales.actionpack.ApplicationController
+import java.io.ByteArrayOutputStream
 import java.io.File
+import java.io.OutputStreamWriter
+import java.nio.charset.StandardCharsets
 
 /** Generates a controller class */
 class GenerateControllerCommandRunner(
@@ -19,7 +22,7 @@ class GenerateControllerCommandRunner(
       File(workingDirectory, listOf("src", "main", "kotlin").joinToString(File.separator))
 
   fun run() {
-    val appDirectory = findKotlinDirectory()
+    val appDirectory = findAppDirectory()
         ?: throw UsageError("Unable to find the `app` sources directory")
     val controllerName = when {
       name.endsWith("Controller.kt") -> name.replace(".kt", "")
@@ -32,7 +35,8 @@ class GenerateControllerCommandRunner(
           Make sure your sources directory structure follows the default
           "src/main/kotlin/your/package/name" structure
           """.trimIndent())
-    writeControllerClassFile(kotlinDir, controllerName, packageName)
+    val controllersDir = File(appDirectory, "controllers")
+    writeControllerClassFile(controllersDir, controllerName, packageName)
   }
 
   private fun writeControllerClassFile(
@@ -40,6 +44,17 @@ class GenerateControllerCommandRunner(
       controllerName: String,
       appPackageName: String
   ) {
+    val file = buildFileSpec(controllerName, appPackageName)
+    val outputPath = controllersDir.toPath().resolve("$controllerName.kt")
+    ByteArrayOutputStream().use { baos ->
+      OutputStreamWriter(baos, StandardCharsets.UTF_8).use { writer ->
+        file.writeTo(writer)
+      }
+      outputPath.toFile().safeWriteText(baos.toString())
+    }
+  }
+
+  private fun buildFileSpec(controllerName: String, appPackageName: String): FileSpec {
     val controllerTypeSpec = TypeSpec.classBuilder(controllerName)
         .primaryConstructor(FunSpec.constructorBuilder()
             .addParameter("call", ApplicationCall::class)
@@ -48,10 +63,9 @@ class GenerateControllerCommandRunner(
         .addSuperclassConstructorParameter("call")
         .addControllerActions()
         .build()
-    val file = FileSpec.builder("$appPackageName.app.controllers", controllerName)
+    return FileSpec.builder("$appPackageName.app.controllers", controllerName)
         .addType(controllerTypeSpec)
         .build()
-    file.writeTo(controllersDir)
   }
 
   private fun TypeSpec.Builder.addControllerActions(): TypeSpec.Builder {
@@ -68,7 +82,7 @@ class GenerateControllerCommandRunner(
   }
 
   /** Returns a File pointing to the application app/`type` directory or null if none found */
-  private fun findKotlinDirectory(): File? {
+  private fun findAppDirectory(): File? {
     return kotlinDir.childDirectories()
         .mapNotNull(this::recursivelyFindAppDirectory)
         .firstOrNull()
