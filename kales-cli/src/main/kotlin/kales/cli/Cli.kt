@@ -2,8 +2,9 @@ package kales.cli
 
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.subcommands
-import com.github.ajalt.clikt.parameters.options.option
-import com.github.ajalt.clikt.parameters.options.required
+import com.github.ajalt.clikt.parameters.arguments.argument
+import com.github.ajalt.clikt.parameters.arguments.multiple
+import com.github.ajalt.clikt.parameters.types.file
 import java.io.File
 
 class Cli : CliktCommand() {
@@ -16,12 +17,12 @@ class New : CliktCommand(help = """
   The 'kales new' command creates a new Kales application with a default
     directory structure and configuration at the path you specify.
   """.trimIndent()) {
-  private val appPath by option(help = """
+  private val appPath by argument(help = """
     the path to your new app directory, eg.: ~/Code/Kotlin/weblog
-  """.trimIndent()).required()
-  private val appName by option(help = """
+  """.trimIndent()).file()
+  private val appName by argument(help = """
     the application name in reverse domain name notation, eg.: \"com.example.foo\""
-  """.trimIndent()).required()
+  """.trimIndent())
 
   override fun run() {
     NewCommandRunner(appPath, appName).run()
@@ -40,14 +41,19 @@ class GenerateController : CliktCommand(name = "controller", help = """
 
     This generates a controller class in app/controllers.
 """.trimIndent()) {
-  private val name by option().required()
+  private val name by argument()
+
+  private val actions by argument().multiple()
 
   override fun run() {
     val workingDir = File(System.getProperty("user.dir"))
-    GenerateControllerCommandRunner(workingDir, name).run()
+    GenerateControllerCommandRunner(workingDir, name, actions.toSet()).run()
   }
 }
 
-fun main(args: Array<String>) = Cli()
-    .subcommands(New(), Generate().subcommands(GenerateController()))
-    .main(args)
+fun main(args: Array<String>) {
+  val generateCommand = Generate()
+      .subcommands(GenerateController())
+  Cli().subcommands(New(), generateCommand)
+      .main(args)
+}

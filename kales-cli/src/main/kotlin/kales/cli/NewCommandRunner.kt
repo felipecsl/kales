@@ -7,11 +7,13 @@ import java.nio.file.Path
 import java.nio.file.attribute.PosixFilePermissions
 
 /** "kales new" command: Creates a new Kales application */
-class NewCommandRunner(private val appPath: String, private val appName: String) {
+class NewCommandRunner(
+    private val appDir: File,
+    private val appName: String
+) {
   fun run() {
-    val appDir = File(appPath)
     if (!appDir.exists() && !appDir.mkdirs()) {
-      throw UsageError("Failed to create directory $appPath")
+      throw UsageError("Failed to create directory ${appDir.absolutePath}")
     }
     File(appDir, "build.gradle").writeText(buildFileContents())
     val srcDirRelativePath = (setOf("src", "main", "kotlin") + appName.split("."))
