@@ -3,6 +3,7 @@ package kales.cli
 import com.github.ajalt.clikt.core.UsageError
 import java.io.File
 import java.nio.file.Files
+import java.nio.file.Files.exists
 import java.nio.file.Path
 import java.nio.file.attribute.PosixFilePermissions
 
@@ -12,10 +13,8 @@ class NewCommandRunner(
     private val appName: String
 ) {
   fun run() {
-    if (!appDir.exists() && !appDir.mkdirs()) {
-      throw UsageError("Failed to create directory ${appDir.absolutePath}")
-    }
-    File(appDir, "build.gradle").writeText(buildFileContents())
+    checkTargetDirectory()
+    File(appDir, "build.gradle").safeWriteText(buildFileContents())
     val srcDirRelativePath = (setOf("src", "main", "kotlin") + appName.split("."))
         .joinToString(File.separator)
     val appSourceDir = File(File(appDir, srcDirRelativePath), "app")
@@ -26,27 +25,37 @@ class NewCommandRunner(
     val gradleWrapperDir = setOf("gradle", "wrapper").joinToString(File.separator)
     File(appDir, gradleWrapperDir).mkdirs()
     File(File(appDir, gradleWrapperDir), "gradle-wrapper.properties")
-        .writeText(GRADLE_WRAPPER_FILE_CONTENTS)
+        .safeWriteText(GRADLE_WRAPPER_FILE_CONTENTS)
     copyResource("gradle-wrapper.bin", File(File(appDir, gradleWrapperDir), "gradle-wrapper.jar"))
     File(appDir, "gradlew").also { gradlewFile ->
-      makeExecutable(gradlewFile.toPath())
+      gradlewFile.toPath().makeExecutable()
       copyResource("gradlew", gradlewFile)
+    }
+    println("""
+
+      New Kales project successfully initialized at '${appDir.absoluteFile.absolutePath}'.
+      Happy coding!
+      """.trimIndent())
+  }
+
+  private fun checkTargetDirectory() {
+    if (!appDir.exists() && !appDir.mkdirs()) {
+      throw UsageError("Failed to create directory ${appDir.absolutePath}")
     }
   }
 
   private fun copyResource(resourceName: String, destination: File) {
-    val classLoader = New::class.java.classLoader
-    classLoader.getResourceAsStream(resourceName).use { input ->
-      destination.outputStream().use { output ->
-        input.copyTo(output)
-      }
-    }
+    val inputStream = javaClass.classLoader.getResourceAsStream(resourceName)
+    // If the file is zero bytes we'll just consider it non-existing
+    inputStream.safeCopyTo(destination)
   }
 
-  private fun makeExecutable(file: Path) {
-    val ownerWritable = PosixFilePermissions.fromString("rwxr--r--")
-    val permissions = PosixFilePermissions.asFileAttribute(ownerWritable)
-    Files.createFile(file, permissions)
+  private fun Path.makeExecutable() {
+    if (!exists(this)) {
+      val ownerWritable = PosixFilePermissions.fromString("rwxr--r--")
+      val permissions = PosixFilePermissions.asFileAttribute(ownerWritable)
+      Files.createFile(this, permissions)
+    }
   }
 
   private fun buildFileContents() = """
