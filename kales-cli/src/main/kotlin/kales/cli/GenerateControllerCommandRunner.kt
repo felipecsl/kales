@@ -1,41 +1,76 @@
 package kales.cli
 
 import com.github.ajalt.clikt.core.UsageError
+import com.squareup.kotlinpoet.FileSpec
+import com.squareup.kotlinpoet.FunSpec
+import com.squareup.kotlinpoet.TypeSpec
+import com.squareup.kotlinpoet.asTypeName
+import io.ktor.application.ApplicationCall
+import kales.actionpack.ApplicationController
 import java.io.File
 
 /** Generates a controller class */
 class GenerateControllerCommandRunner(
-    private val workingDirectory: File,
+    workingDirectory: File,
     private val name: String,
     private val actions: Set<String> = setOf()
 ) {
+  private val kotlinDir =
+      File(workingDirectory, listOf("src", "main", "kotlin").joinToString(File.separator))
+
   fun run() {
-    val appDirectory = findAppDirectory()
-        ?: throw UsageError("Unable to find the `app` directory")
-    val controllersDir = File(appDirectory, "controllers")
+    val appDirectory = findKotlinDirectory()
+        ?: throw UsageError("Unable to find the `app` sources directory")
     val controllerName = when {
       name.endsWith("Controller.kt") -> name.replace(".kt", "")
       name.endsWith("Controller") -> name
       else -> "${name}Controller"
     }.capitalize()
     val packageName = determinePackageName(appDirectory)
-    File(controllersDir, "$controllerName.kt").writeText("""
-      package $packageName.app.controllers
+        ?: throw UsageError("""
+          Unable to infer the package name for $controllerName.
+          Make sure your sources directory structure follows the default
+          "src/main/kotlin/your/package/name" structure
+          """.trimIndent())
+    writeControllerClassFile(kotlinDir, controllerName, packageName)
+  }
 
-      import io.ktor.application.ApplicationCall
-      import kales.actionpack.ApplicationController
+  private fun writeControllerClassFile(
+      controllersDir: File,
+      controllerName: String,
+      appPackageName: String
+  ) {
+    val controllerTypeSpec = TypeSpec.classBuilder(controllerName)
+        .primaryConstructor(FunSpec.constructorBuilder()
+            .addParameter("call", ApplicationCall::class)
+            .build())
+        .superclass(ApplicationController::class)
+        .addSuperclassConstructorParameter("call")
+        .addControllerActions()
+        .build()
+    val file = FileSpec.builder("$appPackageName.app.controllers", controllerName)
+        .addType(controllerTypeSpec)
+        .build()
+    file.writeTo(controllersDir)
+  }
 
-      class $controllerName(call: ApplicationCall) : ApplicationController(call) {
-      }
-    """.trimIndent())
+  private fun TypeSpec.Builder.addControllerActions(): TypeSpec.Builder {
+    actions.forEach { addControllerAction(it) }
+    return this
+  }
+
+  private fun TypeSpec.Builder.addControllerAction(actionName: String): TypeSpec.Builder {
+    return addFunction(
+        FunSpec.builder(actionName)
+            .returns(Any::class.asTypeName().copy(nullable = true))
+            .addStatement("return null")
+            .build())
   }
 
   /** Returns a File pointing to the application app/`type` directory or null if none found */
-  private fun findAppDirectory(): File? {
-    val kotlinDir = File(workingDirectory,
-        listOf("src", "main", "kotlin").joinToString(File.separator))
+  private fun findKotlinDirectory(): File? {
     return kotlinDir.childDirectories()
-        .mapNotNull { recursivelyFindAppDirectory(it) }
+        .mapNotNull(this::recursivelyFindAppDirectory)
         .firstOrNull()
   }
 
@@ -66,12 +101,6 @@ class GenerateControllerCommandRunner(
     }
   }
 
-  /** Like list() but returns empty list instead of null */
-  private fun File.safeList(): List<String> {
-    return list()?.asList() ?: emptyList()
-  }
-
   private fun File.childDirectories() =
-      safeList().map { f -> File(this, f) }.filter { it.isDirectory }
-
+      safeListFiles().filter { it.isDirectory }
 }
