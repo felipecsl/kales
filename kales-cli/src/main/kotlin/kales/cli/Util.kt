@@ -3,7 +3,6 @@ package kales.cli
 import com.github.ajalt.clikt.core.UsageError
 import java.io.File
 import java.io.InputStream
-import java.io.OutputStream
 import java.nio.charset.Charset
 
 /** Like list() but returns empty list instead of null */
@@ -50,11 +49,15 @@ fun File.printStatus(status: String) {
 }
 
 /** Copy streams and close at the end */
-fun InputStream.safeCopyTo(out: OutputStream, bufferSize: Int = DEFAULT_BUFFER_SIZE): Long {
+fun InputStream.safeCopyTo(destination: File): Long {
+  if (!destination.exists() || destination.length() == 0L) {
+    destination.printCreated()
+  } else {
+    destination.printSkipped()
+  }
   use { input ->
-    out.use { output ->
-      // TODO print message about updates just like safeWriteText()
-      return input.copyTo(output, bufferSize)
+    destination.outputStream().use { output ->
+      return input.copyTo(output)
     }
   }
 }

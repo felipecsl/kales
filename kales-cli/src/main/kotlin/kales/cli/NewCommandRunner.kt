@@ -47,12 +47,7 @@ class NewCommandRunner(
   private fun copyResource(resourceName: String, destination: File) {
     val inputStream = javaClass.classLoader.getResourceAsStream(resourceName)
     // If the file is zero bytes we'll just consider it non-existing
-    if (!destination.exists() || destination.length() == 0L) {
-      destination.printCreated()
-    } else {
-      destination.printSkipped()
-    }
-    inputStream.safeCopyTo(destination.outputStream())
+    inputStream.safeCopyTo(destination)
   }
 
   private fun Path.makeExecutable() {
