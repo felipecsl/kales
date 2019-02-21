@@ -16,6 +16,8 @@ class ApplicationRecordTest {
       assertThat(TestModel.where("name" to "Hello World")).containsExactly(expectedModel1)
       assertThat(TestModel.where("id" to 1)).containsExactly(expectedModel1)
       assertThat(TestModel.where("id" to 2)).containsExactly(expectedModel2)
+      assertThat(TestModel.find(1)).isEqualTo(expectedModel1)
+      assertThat(TestModel.find(2)).isEqualTo(expectedModel2)
     }
   }
 }

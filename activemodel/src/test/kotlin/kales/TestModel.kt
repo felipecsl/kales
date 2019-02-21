@@ -10,5 +10,7 @@ data class TestModel(
     fun where(vararg clause: Pair<String, Any>) = whereRecords<TestModel>(clause.toMap())
 
     fun create(vararg values: Pair<String, Any>) = createRecord<TestModel>(values.toMap())
+
+    fun find(id: Int) = findRecord<TestModel>(id)
   }
 }
