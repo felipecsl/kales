@@ -1,13 +1,19 @@
 # Kales
 
-Let's see how hard it would be to create web framework 
-like Ruby on Rails but in Kotlin. 
-Kales run on top of [Ktor](https://ktor.io/).
+A modern web framework built for developer productivity and safety.  
+Kales run on top of [Ktor](https://ktor.io/) and uses a Model-View-Controller architecture. 
 
-It uses a Model-View-Controller architecture. Database access is
-done via [JDBI](http://jdbi.org/) and configured from a `database.yml` resource file (similar to Rails).
+Database access is done via [JDBI](http://jdbi.org/) and configured from a `database.yml` resource 
+file (similar to Rails).
 
-## Running 
+More documentation coming soon!
+
+## Usage
+
+Kales comes with a command line application `kales-cli` that can generate most of the boilerplate
+needed to bootstrap a new web app using Kales. More details about this coming soon!
+
+## Running the example app
 
 ```
 ./gradlew sampleapp:run
@@ -36,8 +42,11 @@ data class Video(
     val title: String
 ) : ApplicationRecord() {
   companion object {
-    // Returns all records in the table
     fun all() = allRecords<Video>()
+
+    fun where(vararg clause: Pair<String, Any>) = whereRecords<Video>(clause.toMap())
+
+    fun find(id: Int) = findRecord<Video>(id)
   }
 }
 ```
@@ -51,8 +60,11 @@ class ExampleController(call: ApplicationCall) : ApplicationController(call) {
     return null
   }
 
-  override fun show() =
-      IndexView(IndexViewModel(call.parameters["id"] ?: "?", listOf()))
+  override fun show(): Any? {
+    bindings = ShowViewModel(Video.find(call.parameters["id"]?.toInt()
+        ?: throw IllegalArgumentException("Missing parameter id")))
+    return null
+  }
 }
 ```
 
