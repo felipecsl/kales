@@ -1,12 +1,12 @@
 package kales
 
+import org.jdbi.v3.core.Handle
 import org.jdbi.v3.core.Jdbi
 import org.jdbi.v3.core.h2.H2DatabasePlugin
 import org.jdbi.v3.core.kotlin.KotlinPlugin
 import org.jdbi.v3.core.kotlin.mapTo
 import org.jdbi.v3.postgres.PostgresPlugin
 import org.yaml.snakeyaml.Yaml
-import kotlin.reflect.KClass
 
 abstract class ApplicationRecord {
   companion object {
@@ -20,10 +20,11 @@ abstract class ApplicationRecord {
       val yaml = Yaml()
       val stream = ApplicationRecord::class.java.classLoader.getResourceAsStream("database.yml")
       val data = yaml.load<Map<String, Any>>(stream)
-      val devData = data["development"] as Map<String, String>
-      val adapter = devData["adapter"]
-      val host = devData["host"]
-      val database = devData["database"]
+      // TODO handle muliple environments
+      val devData = data["development"] as? Map<String, String> ?: throwMissingField("development")
+      val adapter = devData["adapter"] ?: throwMissingField("adapter")
+      val host = devData["host"] ?: throwMissingField("host")
+      val database = devData["database"] ?: throwMissingField("database")
       return if (adapter == "h2") {
         "jdbc:$adapter:$host:$database"
       } else {
@@ -33,16 +34,20 @@ abstract class ApplicationRecord {
       }
     }
 
+    private fun throwMissingField(name: String): Nothing =
+        throw IllegalArgumentException(
+            "Please set a value for the field '$name' in the file database.yml")
+
     inline fun <reified T : ApplicationRecord> allRecords(): List<T> {
-      JDBI.open().use {
-        val tableName = T::class.toTableName()
+      useJdbi {
+        val tableName = toTableName<T>()
         return it.createQuery("select * from $tableName").mapTo<T>().list()
       }
     }
 
     inline fun <reified T : ApplicationRecord> whereRecords(clause: Map<String, Any>): List<T> {
-      JDBI.open().use {
-        val tableName = T::class.toTableName()
+      useJdbi {
+        val tableName = toTableName<T>()
         val whereClause = clause.keys.joinToString(" and ") { k -> "$k = :$k" }
         val query = it.createQuery("select * from $tableName where $whereClause")
         clause.forEach { k, v -> query.bind(k, v) }
@@ -51,8 +56,8 @@ abstract class ApplicationRecord {
     }
 
     inline fun <reified T : ApplicationRecord> createRecord(values: Map<String, Any>): Int {
-      JDBI.open().use {
-        val tableName = T::class.toTableName()
+      useJdbi {
+        val tableName = toTableName<T>()
         val cols = values.keys.joinToString(prefix = "(", postfix = ")")
         val refs = values.keys.joinToString(prefix = "(", postfix = ")") { k -> ":$k" }
         val update = it.createUpdate("insert into $tableName $cols values $refs")
@@ -61,16 +66,20 @@ abstract class ApplicationRecord {
       }
     }
 
-    inline fun <reified T : ApplicationRecord> findRecord(id: Int): T {
-      JDBI.open().use {
-        val tableName = T::class.toTableName()
+    /** TODO I think Rails raises RecordNotFound in this case instead of returning null. Should we do the same? */
+    inline fun <reified T : ApplicationRecord> findRecord(id: Int): T? {
+      useJdbi {
+        val tableName = toTableName<T>()
         return it.createQuery("select * from $tableName where id = :id")
             .bind("id", id)
             .mapTo<T>()
-            .findOnly()
+            .findFirst()
+            .orElse(null)
       }
     }
 
-    fun KClass<*>.toTableName() = "${simpleName!!.toLowerCase()}s"
+    inline fun <T> useJdbi(block: (Handle) -> T) = JDBI.open().use { block(it) }
+
+    inline fun <reified T> toTableName() = "${T::class.simpleName!!.toLowerCase()}s"
   }
 }

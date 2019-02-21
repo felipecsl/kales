@@ -4,10 +4,19 @@ import com.google.common.truth.Truth.assertThat
 import org.junit.Test
 
 class ApplicationRecordTest {
-  @Test fun `test model create and query`() {
+  @Test fun `no records`() {
     ApplicationRecord.JDBI.withHandle<Any, RuntimeException> {
       it.execute("CREATE TABLE testmodels (id INTEGER PRIMARY KEY AUTO_INCREMENT, name VARCHAR)")
       assertThat(TestModel.all()).isEmpty()
+      assertThat(TestModel.where("id" to 1)).isEmpty()
+      assertThat(TestModel.find(1)).isNull()
+      assertThat(TestModel.find(2)).isNull()
+    }
+  }
+
+  @Test fun `test model create and query`() {
+    ApplicationRecord.JDBI.withHandle<Any, RuntimeException> {
+      it.execute("CREATE TABLE testmodels (id INTEGER PRIMARY KEY AUTO_INCREMENT, name VARCHAR)")
       TestModel.create("name" to "Hello World")
       TestModel.create("name" to "Ping Pong")
       val expectedModel1 = TestModel(1, "Hello World")
