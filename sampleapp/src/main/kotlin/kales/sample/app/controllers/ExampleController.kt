@@ -12,6 +12,8 @@ class ExampleController(call: ApplicationCall) : ApplicationController(call) {
     return null
   }
 
-  override fun show() =
-      IndexView(IndexViewModel(call.parameters["id"] ?: "?", listOf()))
+  override fun show(): IndexView {
+    val id = call.parameters["id"] ?: throw RuntimeException("Missing parameter ID")
+    return IndexView(IndexViewModel(id, Video.where("id" to id.toInt())))
+  }
 }

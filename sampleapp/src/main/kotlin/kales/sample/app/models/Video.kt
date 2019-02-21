@@ -8,5 +8,7 @@ data class Video(
 ) : ApplicationRecord() {
   companion object {
     fun all() = allRecords<Video>()
+
+    fun where(vararg clause: Pair<String, Any>) = whereRecords<Video>(clause.toMap())
   }
 }

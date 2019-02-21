@@ -1,0 +1,6 @@
+development:
+  adapter: h2
+  host: mem
+  database: test
+  username:
+  password:
