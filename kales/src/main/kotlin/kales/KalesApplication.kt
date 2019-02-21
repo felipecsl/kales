@@ -7,12 +7,16 @@ import io.ktor.application.install
 import io.ktor.features.CallLogging
 import io.ktor.features.DefaultHeaders
 import io.ktor.html.respondHtmlTemplate
+import io.ktor.http.content.files
+import io.ktor.http.content.static
+import io.ktor.http.content.staticRootFolder
 import io.ktor.routing.Route
 import io.ktor.routing.Routing
 import io.ktor.routing.get
 import kales.actionpack.ApplicationController
 import kales.actionview.ActionView
 import kales.actionview.ApplicationLayout
+import java.io.File
 import kotlin.reflect.KClass
 import kotlin.reflect.full.createInstance
 import kotlin.reflect.full.primaryConstructor
@@ -29,6 +33,12 @@ class KalesApplication<T : ApplicationLayout>(
     application.install(Routing) {
       routing = this
       routes()
+      static("assets") {
+        staticRootFolder = File("assets")
+        files("javascripts")
+        files("stylesheets")
+        files("images")
+      }
     }
   }
 

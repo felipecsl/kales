@@ -23,4 +23,5 @@ dependencies {
   api "org.jdbi:jdbi3-postgres:$jdbiVersion"
   implementation 'org.yaml:snakeyaml:1.23'
   testImplementation "com.google.truth:truth:$truthVersion"
+  testRuntime 'com.h2database:h2:1.4.197'
 }
