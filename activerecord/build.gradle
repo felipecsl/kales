@@ -12,4 +12,5 @@ apply from: "$rootDir/gradle/publish.gradle"
 dependencies {
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
   testImplementation "com.google.truth:truth:$truthVersion"
+  testImplementation "org.jetbrains.kotlin:kotlin-test:$kotlinVersion"
 }
