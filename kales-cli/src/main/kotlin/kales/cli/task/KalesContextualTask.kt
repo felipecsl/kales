@@ -26,7 +26,7 @@ abstract class KalesContextualTask(protected val applicationRootDir: File) : Kal
           ?.joinToString(".")
 
   /** Returns "com.example.foo" */
-  internal val packageName = PackageName(appPackageNameOrThrow()).parentPackage
+  internal val packageName = PackageName.parse(appPackageNameOrThrow()).parentPackage
 
   private fun appPackageNameOrThrow() = appPackageName
       ?: throw IllegalStateException("appPackageName == null")

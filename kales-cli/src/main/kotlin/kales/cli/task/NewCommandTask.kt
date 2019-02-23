@@ -11,38 +11,40 @@ import java.nio.file.attribute.PosixFilePermissions
 
 /** "kales new" command: Creates a new Kales application */
 class NewCommandTask(
-    private val appDir: File,
+    private val appRootDir: File,
     private val appName: String
 ) : KalesTask {
   override fun run() {
     checkTargetDirectory()
-    File(appDir, "build.gradle").safeWriteText(buildFileContents())
+    File(appRootDir, "build.gradle").safeWriteText(buildFileContents())
     val srcDirRelativePath = (setOf("src", "main", "kotlin") + appName.split("."))
         .joinToString(File.separator)
-    val appSourceDir = File(File(appDir, srcDirRelativePath), "app")
-    appSourceDir.mkdirs()
+    val sourcesDir = File(appRootDir, srcDirRelativePath)
+    val appDir = File(sourcesDir, "app")
+    appDir.mkdirs()
     setOf("controllers", "views", "models").forEach {
-      File(appSourceDir, it).mkdirs()
+      File(appDir, it).mkdirs()
     }
+    File(sourcesDir, setOf("db", "migrate").joinToString(File.separator)).mkdirs()
     val gradleWrapperDir = setOf("gradle", "wrapper").joinToString(File.separator)
-    File(appDir, gradleWrapperDir).mkdirs()
-    File(File(appDir, gradleWrapperDir), "gradle-wrapper.properties")
+    File(appRootDir, gradleWrapperDir).mkdirs()
+    File(File(appRootDir, gradleWrapperDir), "gradle-wrapper.properties")
         .safeWriteText(GRADLE_WRAPPER_FILE_CONTENTS)
-    copyResource("gradle-wrapper.bin", File(File(appDir, gradleWrapperDir), "gradle-wrapper.jar"))
-    File(appDir, "gradlew").also { gradlewFile ->
+    copyResource("gradle-wrapper.bin", File(File(appRootDir, gradleWrapperDir), "gradle-wrapper.jar"))
+    File(appRootDir, "gradlew").also { gradlewFile ->
       gradlewFile.toPath().makeExecutable()
       copyResource("gradlew", gradlewFile)
     }
     println("""
 
-      New Kales project successfully initialized at '${appDir.absoluteFile.absolutePath}'.
+      New Kales project successfully initialized at '${appRootDir.absoluteFile.absolutePath}'.
       Happy coding!
       """.trimIndent())
   }
 
   private fun checkTargetDirectory() {
-    if (!appDir.exists() && !appDir.mkdirs()) {
-      throw UsageError("Failed to create directory ${appDir.absolutePath}")
+    if (!appRootDir.exists() && !appRootDir.mkdirs()) {
+      throw UsageError("Failed to create directory ${appRootDir.absolutePath}")
     }
   }
 

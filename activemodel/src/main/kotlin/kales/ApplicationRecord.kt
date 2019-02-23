@@ -7,7 +7,6 @@ import org.jdbi.v3.core.h2.H2DatabasePlugin
 import org.jdbi.v3.core.kotlin.KotlinPlugin
 import org.jdbi.v3.core.kotlin.mapTo
 import org.jdbi.v3.postgres.PostgresPlugin
-import org.yaml.snakeyaml.Yaml
 
 abstract class ApplicationRecord {
   companion object {
