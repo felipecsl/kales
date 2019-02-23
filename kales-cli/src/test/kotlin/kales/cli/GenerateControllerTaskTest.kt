@@ -2,20 +2,22 @@ package kales.cli
 
 import com.github.ajalt.clikt.core.UsageError
 import com.google.common.truth.Truth.assertThat
+import kales.cli.task.GenerateControllerTask
+import kales.cli.task.NewCommandTask
 import org.junit.Test
 
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import java.io.File
 
-class GenerateControllerCommandRunnerTest {
+class GenerateControllerTaskTest {
   @get:Rule val tempDir = TemporaryFolder()
 
   @Test fun `test generate an empty controller class`() {
     val root = tempDir.root
     val appName = "com.example.testapp"
-    NewCommandRunner(root, appName).run()
-    GenerateControllerCommandRunner(root, "bar").run()
+    NewCommandTask(root, appName).run()
+    GenerateControllerTask(root, "bar").run()
     println(File(root,
         "src/main/kotlin/com/example/testapp/app/controllers").safeListFiles())
     val controllerFile = File(root,
@@ -35,8 +37,8 @@ class GenerateControllerCommandRunnerTest {
   @Test fun `test generate a controller with actions`() {
     val root = tempDir.root
     val appName = "com.example.testapp"
-    NewCommandRunner(root, appName).run()
-    GenerateControllerCommandRunner(root, "bar", setOf("blah", "foo")).run()
+    NewCommandTask(root, appName).run()
+    GenerateControllerTask(root, "bar", setOf("blah", "foo")).run()
     val controllerFile = File(root,
         "src/main/kotlin/com/example/testapp/app/controllers/BarController.kt")
     assertThat(controllerFile.exists()).isTrue()
@@ -58,6 +60,6 @@ class GenerateControllerCommandRunnerTest {
 
   @Test(expected = UsageError::class)
   fun `invalid or inexistent app directory`() {
-    GenerateControllerCommandRunner(File("."), "bar").run()
+    GenerateControllerTask(File("."), "bar").run()
   }
 }

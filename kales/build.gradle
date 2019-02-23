@@ -18,6 +18,7 @@ dependencies {
   api project(":actionpack")
   api project(":actionview")
   api project(":activemodel")
+  api project(":activerecord")
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
   implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
   implementation "ch.qos.logback:logback-classic:1.2.3"

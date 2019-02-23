@@ -1,6 +1,8 @@
-package kales.cli
+package kales.cli.task
 
 import com.github.ajalt.clikt.core.UsageError
+import kales.cli.safeCopyTo
+import kales.cli.safeWriteText
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.Files.exists
@@ -8,11 +10,11 @@ import java.nio.file.Path
 import java.nio.file.attribute.PosixFilePermissions
 
 /** "kales new" command: Creates a new Kales application */
-class NewCommandRunner(
+class NewCommandTask(
     private val appDir: File,
     private val appName: String
-) {
-  fun run() {
+) : KalesTask {
+  override fun run() {
     checkTargetDirectory()
     File(appDir, "build.gradle").safeWriteText(buildFileContents())
     val srcDirRelativePath = (setOf("src", "main", "kotlin") + appName.split("."))

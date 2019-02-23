@@ -11,6 +11,8 @@ apply from: "$rootDir/gradle/publish.gradle"
 
 dependencies {
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
+  implementation 'org.yaml:snakeyaml:1.23'
+  api files("libs/harmonica-core-1.1.18.jar")
   testImplementation "com.google.truth:truth:$truthVersion"
   testImplementation "org.jetbrains.kotlin:kotlin-test:$kotlinVersion"
 }

@@ -16,12 +16,12 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
 }
 
 dependencies {
+  implementation project(":activerecord")
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
   implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
   api "org.jdbi:jdbi3-core:$jdbiVersion"
   api "org.jdbi:jdbi3-kotlin:$jdbiVersion"
   api "org.jdbi:jdbi3-postgres:$jdbiVersion"
-  implementation 'org.yaml:snakeyaml:1.23'
   testImplementation "com.google.truth:truth:$truthVersion"
   testRuntime 'com.h2database:h2:1.4.197'
 }
