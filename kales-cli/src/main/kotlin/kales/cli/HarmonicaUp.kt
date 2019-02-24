@@ -2,21 +2,23 @@ package kales.cli
 
 import com.improve_future.harmonica.core.AbstractMigration
 import com.improve_future.harmonica.core.Connection
-import com.improve_future.harmonica.task.JarmonicaTaskMain
+import com.improve_future.harmonica.service.VersionService
 import org.jetbrains.kotlin.script.jsr223.KotlinJsr223JvmLocalScriptEngineFactory
 import java.io.File
 
-class HarmonicaUp(
+internal class HarmonicaUp(
     private val migrationsDirectory: File,
     private val connection: Connection
-) : JarmonicaTaskMain() {
+) {
+  private val versionService = VersionService("schema_migrations")
+
   fun run() {
     connection.use { connection ->
       connection.transaction {
         versionService.setupHarmonicaMigrationTable(connection)
       }
       for (file in migrationsDirectory.listFiles().sortedBy { it.name }) {
-        val migrationVersion = file.name.split('_')[0]
+        val migrationVersion = file.name.split('_').first()
         if (versionService.isVersionMigrated(connection, migrationVersion)) {
           continue
         }
@@ -30,9 +32,8 @@ class HarmonicaUp(
     }
   }
 
-  private fun readMigration(script: String): AbstractMigration {
-    return engine.eval(removePackageStatement(script)) as AbstractMigration
-  }
+  private fun readMigration(script: String) =
+      engine.eval(removePackageStatement(script)) as AbstractMigration
 
   private companion object {
     val engine by lazy {
