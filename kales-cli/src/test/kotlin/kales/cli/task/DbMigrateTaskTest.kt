@@ -24,9 +24,9 @@ class DbMigrateTaskTest {
     File(migrationsDir, "M${timestamp}_CreatePostsMigration.kts").writeText("""
       package $appName.db.migrate
 
-      import com.improve_future.harmonica.core.AbstractMigration
+      import kales.migrations.Migration
 
-      class CreatePostsMigration : AbstractMigration() {
+      class CreatePostsMigration : Migration() {
         override fun up() {
           createTable("posts") {
             varchar(columnName = "title", nullable = false)
@@ -53,7 +53,7 @@ class DbMigrateTaskTest {
     jdbi.withHandle<Any, RuntimeException> {
       DbMigrateTask(root).run()
       assertThat(it.createQuery("show tables").mapTo<String>().list())
-          .containsExactly("HARMONICA_MIGRATION", "POSTS")
+          .containsExactly("SCHEMA_MIGRATIONS", "POSTS")
     }
   }
 }
