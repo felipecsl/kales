@@ -3,4 +3,5 @@ ext {
   truthVersion = '0.42'
   ktorVersion = '1.1.2'
   jdbiVersion = '3.6.0'
+  h2DBVersion = '1.4.197'
 }

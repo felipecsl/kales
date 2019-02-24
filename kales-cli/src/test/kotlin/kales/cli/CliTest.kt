@@ -27,6 +27,8 @@ class CliTest {
     New().parse(arrayOf(tempDir.root.absolutePath, "com.example"))
     val stdOut = outContent.toString()
     val buildGradleRelativePath = File(tempDir.root, "build.gradle").relativePathToWorkingDir()
+    val databaseYmlRelativePath =
+        File(tempDir.root, "src/main/resources/database.yml").relativePathToWorkingDir()
     val gradleWrapperPropsRelativePath = File(tempDir.root,
         "gradle/wrapper/gradle-wrapper.properties").relativePathToWorkingDir()
     val gradleWrapperJarRelativePath = File(tempDir.root,
@@ -34,6 +36,7 @@ class CliTest {
     val gradlewRelativePath = File(tempDir.root, "gradlew").relativePathToWorkingDir()
     assertThat(stdOut).isEqualTo("""
              create $buildGradleRelativePath
+             create $databaseYmlRelativePath
              create $gradleWrapperPropsRelativePath
              create $gradleWrapperJarRelativePath
              create $gradlewRelativePath
@@ -52,6 +55,7 @@ class CliTest {
       val stdOut = outContent.toString()
       assertThat(stdOut).isEqualTo("""
            create blah/build.gradle
+           create blah/src/main/resources/database.yml
            create blah/gradle/wrapper/gradle-wrapper.properties
            create blah/gradle/wrapper/gradle-wrapper.jar
            create blah/gradlew
@@ -73,6 +77,7 @@ class CliTest {
       val stdOut = outContent.toString()
       assertThat(stdOut).isEqualTo("""
            create blah/build.gradle
+           create blah/src/main/resources/database.yml
            create blah/gradle/wrapper/gradle-wrapper.properties
            create blah/gradle/wrapper/gradle-wrapper.jar
            create blah/gradlew
@@ -80,6 +85,7 @@ class CliTest {
         New Kales project successfully initialized at '${workingDir.absolutePath}/blah'.
         Happy coding!
            identical blah/build.gradle
+           identical blah/src/main/resources/database.yml
            identical blah/gradle/wrapper/gradle-wrapper.properties
            skip blah/gradle/wrapper/gradle-wrapper.jar
            skip blah/gradlew

@@ -7,7 +7,7 @@ import com.squareup.kotlinpoet.TypeSpec
 import com.squareup.kotlinpoet.asTypeName
 import io.ktor.application.ApplicationCall
 import kales.actionpack.ApplicationController
-import kales.cli.safeWriteText
+import kales.cli.writeTextWithLogging
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.OutputStreamWriter
@@ -47,7 +47,7 @@ class GenerateControllerTask(
       OutputStreamWriter(baos, StandardCharsets.UTF_8).use { writer ->
         file.writeTo(writer)
       }
-      outputPath.toFile().safeWriteText(baos.toString())
+      outputPath.toFile().writeTextWithLogging(baos.toString())
     }
   }
 

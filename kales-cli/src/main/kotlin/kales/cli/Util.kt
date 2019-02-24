@@ -11,7 +11,7 @@ fun File.safeListFiles(): List<File> {
 }
 
 /** Print messages about file changes when writing text to it */
-fun File.safeWriteText(text: String, charset: Charset = Charsets.UTF_8) {
+fun File.writeTextWithLogging(text: String, charset: Charset = Charsets.UTF_8) {
   if (exists()) {
     if (readText(charset) != text) {
       printConflict()
@@ -49,7 +49,7 @@ fun File.printStatus(status: String) {
 }
 
 /** Copy streams and close at the end */
-fun InputStream.safeCopyTo(destination: File): Long {
+fun InputStream.copyToWithLogging(destination: File): Long {
   if (!destination.exists() || destination.length() == 0L) {
     destination.printCreated()
   } else {
@@ -67,3 +67,7 @@ fun File.relativePathToWorkingDir(): String {
   val workingDir = File(System.getProperty("user.dir"))
   return workingDir.toPath().relativize(absoluteFile.toPath()).toString()
 }
+
+/** Returns a relative path String for a set of directory names */
+fun relativePathFor(vararg pathSegments: String) =
+    pathSegments.toSet().joinToString(File.separator)

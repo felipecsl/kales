@@ -18,8 +18,6 @@ class GenerateControllerTaskTest {
     val appName = "com.example.testapp"
     NewCommandTask(root, appName).run()
     GenerateControllerTask(root, "bar").run()
-    println(File(root,
-        "src/main/kotlin/com/example/testapp/app/controllers").safeListFiles())
     val controllerFile = File(root,
         "src/main/kotlin/com/example/testapp/app/controllers/BarController.kt")
     assertThat(controllerFile.exists()).isTrue()

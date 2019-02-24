@@ -2,6 +2,7 @@ package kales.cli.task
 
 import com.github.ajalt.clikt.core.UsageError
 import kales.cli.PackageName
+import kales.cli.relativePathFor
 import kales.cli.safeListFiles
 import java.io.File
 
@@ -10,12 +11,11 @@ import java.io.File
  * defined by [applicationRootDir], eg.: "~/projects/foo"
  */
 abstract class KalesContextualTask(protected val applicationRootDir: File) : KalesTask {
-  private val kotlinDir =
-      File(applicationRootDir, listOf("src", "main", "kotlin").joinToString(File.separator))
+  private val kotlinDir = File(applicationRootDir, relativePathFor("src", "main", "kotlin"))
 
-  protected val resourcesDir =
-      File(listOf("src", "main", "resources").joinToString(File.separator))
+  protected val resourcesDir = File(applicationRootDir, relativePathFor("src", "main", "resources"))
 
+  /** returns the directory where the code for package "com.example.foo.app" is found */
   protected val appDirectory = findAppDirectory()
       ?: throw UsageError("Unable to find the `app` sources directory")
 

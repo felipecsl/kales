@@ -4,7 +4,8 @@ import com.github.ajalt.clikt.core.UsageError
 import com.improve_future.harmonica.core.Connection
 import com.improve_future.harmonica.core.DbConfig
 import com.improve_future.harmonica.core.Dbms
-import com.improve_future.harmonica.service.HarmonicaUp
+import kales.cli.HarmonicaUp
+import kales.cli.relativePathFor
 import kales.migrations.KalesDatabaseConfig
 import java.io.File
 
@@ -27,12 +28,13 @@ class DbMigrateTask(workingDirectory: File) : KalesContextualTask(workingDirecto
         "sqlite" -> Dbms.SQLite
         "oracle" -> Dbms.Oracle
         "sqlserver" -> Dbms.SQLServer
+        "h2" -> Dbms.H2
         else -> throw IllegalArgumentException("Unknown database adapter ${kalesDbConfig.adapter}")
       }
     }
-    val migrationPackage = packageName.childPackage("db", "migrate").toString()
+    val dbMigrateDir = File(appDirectory.parentFile, relativePathFor("db", "migrate"))
     val connection = Connection(harmonicaDbConfig)
-    val harmonicaUp = HarmonicaUp(migrationPackage, connection)
+    val harmonicaUp = HarmonicaUp(dbMigrateDir, connection)
     harmonicaUp.run()
   }
 }

@@ -23,5 +23,5 @@ dependencies {
   api "org.jdbi:jdbi3-kotlin:$jdbiVersion"
   api "org.jdbi:jdbi3-postgres:$jdbiVersion"
   testImplementation "com.google.truth:truth:$truthVersion"
-  testRuntime 'com.h2database:h2:1.4.197'
+  testRuntime "com.h2database:h2:$h2DBVersion"
 }

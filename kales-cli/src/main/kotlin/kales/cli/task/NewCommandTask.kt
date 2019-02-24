@@ -1,8 +1,9 @@
 package kales.cli.task
 
 import com.github.ajalt.clikt.core.UsageError
-import kales.cli.safeCopyTo
-import kales.cli.safeWriteText
+import kales.cli.copyToWithLogging
+import kales.cli.relativePathFor
+import kales.cli.writeTextWithLogging
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.Files.exists
@@ -16,7 +17,7 @@ class NewCommandTask(
 ) : KalesTask {
   override fun run() {
     checkTargetDirectory()
-    File(appRootDir, "build.gradle").safeWriteText(buildFileContents())
+    File(appRootDir, "build.gradle").writeTextWithLogging(buildFileContents())
     val srcDirRelativePath = (setOf("src", "main", "kotlin") + appName.split("."))
         .joinToString(File.separator)
     val sourcesDir = File(appRootDir, srcDirRelativePath)
@@ -25,11 +26,19 @@ class NewCommandTask(
     setOf("controllers", "views", "models").forEach {
       File(appDir, it).mkdirs()
     }
-    File(sourcesDir, setOf("db", "migrate").joinToString(File.separator)).mkdirs()
-    val gradleWrapperDir = setOf("gradle", "wrapper").joinToString(File.separator)
+    File(sourcesDir, relativePathFor("db", "migrate")).mkdirs()
+    val resourcesDir = File(appRootDir, relativePathFor("src", "main", "resources"))
+    resourcesDir.mkdirs()
+    File(resourcesDir, "database.yml").writeTextWithLogging("""
+      development:
+        adapter: sqlite
+        host: localhost
+        database: ${appName}_development
+    """.trimIndent())
+    val gradleWrapperDir = relativePathFor("gradle", "wrapper")
     File(appRootDir, gradleWrapperDir).mkdirs()
     File(File(appRootDir, gradleWrapperDir), "gradle-wrapper.properties")
-        .safeWriteText(GRADLE_WRAPPER_FILE_CONTENTS)
+        .writeTextWithLogging(GRADLE_WRAPPER_FILE_CONTENTS)
     copyResource("gradle-wrapper.bin", File(File(appRootDir, gradleWrapperDir), "gradle-wrapper.jar"))
     File(appRootDir, "gradlew").also { gradlewFile ->
       gradlewFile.toPath().makeExecutable()
@@ -51,7 +60,7 @@ class NewCommandTask(
   private fun copyResource(resourceName: String, destination: File) {
     val inputStream = javaClass.classLoader.getResourceAsStream(resourceName)
     // If the file is zero bytes we'll just consider it non-existing
-    inputStream.safeCopyTo(destination)
+    inputStream.copyToWithLogging(destination)
   }
 
   private fun Path.makeExecutable() {

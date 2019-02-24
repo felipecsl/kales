@@ -18,6 +18,7 @@ class NewCommandTaskTest {
     assertThat(File(root, "gradlew").exists()).isTrue()
     assertThat(File(root, "gradle/wrapper/gradle-wrapper.properties").exists()).isTrue()
     assertThat(File(root, "gradle/wrapper/gradle-wrapper.jar").exists()).isTrue()
+    assertThat(File(root, "src/main/resources/database.yml").exists()).isTrue()
     assertThat(File(root, "src/main/kotlin/com/example/testapp/app/controllers").exists()).isTrue()
     assertThat(File(root, "src/main/kotlin/com/example/testapp/db/migrate").exists()).isTrue()
     assertThat(File(root, "src/main/kotlin/com/example/testapp/app/views").exists()).isTrue()
