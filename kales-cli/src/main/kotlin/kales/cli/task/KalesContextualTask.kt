@@ -19,17 +19,14 @@ abstract class KalesContextualTask(protected val applicationRootDir: File) : Kal
   protected val appDirectory = findAppDirectory()
       ?: throw UsageError("Unable to find the `app` sources directory")
 
-  /** returns "com.example.foo.app" */
+  /** Returns the path to the migrations directory */
+  protected val dbMigrateDir = File(appDirectory.parentFile, relativePathFor("db", "migrate"))
+
+  /** returns "com.example.foo" */
   protected val appPackageName =
       recursivelyDetermineAppPackageName(appDirectory, appDirectory)
           ?.split("/")
           ?.joinToString(".")
-
-  /** Returns "com.example.foo" */
-  internal val packageName = PackageName.parse(appPackageNameOrThrow()).parentPackage
-
-  private fun appPackageNameOrThrow() = appPackageName
-      ?: throw IllegalStateException("appPackageName == null")
 
   /** Returns a File pointing to the application app/`type` directory or null if none found */
   private fun findAppDirectory(): File? {

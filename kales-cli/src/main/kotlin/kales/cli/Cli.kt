@@ -5,9 +5,7 @@ import com.github.ajalt.clikt.core.subcommands
 import com.github.ajalt.clikt.parameters.arguments.argument
 import com.github.ajalt.clikt.parameters.arguments.multiple
 import com.github.ajalt.clikt.parameters.types.file
-import kales.cli.task.DbMigrateTask
-import kales.cli.task.GenerateControllerTask
-import kales.cli.task.NewCommandTask
+import kales.cli.task.*
 import java.io.File
 
 class Cli : CliktCommand() {
@@ -43,8 +41,16 @@ class DbMigrate : CliktCommand(name = "db:migrate", help = """
   Migrate the database
 """.trimIndent()) {
   override fun run() {
-    val workingDir = File(System.getProperty("user.dir"))
-    DbMigrateTask(workingDir).run()
+    DbMigrateTask(workingDir()).run()
+  }
+}
+
+// TODO: Add support for different KALES_ENV (development, production, test, etc)
+class DbCreate : CliktCommand(name = "db:create", help = """
+  Creates the database from resources/database.yml
+""".trimIndent()) {
+  override fun run() {
+    DbCreateTask(workingDir()).run()
   }
 }
 
@@ -58,14 +64,28 @@ class GenerateController : CliktCommand(name = "controller", help = """
   private val actions by argument().multiple()
 
   override fun run() {
-    val workingDir = File(System.getProperty("user.dir"))
-    GenerateControllerTask(workingDir, name, actions.toSet()).run()
+    GenerateControllerTask(workingDir(), name, actions.toSet()).run()
+  }
+}
+
+class GenerateMigration : CliktCommand(name = "migration", help ="""
+    Stubs out a new database migration. Pass the migration name CamelCased.
+
+    A migration class is generated in db/migrate prefixed by a timestamp of the current date and time.
+""".trimIndent()) {
+  private val migrationName by argument()
+
+  override fun run() {
+    GenerateMigrationTask(workingDir(), migrationName).run()
   }
 }
 
 fun main(args: Array<String>) {
   val generateCommand = Generate()
       .subcommands(GenerateController())
-  Cli().subcommands(New(), generateCommand, DbMigrate())
+      .subcommands(GenerateMigration())
+  Cli().subcommands(New(), generateCommand, DbMigrate(), DbCreate())
       .main(args)
 }
+
+fun workingDir() = File(System.getProperty("user.dir"))
