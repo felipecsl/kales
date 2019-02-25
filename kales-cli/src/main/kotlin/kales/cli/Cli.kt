@@ -5,6 +5,9 @@ import com.github.ajalt.clikt.core.subcommands
 import com.github.ajalt.clikt.parameters.arguments.argument
 import com.github.ajalt.clikt.parameters.arguments.multiple
 import com.github.ajalt.clikt.parameters.types.file
+import kales.cli.task.DbMigrateTask
+import kales.cli.task.GenerateControllerTask
+import kales.cli.task.NewCommandTask
 import java.io.File
 
 class Cli : CliktCommand() {
@@ -25,7 +28,7 @@ class New : CliktCommand(help = """
   """.trimIndent())
 
   override fun run() {
-    NewCommandRunner(appPath, appName).run()
+    NewCommandTask(appPath, appName).run()
   }
 }
 
@@ -34,6 +37,15 @@ class Generate : CliktCommand(help = """
 """.trimIndent()) {
 
   override fun run() = Unit
+}
+
+class DbMigrate : CliktCommand(name = "db:migrate", help = """
+  Migrate the database
+""".trimIndent()) {
+  override fun run() {
+    val workingDir = File(System.getProperty("user.dir"))
+    DbMigrateTask(workingDir).run()
+  }
 }
 
 class GenerateController : CliktCommand(name = "controller", help = """
@@ -47,13 +59,13 @@ class GenerateController : CliktCommand(name = "controller", help = """
 
   override fun run() {
     val workingDir = File(System.getProperty("user.dir"))
-    GenerateControllerCommandRunner(workingDir, name, actions.toSet()).run()
+    GenerateControllerTask(workingDir, name, actions.toSet()).run()
   }
 }
 
 fun main(args: Array<String>) {
   val generateCommand = Generate()
       .subcommands(GenerateController())
-  Cli().subcommands(New(), generateCommand)
+  Cli().subcommands(New(), generateCommand, DbMigrate())
       .main(args)
 }

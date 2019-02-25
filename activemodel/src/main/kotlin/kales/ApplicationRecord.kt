@@ -1,12 +1,12 @@
 package kales
 
+import kales.migrations.KalesDatabaseConfig
 import org.jdbi.v3.core.Handle
 import org.jdbi.v3.core.Jdbi
 import org.jdbi.v3.core.h2.H2DatabasePlugin
 import org.jdbi.v3.core.kotlin.KotlinPlugin
 import org.jdbi.v3.core.kotlin.mapTo
 import org.jdbi.v3.postgres.PostgresPlugin
-import org.yaml.snakeyaml.Yaml
 
 abstract class ApplicationRecord {
   companion object {
@@ -15,28 +15,10 @@ abstract class ApplicationRecord {
         .installPlugin(H2DatabasePlugin())
         .installPlugin(KotlinPlugin())
 
-    @Suppress("UNCHECKED_CAST")
     private fun dbConnectionString(): String {
-      val yaml = Yaml()
       val stream = ApplicationRecord::class.java.classLoader.getResourceAsStream("database.yml")
-      val data = yaml.load<Map<String, Any>>(stream)
-      // TODO handle muliple environments
-      val devData = data["development"] as? Map<String, String> ?: throwMissingField("development")
-      val adapter = devData["adapter"] ?: throwMissingField("adapter")
-      val host = devData["host"] ?: throwMissingField("host")
-      val database = devData["database"] ?: throwMissingField("database")
-      return if (adapter == "h2") {
-        "jdbc:$adapter:$host:$database"
-      } else {
-        val username = devData["username"] ?: ""
-        val password = devData["password"] ?: ""
-        "jdbc:$adapter://$host/$database?user=$username&password=$password"
-      }
+      return KalesDatabaseConfig.fromDatabaseYml(stream).toString()
     }
-
-    private fun throwMissingField(name: String): Nothing =
-        throw IllegalArgumentException(
-            "Please set a value for the field '$name' in the file database.yml")
 
     inline fun <reified T : ApplicationRecord> allRecords(): List<T> {
       useJdbi {

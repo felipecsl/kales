@@ -1,6 +1,9 @@
-package kales.cli
+package kales.cli.task
 
 import com.github.ajalt.clikt.core.UsageError
+import kales.cli.copyToWithLogging
+import kales.cli.relativePathFor
+import kales.cli.writeTextWithLogging
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.Files.exists
@@ -8,46 +11,56 @@ import java.nio.file.Path
 import java.nio.file.attribute.PosixFilePermissions
 
 /** "kales new" command: Creates a new Kales application */
-class NewCommandRunner(
-    private val appDir: File,
+class NewCommandTask(
+    private val appRootDir: File,
     private val appName: String
-) {
-  fun run() {
+) : KalesTask {
+  override fun run() {
     checkTargetDirectory()
-    File(appDir, "build.gradle").safeWriteText(buildFileContents())
+    File(appRootDir, "build.gradle").writeTextWithLogging(buildFileContents())
     val srcDirRelativePath = (setOf("src", "main", "kotlin") + appName.split("."))
         .joinToString(File.separator)
-    val appSourceDir = File(File(appDir, srcDirRelativePath), "app")
-    appSourceDir.mkdirs()
+    val sourcesDir = File(appRootDir, srcDirRelativePath)
+    val appDir = File(sourcesDir, "app")
+    appDir.mkdirs()
     setOf("controllers", "views", "models").forEach {
-      File(appSourceDir, it).mkdirs()
+      File(appDir, it).mkdirs()
     }
-    val gradleWrapperDir = setOf("gradle", "wrapper").joinToString(File.separator)
-    File(appDir, gradleWrapperDir).mkdirs()
-    File(File(appDir, gradleWrapperDir), "gradle-wrapper.properties")
-        .safeWriteText(GRADLE_WRAPPER_FILE_CONTENTS)
-    copyResource("gradle-wrapper.bin", File(File(appDir, gradleWrapperDir), "gradle-wrapper.jar"))
-    File(appDir, "gradlew").also { gradlewFile ->
+    File(sourcesDir, relativePathFor("db", "migrate")).mkdirs()
+    val resourcesDir = File(appRootDir, relativePathFor("src", "main", "resources"))
+    resourcesDir.mkdirs()
+    File(resourcesDir, "database.yml").writeTextWithLogging("""
+      development:
+        adapter: sqlite
+        host: localhost
+        database: ${appName}_development
+    """.trimIndent())
+    val gradleWrapperDir = relativePathFor("gradle", "wrapper")
+    File(appRootDir, gradleWrapperDir).mkdirs()
+    File(File(appRootDir, gradleWrapperDir), "gradle-wrapper.properties")
+        .writeTextWithLogging(GRADLE_WRAPPER_FILE_CONTENTS)
+    copyResource("gradle-wrapper.bin", File(File(appRootDir, gradleWrapperDir), "gradle-wrapper.jar"))
+    File(appRootDir, "gradlew").also { gradlewFile ->
       gradlewFile.toPath().makeExecutable()
       copyResource("gradlew", gradlewFile)
     }
     println("""
 
-      New Kales project successfully initialized at '${appDir.absoluteFile.absolutePath}'.
+      New Kales project successfully initialized at '${appRootDir.absoluteFile.absolutePath}'.
       Happy coding!
       """.trimIndent())
   }
 
   private fun checkTargetDirectory() {
-    if (!appDir.exists() && !appDir.mkdirs()) {
-      throw UsageError("Failed to create directory ${appDir.absolutePath}")
+    if (!appRootDir.exists() && !appRootDir.mkdirs()) {
+      throw UsageError("Failed to create directory ${appRootDir.absolutePath}")
     }
   }
 
   private fun copyResource(resourceName: String, destination: File) {
     val inputStream = javaClass.classLoader.getResourceAsStream(resourceName)
     // If the file is zero bytes we'll just consider it non-existing
-    inputStream.safeCopyTo(destination)
+    inputStream.copyToWithLogging(destination)
   }
 
   private fun Path.makeExecutable() {
