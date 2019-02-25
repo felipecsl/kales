@@ -33,15 +33,14 @@ class GenerateControllerTask(
           """.trimIndent())
     }
     val controllersDir = File(appDirectory, "controllers")
-    writeControllerClassFile(controllersDir, controllerName, appPackageName)
+    writeControllerClassFile(controllersDir, controllerName)
   }
 
   private fun writeControllerClassFile(
       controllersDir: File,
-      controllerName: String,
-      appPackageName: String
+      controllerName: String
   ) {
-    val file = buildFileSpec(controllerName, appPackageName)
+    val file = buildFileSpec(controllerName)
     val outputPath = controllersDir.toPath().resolve("$controllerName.kt")
     ByteArrayOutputStream().use { baos ->
       OutputStreamWriter(baos, StandardCharsets.UTF_8).use { writer ->
@@ -51,7 +50,7 @@ class GenerateControllerTask(
     }
   }
 
-  private fun buildFileSpec(controllerName: String, appPackageName: String): FileSpec {
+  private fun buildFileSpec(controllerName: String): FileSpec {
     val controllerTypeSpec = TypeSpec.classBuilder(controllerName)
         .primaryConstructor(FunSpec.constructorBuilder()
             .addParameter("call", ApplicationCall::class)

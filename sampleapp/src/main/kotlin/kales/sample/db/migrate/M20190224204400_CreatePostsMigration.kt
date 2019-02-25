@@ -1,8 +1,8 @@
 package kales.sample.db.migrate
 
-import com.improve_future.harmonica.core.AbstractMigration
+import kales.migrations.Migration
 
-class CreatePostsMigration : AbstractMigration() {
+class M20190224204400_CreatePostsMigration : Migration() {
   override fun up() {
     createTable("posts") {
       varchar(columnName = "title", nullable = false)
