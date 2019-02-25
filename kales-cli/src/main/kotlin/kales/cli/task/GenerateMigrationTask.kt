@@ -37,7 +37,12 @@ class GenerateMigrationTask(
       OutputStreamWriter(baos, StandardCharsets.UTF_8).use { writer ->
         fileSpec.writeTo(writer)
       }
-      outputPath.toFile().writeTextWithLogging(baos.toString())
+      // We need to instantiate the migration class name at the bottom of the migration file so that
+      // the Kotlin script engine will return that type from eval() and be able to execute the
+      // migration. Without that, eval() returns `null` and we cannot run it. There must be a better
+      // way to do this...
+      val finalText = "$baos\n$migrationClassName()\n"
+      outputPath.toFile().writeTextWithLogging(finalText)
     }
   }
 }

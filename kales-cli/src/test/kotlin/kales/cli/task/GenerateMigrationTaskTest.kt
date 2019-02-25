@@ -34,6 +34,8 @@ class GenerateMigrationTaskTest {
           }
       }
 
+      CreateFooBar()
+
     """.trimIndent())
   }
 }

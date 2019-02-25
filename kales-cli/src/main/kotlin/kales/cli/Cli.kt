@@ -76,7 +76,7 @@ class GenerateMigration : CliktCommand(name = "migration", help ="""
   private val migrationName by argument()
 
   override fun run() {
-    GenerateMigrationTask(workingDir(), migrationName)
+    GenerateMigrationTask(workingDir(), migrationName).run()
   }
 }
 
