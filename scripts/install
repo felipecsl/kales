@@ -2,8 +2,12 @@
 # heavily based on https://github.com/junegunn/fzf/blob/master/install
 
 set -u
-version=0.0.1-SNAPSHOT
+version="0.0.1-SNAPSHOT"
 kales_base=$(pwd)
+shells="bash zsh fish"
+prefix='~/.kales'
+prefix_expand=~/.kales
+fish_dir=${XDG_CONFIG_HOME:-$HOME/.config}/fish
 
 check_binary() {
   echo -n "  - Checking kales executable ... "
@@ -68,8 +72,7 @@ download() {
   fi
 
   local url
-  [[ "$version" =~ alpha ]] &&
-    url=https://github.com/felipecsl/kales/releases/download/$version/{1}
+  url=https://github.com/felipecsl/kales/releases/download/$version/${1}
   set -o pipefail
   if ! (try_curl $url || try_wget $url); then
     set +o pipefail
