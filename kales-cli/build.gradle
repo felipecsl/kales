@@ -17,6 +17,12 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
   }
 }
 
+jar {
+  manifest {
+    attributes 'Version': VERSION
+  }
+}
+
 mainClassName = 'kales.cli.CliKt'
 
 project.ext.artifact = 'kales-cli'

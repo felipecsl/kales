@@ -1,0 +1,207 @@
+#!/usr/bin/env bash
+# heavily based on https://github.com/junegunn/fzf/blob/master/install
+
+set -u
+version=0.0.1-SNAPSHOT
+kales_base=$(pwd)
+
+check_binary() {
+  echo -n "  - Checking kales executable ... "
+  local output
+  output=$("$kales_base"/bin/kales version 2>&1 | awk '{print $1}')
+  if [ $? -ne 0 ]; then
+    echo "Error: $output"
+    binary_error="Invalid binary"
+  elif [ "$version" != "$output" ]; then
+    echo "$output != $version"
+    binary_error="Invalid version"
+  else
+    echo "$output"
+    binary_error=""
+    return 0
+  fi
+  rm -f "$kales_base"/bin/kales
+  return 1
+}
+
+link_kales_in_path() {
+  if which_kales="$(command -v kales)"; then
+    echo "  - Found in \$PATH"
+    echo "  - Creating symlink: $which_kales -> bin/kales"
+    (cd "$kales_base"/bin && rm -f kales && ln -sf "$which_kales" kales)
+    check_binary && return
+  fi
+  return 1
+}
+
+try_curl() {
+  command -v curl > /dev/null &&
+  if [[ $1 =~ tgz$ ]]; then
+    curl -fL $1 | tar -xzf -
+  else
+    local temp=${TMPDIR:-/tmp}/kales.zip
+    curl -fLo "$temp" $1 && unzip -o "$temp" && rm -f "$temp"
+  fi
+}
+
+try_wget() {
+  command -v wget > /dev/null &&
+  if [[ $1 =~ tgz$ ]]; then
+    wget -O - $1 | tar -xzf -
+  else
+    local temp=${TMPDIR:-/tmp}/kales.zip
+    wget -O "$temp" $1 && unzip -o "$temp" && rm -f "$temp"
+  fi
+}
+
+download() {
+  echo "Downloading kales..."
+  if [ -x "$kales_base"/bin/kales ]; then
+    echo "  - Already exists"
+    check_binary && return
+  fi
+  link_kales_in_path && return
+  mkdir -p "$kales_base"/bin && cd "$kales_base"/bin
+  if [ $? -ne 0 ]; then
+    binary_error="Failed to create bin directory"
+    return
+  fi
+
+  local url
+  [[ "$version" =~ alpha ]] &&
+    url=https://github.com/felipecsl/kales/releases/download/$version/{1}
+  set -o pipefail
+  if ! (try_curl $url || try_wget $url); then
+    set +o pipefail
+    binary_error="Failed to download with curl and wget"
+    return
+  fi
+  set +o pipefail
+
+  if [ ! -f kales ]; then
+    binary_error="Failed to download ${1}"
+    return
+  fi
+
+  chmod +x kales && check_binary
+}
+
+ask() {
+  while true; do
+    read -p "$1 ([y]/n) " -r
+    REPLY=${REPLY:-"y"}
+    if [[ $REPLY =~ ^[Yy]$ ]]; then
+      return 1
+    elif [[ $REPLY =~ ^[Nn]$ ]]; then
+      return 0
+    fi
+  done
+}
+
+append_line() {
+  set -e
+
+  local update line file pat lno
+  update="$1"
+  line="$2"
+  file="$3"
+  pat="${4:-}"
+  lno=""
+
+  echo "Update $file:"
+  echo "  - $line"
+  if [ -f "$file" ]; then
+    if [ $# -lt 4 ]; then
+      lno=$(\grep -nF "$line" "$file" | sed 's/:.*//' | tr '\n' ' ')
+    else
+      lno=$(\grep -nF "$pat" "$file" | sed 's/:.*//' | tr '\n' ' ')
+    fi
+  fi
+  if [ -n "$lno" ]; then
+    echo "    - Already exists: line #$lno"
+  else
+    if [ $update -eq 1 ]; then
+      [ -f "$file" ] && echo >> "$file"
+      echo "$line" >> "$file"
+      echo "    + Added"
+    else
+      echo "    ~ Skipped"
+    fi
+  fi
+  echo
+  set +e
+}
+
+create_file() {
+  local file="$1"
+  shift
+  echo "Create $file:"
+  for line in "$@"; do
+    echo "    $line"
+    echo "$line" >> "$file"
+  done
+  echo
+}
+
+download kales-cli-$version-all.jar.zip
+
+cd "$kales_base"
+
+[[ "$*" =~ "--bin" ]] && exit 0
+
+for s in $shells; do
+  if ! command -v "$s" > /dev/null; then
+    shells=${shells/$s/}
+  fi
+done
+
+if [[ ${#shells} -lt 3 ]]; then
+  echo "No shell configuration to be updated."
+  exit 0
+fi
+
+for shell in $shells; do
+  [[ "$shell" = fish ]] && continue
+  src=${prefix_expand}.${shell}
+  echo -n "Generate $src ... "
+
+  fzf_completion="[[ \$- == *i* ]] && source \"$fzf_base/shell/completion.${shell}\" 2> /dev/null"
+  if [ $auto_completion -eq 0 ]; then
+    fzf_completion="# $fzf_completion"
+  fi
+
+  fzf_key_bindings="source \"$fzf_base/shell/key-bindings.${shell}\""
+  if [ $key_bindings -eq 0 ]; then
+    fzf_key_bindings="# $fzf_key_bindings"
+  fi
+
+  cat > "$src" << EOF
+# Setup kales
+# ---------
+if [[ ! "\$PATH" == *$kales_base_esc/bin* ]]; then
+  export PATH="\$PATH:$kales_base/bin"
+fi
+EOF
+  echo "OK"
+done
+
+if [ $update_config -eq 2 ]; then
+  echo
+  ask "Do you want to update your shell configuration files?"
+  update_config=$?
+fi
+echo
+for shell in $shells; do
+  [[ "$shell" = fish ]] && continue
+  [ $shell = zsh ] && dest=${ZDOTDIR:-~}/.zshrc || dest=~/.bashrc
+  append_line $update_config "[ -f ${prefix}.${shell} ] && source ${prefix}.${shell}" "$dest" "${prefix}.${shell}"
+done
+
+if [ $update_config -eq 1 ]; then
+  echo 'Finished. Restart your shell.'
+  [[ "$shells" =~ bash ]] && echo '   source ~/.bashrc  # bash'
+  [[ "$shells" =~ zsh ]]  && echo "   source ${ZDOTDIR:-~}/.zshrc   # zsh"
+  [[ "$shells" =~ fish ]] && [ $key_bindings -eq 1 ] && echo '   fzf_key_bindings  # fish'
+  echo
+fi
+echo 'For more information, see: https://github.com/felipecsl/kales'
