@@ -4,7 +4,7 @@
 set -u
 version="0.0.1-SNAPSHOT"
 kales_base=$(pwd)
-update_config=2
+update_config=1
 kales_base_esc=$(printf %q "$kales_base")
 shells="bash zsh fish"
 prefix='~/.kales'
@@ -181,8 +181,8 @@ EOF
 done
 
 echo
-ask "Do you want to update your shell configuration files?"
-update_config=$?
+# ask "Do you want to update your shell configuration files?"
+# update_config=$?
 echo
 for shell in $shells; do
   [[ "$shell" = fish ]] && continue
