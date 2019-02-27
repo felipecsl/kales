@@ -102,7 +102,7 @@ class NewCommandTask(
     mainClassName = '$appName.MainKt'
 
     dependencies {
-      implementation "com.felipecsl.kales:kales:0.0.1-SNAPSHOT"
+      implementation "com.felipecsl.kales:kales:${KalesVersionTask.version()}"
     }
   """.trimIndent()
 

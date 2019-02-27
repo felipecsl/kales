@@ -1,17 +1,18 @@
 # Kales
 
 A modern web framework built for developer productivity and safety.  
-Kales run on top of [Ktor](https://ktor.io/) and uses a Model-View-Controller architecture. 
-
-Database access is done via [JDBI](http://jdbi.org/) and configured from a `database.yml` resource 
-file (similar to Rails).
-
-More documentation coming soon!
+Kales runs on top of [Ktor](https://ktor.io/) and uses an [MVC architecture](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller). 
 
 ## Usage
 
-Kales comes with a command line application `kales-cli` that can generate most of the boilerplate
-needed to bootstrap a new web app using Kales. More details about this coming soon!
+Run the following in your terminal, then follow the onscreen instructions.
+
+```
+curl https://raw.githubusercontent.com/felipecsl/kales/master/scripts/install -sSf | sh
+```
+
+This will install the command line application `kales`. It can generate the boilerplate
+you need to bootstrap a new web app.
 
 ## Running the example app
 

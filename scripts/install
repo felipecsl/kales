@@ -4,6 +4,7 @@
 set -u
 version="0.0.1-SNAPSHOT"
 kales_base=$(pwd)
+update_config=2
 kales_base_esc=$(printf %q "$kales_base")
 shells="bash zsh fish"
 prefix='~/.kales'
