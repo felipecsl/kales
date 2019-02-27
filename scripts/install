@@ -4,7 +4,7 @@
 set -u
 version="0.0.1-SNAPSHOT"
 kales_base=$(pwd)
-kales_base_esc=$(printf %q "$fzf_base")
+kales_base_esc=$(printf %q "$kales_base")
 shells="bash zsh fish"
 prefix='~/.kales'
 prefix_expand=~/.kales
@@ -179,11 +179,9 @@ EOF
   echo "OK"
 done
 
-if [ $update_config -eq 2 ]; then
-  echo
-  ask "Do you want to update your shell configuration files?"
-  update_config=$?
-fi
+echo
+ask "Do you want to update your shell configuration files?"
+update_config=$?
 echo
 for shell in $shells; do
   [[ "$shell" = fish ]] && continue
@@ -195,7 +193,6 @@ if [ $update_config -eq 1 ]; then
   echo 'Finished. Restart your shell.'
   [[ "$shells" =~ bash ]] && echo '   source ~/.bashrc  # bash'
   [[ "$shells" =~ zsh ]]  && echo "   source ${ZDOTDIR:-~}/.zshrc   # zsh"
-  [[ "$shells" =~ fish ]] && [ $key_bindings -eq 1 ] && echo '   fzf_key_bindings  # fish'
   echo
 fi
 echo 'For more information, see: https://github.com/felipecsl/kales'
