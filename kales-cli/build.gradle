@@ -32,11 +32,12 @@ apply from: "$rootDir/gradle/publish.gradle"
 dependencies {
   implementation 'com.github.ajalt:clikt:1.6.0'
   implementation 'com.squareup:kotlinpoet:1.0.1'
-  implementation project(":kales")
+  implementation project(":activerecord")
+  implementation project(":actionpack")
   implementation "org.jetbrains.kotlin:kotlin-compiler-embeddable:$kotlinVersion"
-  implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
-  implementation "org.jetbrains.kotlin:kotlin-script-runtime:$kotlinVersion"
   implementation "org.jetbrains.kotlin:kotlin-script-util:$kotlinVersion"
   testImplementation 'com.google.truth:truth:0.42'
   testRuntime "com.h2database:h2:$h2DBVersion"
+  testImplementation "org.jdbi:jdbi3-core:$jdbiVersion"
+  testImplementation "org.jdbi:jdbi3-kotlin:$jdbiVersion"
 }

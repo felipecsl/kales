@@ -4,6 +4,7 @@
 set -u
 version="0.0.1-SNAPSHOT"
 kales_base=$(pwd)
+kales_base_esc=$(printf %q "$fzf_base")
 shells="bash zsh fish"
 prefix='~/.kales'
 prefix_expand=~/.kales
@@ -146,7 +147,7 @@ create_file() {
   echo
 }
 
-download kales-cli-$version-all.jar.zip
+download kales-$version.zip
 
 cd "$kales_base"
 
@@ -167,16 +168,6 @@ for shell in $shells; do
   [[ "$shell" = fish ]] && continue
   src=${prefix_expand}.${shell}
   echo -n "Generate $src ... "
-
-  fzf_completion="[[ \$- == *i* ]] && source \"$fzf_base/shell/completion.${shell}\" 2> /dev/null"
-  if [ $auto_completion -eq 0 ]; then
-    fzf_completion="# $fzf_completion"
-  fi
-
-  fzf_key_bindings="source \"$fzf_base/shell/key-bindings.${shell}\""
-  if [ $key_bindings -eq 0 ]; then
-    fzf_key_bindings="# $fzf_key_bindings"
-  fi
 
   cat > "$src" << EOF
 # Setup kales
