@@ -101,16 +101,20 @@ class Index extends React.Component {
     );
 
     const TryOut = () => (
-      <Block id="try">
-        {[
-          {
-            content: 'Coming soon!',
-            image: `${baseUrl}img/leaf.svg`,
-            imageAlign: 'left',
-            title: 'Try it Out',
-          },
-        ]}
-      </Block>
+      <Container
+        padding={['bottom', 'top']}
+        id='try'>
+        <div style={{textAlign: 'center'}}>
+          <h2>
+            Try it out
+          </h2>
+          <iframe
+              src="https://carbon.now.sh/embed/?bg=rgba(255%2C255%2C255%2C1)&t=lucario&wt=none&l=application%2Fx-sh&ds=true&dsyoff=20px&dsblur=68px&wc=true&wa=true&pv=56px&ph=56px&ln=false&fm=Hack&fs=14px&lh=133%25&si=false&code=curl%2520https%253A%252F%252Fraw.githubusercontent.com%252Ffelipecsl%252Fkales%252Fmaster%252Fscripts%252Finstall%2520-sSf%2520%257C%2520sh&es=4x&wm=false"
+              style={{transform: 'scale(1.2)', width: '1024px', height: '200px', border: '0', overflow: 'hidden'}}
+              sandbox="allow-scripts allow-same-origin">
+          </iframe>
+        </div>
+      </Container>
     );
 
     const Description = () => (
@@ -119,7 +123,6 @@ class Index extends React.Component {
           {
             content:
               'Coming soon!',
-            image: `${baseUrl}img/leaf.svg`,
             imageAlign: 'right',
             title: 'Description',
           },
@@ -132,7 +135,6 @@ class Index extends React.Component {
         {[
           {
             content: 'Coming soon!',
-            image: `${baseUrl}img/leaf.svg`,
             imageAlign: 'right',
             title: 'Learn How',
           },
@@ -194,8 +196,8 @@ class Index extends React.Component {
         <div className="mainContainer">
           <Features />
           <FeatureCallout />
-          <LearnHow />
           <TryOut />
+          <LearnHow />
           <Description />
           <Showcase />
         </div>
