@@ -55,7 +55,7 @@ case "`uname`" in
     ;;
 esac
 
-CLASSPATH=/usr/local/lib/kales.jar
+CLASSPATH=./kales-cli.jar
 
 # Determine the Java command to use to start the JVM.
 if [ -n "$JAVA_HOME" ] ; then

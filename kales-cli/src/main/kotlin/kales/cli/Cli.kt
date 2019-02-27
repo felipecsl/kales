@@ -7,9 +7,33 @@ import com.github.ajalt.clikt.parameters.arguments.multiple
 import com.github.ajalt.clikt.parameters.types.file
 import kales.cli.task.*
 import java.io.File
+import java.net.URL
+import java.util.jar.Manifest
 
 class Cli : CliktCommand() {
   override fun run() = Unit
+}
+
+class Version : CliktCommand(help = """
+  Displays the Kales version
+""".trimIndent()) {
+  override fun run() {
+    println(kalesVersion())
+  }
+
+  private fun kalesVersion(): String {
+    val clazz = Cli::class.java
+    val className = "${clazz.simpleName}.class"
+    val classPath = clazz.getResource(className).toString()
+    return if (!classPath.startsWith("jar")) {
+      throw RuntimeException()
+    } else {
+      val manifestPath =
+          classPath.substring(0, classPath.lastIndexOf("!") + 1) + "/META-INF/MANIFEST.MF"
+      val manifest = Manifest(URL(manifestPath).openStream())
+      manifest.mainAttributes.getValue("Version")
+    }
+  }
 }
 
 class New : CliktCommand(help = """
@@ -68,7 +92,7 @@ class GenerateController : CliktCommand(name = "controller", help = """
   }
 }
 
-class GenerateMigration : CliktCommand(name = "migration", help ="""
+class GenerateMigration : CliktCommand(name = "migration", help = """
     Stubs out a new database migration. Pass the migration name CamelCased.
 
     A migration class is generated in db/migrate prefixed by a timestamp of the current date and time.
@@ -84,7 +108,7 @@ fun main(args: Array<String>) {
   val generateCommand = Generate()
       .subcommands(GenerateController())
       .subcommands(GenerateMigration())
-  Cli().subcommands(New(), generateCommand, DbMigrate(), DbCreate())
+  Cli().subcommands(New(), generateCommand, DbMigrate(), DbCreate(), Version())
       .main(args)
 }
 
