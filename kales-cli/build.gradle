@@ -23,6 +23,10 @@ jar {
   }
 }
 
+test {
+  systemProperty 'KALES_VERSION', VERSION
+}
+
 mainClassName = 'kales.cli.CliKt'
 
 project.ext.artifact = 'kales-cli'

@@ -18,21 +18,7 @@ class Version : CliktCommand(help = """
   Displays the Kales version
 """.trimIndent()) {
   override fun run() {
-    println(kalesVersion())
-  }
-
-  private fun kalesVersion(): String {
-    val clazz = Cli::class.java
-    val className = "${clazz.simpleName}.class"
-    val classPath = clazz.getResource(className).toString()
-    return if (!classPath.startsWith("jar")) {
-      throw RuntimeException()
-    } else {
-      val manifestPath =
-          classPath.substring(0, classPath.lastIndexOf("!") + 1) + "/META-INF/MANIFEST.MF"
-      val manifest = Manifest(URL(manifestPath).openStream())
-      manifest.mainAttributes.getValue("Version")
-    }
+    KalesVersionTask().run()
   }
 }
 
