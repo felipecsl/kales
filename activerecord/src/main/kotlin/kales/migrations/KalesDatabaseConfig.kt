@@ -20,6 +20,8 @@ data class KalesDatabaseConfig(
     }
   }
 
+  fun toConnectionString() = toString()
+
   companion object {
     @Suppress("UNCHECKED_CAST")
     fun fromDatabaseYml(fileStream: InputStream): KalesDatabaseConfig {

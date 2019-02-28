@@ -37,6 +37,7 @@ dependencies {
   implementation 'com.github.ajalt:clikt:1.6.0'
   implementation 'com.squareup:kotlinpoet:1.0.1'
   implementation project(":activerecord")
+  implementation project(":activemodel")
   implementation project(":actionpack")
   implementation "org.jetbrains.kotlin:kotlin-compiler-embeddable:$kotlinVersion"
   implementation "org.jetbrains.kotlin:kotlin-script-util:$kotlinVersion"

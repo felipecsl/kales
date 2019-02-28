@@ -1,23 +1,18 @@
 package kales
 
+import kales.activemodel.use
 import kales.migrations.KalesDatabaseConfig
 import org.jdbi.v3.core.Handle
 import org.jdbi.v3.core.Jdbi
-import org.jdbi.v3.core.h2.H2DatabasePlugin
-import org.jdbi.v3.core.kotlin.KotlinPlugin
 import org.jdbi.v3.core.kotlin.mapTo
-import org.jdbi.v3.postgres.PostgresPlugin
 
 abstract class ApplicationRecord {
   companion object {
-    val JDBI: Jdbi = Jdbi.create(dbConnectionString())
-        .installPlugin(PostgresPlugin())
-        .installPlugin(H2DatabasePlugin())
-        .installPlugin(KotlinPlugin())
+    val JDBI: Jdbi = JdbiFactory.fromConnectionString(dbConnectionString())
 
     private fun dbConnectionString(): String {
       val stream = ApplicationRecord::class.java.classLoader.getResourceAsStream("database.yml")
-      return KalesDatabaseConfig.fromDatabaseYml(stream).toString()
+      return KalesDatabaseConfig.fromDatabaseYml(stream).toConnectionString()
     }
 
     inline fun <reified T : ApplicationRecord> allRecords(): List<T> {
@@ -60,7 +55,7 @@ abstract class ApplicationRecord {
       }
     }
 
-    inline fun <T> useJdbi(block: (Handle) -> T) = JDBI.open().use { block(it) }
+    inline fun <T> useJdbi(block: (Handle) -> T) = JDBI.use(block)
 
     inline fun <reified T> toTableName() = "${T::class.simpleName!!.toLowerCase()}s"
   }

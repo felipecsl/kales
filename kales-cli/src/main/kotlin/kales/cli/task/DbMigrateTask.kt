@@ -1,22 +1,15 @@
 package kales.cli.task
 
-import com.github.ajalt.clikt.core.UsageError
 import com.improve_future.harmonica.core.Connection
 import com.improve_future.harmonica.core.DbConfig
 import com.improve_future.harmonica.core.Dbms
 import kales.cli.HarmonicaUp
 import kales.cli.relativePathFor
-import kales.migrations.KalesDatabaseConfig
 import java.io.File
 
 class DbMigrateTask(workingDirectory: File) : KalesContextualTask(workingDirectory) {
   override fun run() {
-    val databaseYml = File(resourcesDir, "database.yml")
-    if (!databaseYml.exists()) {
-      throw UsageError("database.yml file not found.\n" +
-          "Plase make sure it exists under src/main/resources and try again")
-    }
-    val kalesDbConfig = KalesDatabaseConfig.fromDatabaseYml(databaseYml.inputStream())
+    val kalesDbConfig = readDatabaseConfig()
     val harmonicaDbConfig = DbConfig {
       dbName = kalesDbConfig.database
       user = kalesDbConfig.username
