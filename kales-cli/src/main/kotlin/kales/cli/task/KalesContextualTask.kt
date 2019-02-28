@@ -4,6 +4,7 @@ import com.github.ajalt.clikt.core.UsageError
 import kales.cli.PackageName
 import kales.cli.relativePathFor
 import kales.cli.safeListFiles
+import kales.migrations.KalesDatabaseConfig
 import java.io.File
 
 /**
@@ -54,6 +55,16 @@ abstract class KalesContextualTask(protected val applicationRootDir: File) : Kal
       else ->
         recursivelyDetermineAppPackageName(currentDir.parentFile, appDir)
     }
+  }
+
+  /** Returns a [KalesDatabaseConfig] representing the current project's `database.yml` file */
+  protected fun readDatabaseConfig(): KalesDatabaseConfig {
+    val databaseYml = File(resourcesDir, "database.yml")
+    if (!databaseYml.exists()) {
+      throw UsageError("database.yml file not found.\n" +
+          "Plase make sure it exists under src/main/resources and try again")
+    }
+    return KalesDatabaseConfig.fromDatabaseYml(databaseYml.inputStream())
   }
 
   private fun File.childDirectories() =
