@@ -130,6 +130,7 @@ class NewApplicationTask(
 
     dependencies {
       implementation "com.felipecsl.kales:kales:${kalesVersion()}"
+      implementation "io.ktor:ktor-server-netty:1.1.2"
     }
   """.trimIndent()
 
@@ -140,6 +141,7 @@ class NewApplicationTask(
       import io.ktor.server.engine.embeddedServer
       import io.ktor.server.netty.Netty
       import kales.kalesApp
+      import $appName.app.views.layouts.AppLayout
 
       fun Application.module() {
         kalesApp(AppLayout::class) {

@@ -13,7 +13,7 @@ class Cli : CliktCommand() {
 }
 
 class Version : CliktCommand(help = """
-  Displays the Kales kalesVersion
+  Displays the Kales version
 """.trimIndent()) {
   override fun run() {
     KalesVersionTask().run()
