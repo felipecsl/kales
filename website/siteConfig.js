@@ -51,6 +51,7 @@ const siteConfig = {
   headerIcon: 'img/leaf.svg',
   footerIcon: 'img/leaf.svg',
   favicon: 'img/leaf.png',
+  cname: 'kales.dev',
 
   /* Colors for website */
   colors: {
