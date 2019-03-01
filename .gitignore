@@ -6,3 +6,4 @@ build/
 jd-gui.cfg
 *.iml
 node_modules/
+scripts/bin

@@ -65,7 +65,7 @@ class HomeSplash extends React.Component {
           <ProjectTitle siteConfig={siteConfig} />
           <PromoSection>
             <Button href="#try">Try It Out</Button>
-            <Button href={docUrl('doc1.html')}>Read the docs</Button>
+            <Button href={docUrl('getting-started.html')}>Read the docs</Button>
           </PromoSection>
         </div>
       </SplashContainer>
@@ -119,25 +119,16 @@ class Index extends React.Component {
         </div>
       </Container>
     );
-
-    const Description = () => (
-      <Block background="dark">
-        {[
-          {
-            content:
-              'Coming soon!',
-            imageAlign: 'right',
-            title: 'Description',
-          },
-        ]}
-      </Block>
-    );
-
+    const docsPart = `${siteConfig.docsUrl ? `${siteConfig.docsUrl}/` : ''}`;
+    const langPart = `${language ? `${language}/` : ''}`;
+    const docUrl = doc => `${baseUrl}${docsPart}${langPart}${doc}`;
+    const gettingStartedUrl = docUrl("getting-started.html");
     const LearnHow = () => (
       <Block background="light">
         {[
           {
-            content: 'Coming soon!',
+            content: '<p> Kales is currently in alpha stability and under active development.' +
+                '<br/>Please check out the <a href="' + gettingStartedUrl + '">docs</a> for our official Guides or check back later for more content!</p>',
             imageAlign: 'right',
             title: 'Learn How',
           },
@@ -181,8 +172,8 @@ class Index extends React.Component {
 
       return (
         <div className="productShowcaseSection paddingBottom">
-          <h2>Who is Using This?</h2>
-          <p>This project is used by all these people</p>
+          <h2>Who is using Kales?</h2>
+          <p>Add a link to your website here!</p>
           <div className="logos">{showcase}</div>
           <div className="more-users">
             <a className="button" href={pageUrl('users.html')}>
@@ -201,7 +192,6 @@ class Index extends React.Component {
           <FeatureCallout />
           <TryOut />
           <LearnHow />
-          <Description />
           <Showcase />
         </div>
       </div>
