@@ -5,13 +5,6 @@
     "previous": "Previous",
     "tagline": "Build modern websites quickly and with confidence.",
     "docs": {
-      "doc1": {
-        "title": "Latin-ish",
-        "sidebar_label": "Example Page"
-      },
-      "doc2": {
-        "title": "document number 2"
-      },
       "doc3": {
         "title": "This is document number 3"
       },
@@ -20,6 +13,13 @@
       },
       "doc5": {
         "title": "Fifth Document"
+      },
+      "getting-started": {
+        "title": "Getting Started",
+        "sidebar_label": "Getting Started"
+      },
+      "installation": {
+        "title": "Installing Kales"
       }
     },
     "links": {
@@ -27,9 +27,8 @@
       "API": "API"
     },
     "categories": {
-      "Docusaurus": "Docusaurus",
-      "First Category": "First Category",
-      "Second Category": "Second Category"
+      "Introduction": "Introduction",
+      "First Category": "First Category"
     }
   },
   "pages-strings": {

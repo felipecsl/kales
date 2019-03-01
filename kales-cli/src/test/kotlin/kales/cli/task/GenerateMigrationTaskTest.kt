@@ -16,9 +16,10 @@ class GenerateMigrationTaskTest {
     val appName = "com.example.testapp"
     val date = Date()
     val timestamp = SimpleDateFormat("yyyyMMddhhmmss").format(date)
-    NewCommandTask(root, appName).run()
-    GenerateMigrationTask(root, "CreateFooBar") { date }.run()
-    val dbMigrateDir = File(root, "src/main/kotlin/com/example/testapp/db/migrate")
+    NewApplicationTask(root, appName).run()
+    val appDir = File(root, appName)
+    GenerateMigrationTask(appDir, "CreateFooBar") { date }.run()
+    val dbMigrateDir = File(appDir, "src/main/kotlin/com/example/testapp/db/migrate")
     val migrationFile = File(dbMigrateDir, "M${timestamp}_CreateFooBar.kt")
     assertThat(dbMigrateDir.listFiles().toList()).containsExactly(migrationFile)
     assertThat(migrationFile.readText()).isEqualTo("""

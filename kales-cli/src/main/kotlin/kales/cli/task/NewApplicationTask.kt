@@ -3,6 +3,7 @@ package kales.cli.task
 import com.github.ajalt.clikt.core.UsageError
 import kales.cli.copyToWithLogging
 import kales.cli.relativePathFor
+import kales.cli.task.KalesVersionTask.Companion.kalesVersion
 import kales.cli.writeTextWithLogging
 import java.io.File
 import java.nio.file.Files
@@ -11,10 +12,12 @@ import java.nio.file.Path
 import java.nio.file.attribute.PosixFilePermissions
 
 /** "kales new" command: Creates a new Kales application */
-class NewCommandTask(
-    private val appRootDir: File,
+class NewApplicationTask(
+    currentDir: File,
     private val appName: String
 ) : KalesTask {
+  private val appRootDir = File(currentDir, appName)
+
   override fun run() {
     checkTargetDirectory()
     File(appRootDir, "build.gradle").writeTextWithLogging(buildFileContents())
@@ -23,9 +26,13 @@ class NewCommandTask(
     val sourcesDir = File(appRootDir, srcDirRelativePath)
     val appDir = File(sourcesDir, "app")
     appDir.mkdirs()
+    File(sourcesDir, "Main.kt").writeTextWithLogging(mainAppFileContents())
     setOf("controllers", "views", "models").forEach {
       File(appDir, it).mkdirs()
     }
+    val layoutsDir = File(appDir, relativePathFor("views", "layouts"))
+    layoutsDir.mkdirs()
+    File(layoutsDir, "AppLayout.kt").writeTextWithLogging(appLayoutFileContents())
     File(sourcesDir, relativePathFor("db", "migrate")).mkdirs()
     val resourcesDir = File(appRootDir, relativePathFor("src", "main", "resources"))
     resourcesDir.mkdirs()
@@ -71,6 +78,26 @@ class NewCommandTask(
     }
   }
 
+  private fun appLayoutFileContents() = """
+    package $appName.app.views.layouts
+
+    import io.ktor.html.insert
+    import kales.actionview.ApplicationLayout
+    import kotlinx.html.*
+
+    class AppLayout : ApplicationLayout() {
+      override fun HTML.apply() {
+        head {
+          title { +"Hello world" }
+        }
+        body {
+          h1 { +"Hello World" }
+          insert(body)
+        }
+      }
+    }
+  """.trimIndent()
+
   private fun buildFileContents() = """
     buildscript {
       repositories {
@@ -102,12 +129,34 @@ class NewCommandTask(
     mainClassName = '$appName.MainKt'
 
     dependencies {
-      implementation "com.felipecsl.kales:kales:${KalesVersionTask.version()}"
+      implementation "com.felipecsl.kales:kales:${kalesVersion()}"
     }
   """.trimIndent()
 
-  companion object {
-    private val GRADLE_WRAPPER_FILE_CONTENTS = """
+  private fun mainAppFileContents() = """
+      package $appName
+
+      import io.ktor.application.Application
+      import io.ktor.server.engine.embeddedServer
+      import io.ktor.server.netty.Netty
+      import kales.kalesApp
+
+      fun Application.module() {
+        kalesApp(AppLayout::class) {
+        }
+      }
+
+      fun main() {
+        embeddedServer(
+            Netty, 8080,
+            watchPaths = listOf("."),
+            module = Application::module
+        ).start()
+      }
+
+      """.trimIndent()
+
+  private val GRADLE_WRAPPER_FILE_CONTENTS = """
         #Wed Feb 13 09:15:40 PST 2019
         distributionBase=GRADLE_USER_HOME
         distributionPath=wrapper/dists
@@ -115,5 +164,4 @@ class NewCommandTask(
         zipStorePath=wrapper/dists
         distributionUrl=https\://services.gradle.org/distributions/gradle-5.0-all.zip
       """.trimIndent()
-  }
 }

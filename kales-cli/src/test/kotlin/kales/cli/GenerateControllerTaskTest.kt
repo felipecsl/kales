@@ -3,7 +3,7 @@ package kales.cli
 import com.github.ajalt.clikt.core.UsageError
 import com.google.common.truth.Truth.assertThat
 import kales.cli.task.GenerateControllerTask
-import kales.cli.task.NewCommandTask
+import kales.cli.task.NewApplicationTask
 import org.junit.Test
 
 import org.junit.Rule
@@ -14,9 +14,9 @@ class GenerateControllerTaskTest {
   @get:Rule val tempDir = TemporaryFolder()
 
   @Test fun `test generate an empty controller class`() {
-    val root = tempDir.root
     val appName = "com.example.testapp"
-    NewCommandTask(root, appName).run()
+    val root = File(tempDir.root, appName)
+    NewApplicationTask(tempDir.root, appName).run()
     GenerateControllerTask(root, "bar").run()
     val controllerFile = File(root,
         "src/main/kotlin/com/example/testapp/app/controllers/BarController.kt")
@@ -33,11 +33,12 @@ class GenerateControllerTaskTest {
   }
 
   @Test fun `test generate a controller with actions`() {
-    val root = tempDir.root
     val appName = "com.example.testapp"
-    NewCommandTask(root, appName).run()
-    GenerateControllerTask(root, "bar", setOf("blah", "foo")).run()
-    val controllerFile = File(root,
+    val root = File(tempDir.root, appName)
+    NewApplicationTask(root, appName).run()
+    val appDir = File(root, appName)
+    GenerateControllerTask(appDir, "bar", setOf("blah", "foo")).run()
+    val controllerFile = File(appDir,
         "src/main/kotlin/com/example/testapp/app/controllers/BarController.kt")
     assertThat(controllerFile.exists()).isTrue()
     assertThat(controllerFile.readText()).isEqualTo("""

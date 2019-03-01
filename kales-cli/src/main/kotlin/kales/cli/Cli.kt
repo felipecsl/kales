@@ -7,15 +7,13 @@ import com.github.ajalt.clikt.parameters.arguments.multiple
 import com.github.ajalt.clikt.parameters.types.file
 import kales.cli.task.*
 import java.io.File
-import java.net.URL
-import java.util.jar.Manifest
 
 class Cli : CliktCommand() {
   override fun run() = Unit
 }
 
 class Version : CliktCommand(help = """
-  Displays the Kales version
+  Displays the Kales kalesVersion
 """.trimIndent()) {
   override fun run() {
     KalesVersionTask().run()
@@ -28,15 +26,13 @@ class New : CliktCommand(help = """
   The 'kales new' command creates a new Kales application with a default
     directory structure and configuration at the path you specify.
   """.trimIndent()) {
-  private val appPath by argument(help = """
-    the path to your new app directory, eg.: ~/Code/Kotlin/weblog
-  """.trimIndent()).file()
+
   private val appName by argument(help = """
     the application name in reverse domain name notation, eg.: \"com.example.foo\""
   """.trimIndent())
 
   override fun run() {
-    NewCommandTask(appPath, appName).run()
+    NewApplicationTask(workingDir(), appName).run()
   }
 }
 

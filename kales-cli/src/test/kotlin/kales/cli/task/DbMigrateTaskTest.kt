@@ -18,9 +18,9 @@ class DbMigrateTaskTest {
   @Test fun `test migrate database by creating a table`() {
     val root = tempDir.root
     val appName = "com.example.testapp"
-    NewCommandTask(root, appName).run()
+    NewApplicationTask(root, appName).run()
     val timestamp = SimpleDateFormat("yyyyMMddhhmmss").format(Date())
-    val migrationsDir = "$root/src/main/kotlin/com/example/testapp/db/migrate"
+    val migrationsDir = "$root/$appName/src/main/kotlin/com/example/testapp/db/migrate"
     File(migrationsDir, "M${timestamp}_CreatePostsMigration.kts").writeText("""
       package $appName.db.migrate
 
@@ -41,7 +41,7 @@ class DbMigrateTaskTest {
 
       CreatePostsMigration()
     """.trimIndent())
-    File("$root/src/main/resources/database.yml").writeText("""
+    File("$root/$appName/src/main/resources/database.yml").writeText("""
       development:
         adapter: h2
         host: mem
@@ -51,7 +51,7 @@ class DbMigrateTaskTest {
         .installPlugin(H2DatabasePlugin())
         .installPlugin(KotlinPlugin())
     jdbi.withHandle<Any, RuntimeException> {
-      DbMigrateTask(root).run()
+      DbMigrateTask(File(root, appName)).run()
       assertThat(it.createQuery("show tables").mapTo<String>().list())
           .containsExactly("SCHEMA_MIGRATIONS", "POSTS")
     }

@@ -6,16 +6,16 @@ import java.util.jar.Manifest
 
 class KalesVersionTask : KalesTask {
   override fun run() {
-    println(version())
+    println(kalesVersion())
   }
 
   companion object {
-    fun version(): String {
+    fun kalesVersion(): String {
       val clazz = Cli::class.java
       val classPath = clazz.getResource("${clazz.simpleName}.class").toString()
       return if (!classPath.startsWith("jar")) {
         // This will be used during unit tests
-        System.getProperty("KALES_VERSION")
+        System.getProperty("KALES_VERSION") ?: "UNKNOWN"
       } else {
         val manifestPath =
             classPath.substring(0, classPath.lastIndexOf("!") + 1) + "/META-INF/MANIFEST.MF"
