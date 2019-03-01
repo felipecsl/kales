@@ -35,4 +35,4 @@ Snapshots of the development version are available in
 Check the `sampleapp` directory for an application that uses
 some of the features exposed by Kales.
 
-For more information, please check the [Kales website](https://felipecsl.github.io/kales/).
+For more information, please check the [Kales website](https://kales.dev/).
