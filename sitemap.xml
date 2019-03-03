@@ -8,9 +8,9 @@
 <url> <loc>https://kales.dev/blog/2017/09/25/testing-rss</loc> <changefreq>weekly</changefreq> <priority>0.3</priority> </url>
 <url> <loc>https://kales.dev/blog/2017/04/10/blog-post-two</loc> <changefreq>weekly</changefreq> <priority>0.3</priority> </url>
 <url> <loc>https://kales.dev/blog/2016/03/11/blog-post</loc> <changefreq>weekly</changefreq> <priority>0.3</priority> </url>
-<url> <loc>https://kales.dev/docs/doc3</loc> <changefreq>hourly</changefreq> <priority>1.0</priority> <xhtml:link rel="alternate" hreflang="en" href="https://kales.dev/docs/doc3" /> </url>
-<url> <loc>https://kales.dev/docs/doc4</loc> <changefreq>hourly</changefreq> <priority>1.0</priority> <xhtml:link rel="alternate" hreflang="en" href="https://kales.dev/docs/doc4" /> </url>
-<url> <loc>https://kales.dev/docs/doc5</loc> <changefreq>hourly</changefreq> <priority>1.0</priority> <xhtml:link rel="alternate" hreflang="en" href="https://kales.dev/docs/doc5" /> </url>
+<url> <loc>https://kales.dev/docs/foreword</loc> <changefreq>hourly</changefreq> <priority>1.0</priority> <xhtml:link rel="alternate" hreflang="en" href="https://kales.dev/docs/foreword" /> </url>
 <url> <loc>https://kales.dev/docs/getting-started</loc> <changefreq>hourly</changefreq> <priority>1.0</priority> <xhtml:link rel="alternate" hreflang="en" href="https://kales.dev/docs/getting-started" /> </url>
+<url> <loc>https://kales.dev/docs/hot-reloading</loc> <changefreq>hourly</changefreq> <priority>1.0</priority> <xhtml:link rel="alternate" hreflang="en" href="https://kales.dev/docs/hot-reloading" /> </url>
 <url> <loc>https://kales.dev/docs/installation</loc> <changefreq>hourly</changefreq> <priority>1.0</priority> <xhtml:link rel="alternate" hreflang="en" href="https://kales.dev/docs/installation" /> </url>
+<url> <loc>https://kales.dev/docs/migrations</loc> <changefreq>hourly</changefreq> <priority>1.0</priority> <xhtml:link rel="alternate" hreflang="en" href="https://kales.dev/docs/migrations" /> </url>
 </urlset>
