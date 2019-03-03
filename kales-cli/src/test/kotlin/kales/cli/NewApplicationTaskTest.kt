@@ -2,6 +2,10 @@ package kales.cli
 
 import com.google.common.truth.Truth.assertThat
 import kales.cli.task.NewApplicationTask
+import org.gradle.api.plugins.buildcomparison.outcome.internal.BuildOutcome
+import org.gradle.testkit.runner.BuildResult
+import org.gradle.testkit.runner.GradleRunner
+import org.gradle.testkit.runner.TaskOutcome
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
@@ -27,5 +31,17 @@ class NewApplicationTaskTest {
     assertThat(File(appDir,
         "src/main/kotlin/com/example/testapp/app/views/layouts/AppLayout.kt").exists()).isTrue()
     assertThat(File(appDir, "src/main/kotlin/com/example/testapp/app/models").exists()).isTrue()
+  }
+
+  @Test fun `new project builds correctly`() {
+    val root = tempDir.root
+    val appName = "com.example.testapp2"
+    NewApplicationTask(root, appName).run()
+    val appDir = File(root, appName)
+    val result = GradleRunner.create()
+        .withProjectDir(appDir)
+        .withArguments("jar")
+        .build()
+    assertThat(result.task(":jar")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
   }
 }

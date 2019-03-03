@@ -45,4 +45,5 @@ dependencies {
   testRuntime "com.h2database:h2:$h2DBVersion"
   testImplementation "org.jdbi:jdbi3-core:$jdbiVersion"
   testImplementation "org.jdbi:jdbi3-kotlin:$jdbiVersion"
+  testImplementation gradleTestKit()
 }
