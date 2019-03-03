@@ -16,4 +16,7 @@ class PostsController(call: ApplicationCall) : ApplicationController(call) {
     bindings = ShowViewModel(Post.find(call.parameters["id"]?.toInt()
         ?: throw IllegalArgumentException("Missing parameter id")))
   }
+
+  fun new() {
+  }
 }
