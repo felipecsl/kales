@@ -1,8 +1,6 @@
 {
   "docs": {
-    "Introduction": ["installation", "getting-started"]
-  },
-  "docs-other": {
-    "First Category": ["doc4", "doc5"]
+    "Introduction": ["foreword","installation", "getting-started", "hot-reloading", "migrations"]
   }
 }
+

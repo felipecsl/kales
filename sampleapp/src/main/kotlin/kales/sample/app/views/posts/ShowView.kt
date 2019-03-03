@@ -1,4 +1,4 @@
-package kales.sample.app.views.example
+package kales.sample.app.views.posts
 
 import kales.actionview.ActionView
 import kotlinx.html.FlowContent
@@ -12,7 +12,7 @@ class ShowView(
     content.apply {
       h2 { +"Details" }
       h3 {
-        +"Video ${bindings?.video}"
+        +"Post ${bindings?.post}"
       }
     }
   }
