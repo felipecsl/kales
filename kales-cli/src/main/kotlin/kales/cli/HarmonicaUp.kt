@@ -35,7 +35,6 @@ internal class HarmonicaUp(
 
   private fun readMigration(script: String): Migration {
     val finalScript = addMigrationIntantiation(removePackageStatement(script))
-    println("final script: $finalScript")
     return engine.eval(finalScript) as Migration
   }
 
