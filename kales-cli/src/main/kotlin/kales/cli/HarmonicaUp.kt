@@ -34,7 +34,7 @@ internal class HarmonicaUp(
   }
 
   private fun readMigration(script: String): Migration {
-    val finalScript = addMigrationIntantiation(removePackageStatement(script))
+    val finalScript = addMigrationInstantiation(removePackageStatement(script))
     return engine.eval(finalScript) as Migration
   }
 
@@ -48,7 +48,7 @@ internal class HarmonicaUp(
      * be able to return the class object after evaluating the migration file. So, we'll manually
      * scan for the migration class name and inject an instantiation at the end of the file.
      */
-    private fun addMigrationIntantiation(script: String): String {
+    private fun addMigrationInstantiation(script: String): String {
       val regex = "class ([a-zA-z0-9]+)".toRegex()
       for (line in script.lines()) {
         regex.find(line)?.let { matchResult ->
