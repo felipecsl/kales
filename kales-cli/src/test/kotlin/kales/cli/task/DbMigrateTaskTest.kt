@@ -38,8 +38,6 @@ class DbMigrateTaskTest {
           dropTable("posts")
         }
       }
-
-      CreatePostsMigration()
     """.trimIndent())
     File("$root/$appName/src/main/resources/database.yml").writeText("""
       development:
