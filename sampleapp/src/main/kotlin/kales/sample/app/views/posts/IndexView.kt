@@ -1,4 +1,4 @@
-package kales.sample.app.views.example
+package kales.sample.app.views.posts
 
 import kales.actionview.ActionView
 import kotlinx.html.*
@@ -12,16 +12,23 @@ class IndexView(
         +"Hello, ${bindings?.name}"
       }
       p {
-        +"Greetings from Kales"
+        +"Below you can see a list of posts"
       }
       h3 {
-        +"Videos"
+        +"Posts"
       }
-      ul {
-        bindings?.videos?.forEach { v ->
-          li {
-            +v.title
+      if (bindings?.posts?.any() == true) {
+        ul {
+          bindings.posts.forEach { v ->
+            li {
+              +v.title
+            }
           }
+        }
+      } else {
+        p { +"No posts yet." }
+        a("/posts/new") {
+          +"Write a post"
         }
       }
     }

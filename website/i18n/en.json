@@ -5,30 +5,28 @@
     "previous": "Previous",
     "tagline": "Build modern websites quickly and with confidence.",
     "docs": {
-      "doc3": {
-        "title": "This is document number 3"
-      },
-      "doc4": {
-        "title": "Other Document"
-      },
-      "doc5": {
-        "title": "Fifth Document"
+      "foreword": {
+        "title": "Foreword"
       },
       "getting-started": {
         "title": "Getting Started",
         "sidebar_label": "Getting Started"
       },
+      "hot-reloading": {
+        "title": "Hot Reloading"
+      },
       "installation": {
         "title": "Installing Kales"
+      },
+      "migrations": {
+        "title": "Database Migrations"
       }
     },
     "links": {
-      "Docs": "Docs",
-      "API": "API"
+      "Docs": "Docs"
     },
     "categories": {
-      "Introduction": "Introduction",
-      "First Category": "First Category"
+      "Introduction": "Introduction"
     }
   },
   "pages-strings": {

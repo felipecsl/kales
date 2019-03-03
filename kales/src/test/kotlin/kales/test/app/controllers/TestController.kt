@@ -5,7 +5,7 @@ import kales.actionpack.ApplicationController
 import kales.test.app.views.test.IndexViewModel
 
 class TestController(call: ApplicationCall) : ApplicationController(call) {
-  override fun index(): Any? {
+  fun index(): Any? {
     bindings = IndexViewModel("foo")
     return null
   }
