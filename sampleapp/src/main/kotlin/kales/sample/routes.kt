@@ -6,6 +6,7 @@ import kales.sample.app.controllers.PostsController
 
 fun <T : ApplicationLayout> routes(): KalesApplication<T>.() -> Unit = {
   get<PostsController>("/", "index")
-  get<PostsController>("/post/{id}", "show")
+  get<PostsController>("/posts/{id}", "show")
   get<PostsController>("/posts/new", "new")
+  post<PostsController>("/posts", "create")
 }

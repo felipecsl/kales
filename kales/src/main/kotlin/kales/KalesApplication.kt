@@ -13,12 +13,15 @@ import io.ktor.http.content.staticRootFolder
 import io.ktor.routing.Route
 import io.ktor.routing.Routing
 import io.ktor.routing.get
+import io.ktor.routing.post
 import kales.actionpack.ApplicationController
 import kales.actionview.ActionView
 import kales.actionview.ApplicationLayout
 import java.io.File
 import kotlin.reflect.KClass
+import kotlin.reflect.full.callSuspend
 import kotlin.reflect.full.createInstance
+import kotlin.reflect.full.declaredFunctions
 import kotlin.reflect.full.primaryConstructor
 
 class KalesApplication<T : ApplicationLayout>(
@@ -54,7 +57,19 @@ class KalesApplication<T : ApplicationLayout>(
     }
   }
 
-  inline fun <reified T : ApplicationController> callControllerAction(
+  inline fun <reified T : ApplicationController> post(
+      path: String,
+      actionName: String
+  ): Route = routing.post(path) {
+    val view = callControllerAction<T>(actionName, call)
+    call.respondHtmlTemplate(layout.createInstance()) {
+      body {
+        view.render(this)
+      }
+    }
+  }
+
+  suspend inline fun <reified T : ApplicationController> callControllerAction(
       actionName: String,
       call: ApplicationCall
   ): ActionView<*> {
@@ -64,8 +79,13 @@ class KalesApplication<T : ApplicationLayout>(
     val controllerCtor = T::class.primaryConstructor ?: throw RuntimeException(
         "Primary constructor not found for Controller class $controllerClassName")
     val controller = controllerCtor.call(call)
-    val actionMethod = controller.javaClass.getMethod(actionName)
-    val view = actionMethod.invoke(controller) as? ActionView<*>
+    val actionMethod = controller::class.declaredFunctions.firstOrNull { it.name == actionName }
+        ?: throw RuntimeException("Cannot find Controller action $actionName")
+    val view = if (actionMethod.isSuspend) {
+      actionMethod.callSuspend(controller)
+    } else {
+      actionMethod.call(controller)
+    } as? ActionView<*>
     return if (view != null) {
       // If the action returned a View object, we'll use that
       view
