@@ -82,10 +82,10 @@ class KalesApplication<T : ApplicationLayout>(
     val actionMethod = controller::class.declaredFunctions.firstOrNull { it.name == actionName }
         ?: throw RuntimeException("Cannot find Controller action $actionName")
     val view = if (actionMethod.isSuspend) {
-      actionMethod.callSuspend(controller) as? ActionView<*>
+      actionMethod.callSuspend(controller)
     } else {
-      actionMethod.call(controller) as? ActionView<*>
-    }
+      actionMethod.call(controller)
+    } as? ActionView<*>
     return if (view != null) {
       // If the action returned a View object, we'll use that
       view
