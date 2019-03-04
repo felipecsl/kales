@@ -37,6 +37,13 @@ class ApplicationRecordTest {
     }
   }
 
+  @Test fun `test create return value`() {
+    withTestDb {
+      val obj = TestModel.create("name" to "Hello World")
+      assertThat(obj).isEqualTo(TestModel(1, "Hello World"))
+    }
+  }
+
   @Test fun `test find`() {
     withTestDb {
       TestModel.create("name" to "Hello World")

@@ -24,4 +24,5 @@ dependencies {
   api "org.jdbi:jdbi3-postgres:$jdbiVersion"
   testImplementation "com.google.truth:truth:$truthVersion"
   testRuntime "com.h2database:h2:$h2DBVersion"
+  testRuntime 'org.slf4j:slf4j-simple:1.8.0-beta4'
 }

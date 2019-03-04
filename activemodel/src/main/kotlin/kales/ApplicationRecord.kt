@@ -5,6 +5,7 @@ import kales.migrations.KalesDatabaseConfig
 import org.jdbi.v3.core.Handle
 import org.jdbi.v3.core.Jdbi
 import org.jdbi.v3.core.kotlin.mapTo
+import org.jdbi.v3.core.result.ResultProducers.returningGeneratedKeys
 
 abstract class ApplicationRecord {
   companion object {
@@ -32,14 +33,18 @@ abstract class ApplicationRecord {
       }
     }
 
-    inline fun <reified T : ApplicationRecord> createRecord(values: Map<String, Any>): Int {
+    inline fun <reified T : ApplicationRecord> createRecord(values: Map<String, Any>): T {
       useJdbi {
         val tableName = toTableName<T>()
         val cols = values.keys.joinToString(prefix = "(", postfix = ")")
         val refs = values.keys.joinToString(prefix = "(", postfix = ")") { k -> ":$k" }
         val update = it.createUpdate("insert into $tableName $cols values $refs")
         values.forEach { k, v -> update.bind(k, v) }
-        return update.execute()
+        return update.execute(returningGeneratedKeys())
+            .mapTo<Int>()
+            .findFirst()
+            .map { id -> findRecord<T>(id) }
+            .orElseThrow { RuntimeException("Failed to create record.") }!!
       }
     }
 

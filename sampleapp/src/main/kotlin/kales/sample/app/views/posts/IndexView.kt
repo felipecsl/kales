@@ -19,17 +19,17 @@ class IndexView(
       }
       if (bindings?.posts?.any() == true) {
         ul {
-          bindings.posts.forEach { v ->
+          bindings.posts.forEach { p ->
             li {
-              +v.title
+              a(href = "/posts/${p.id}") { +p.title }
             }
           }
         }
       } else {
         p { +"No posts yet." }
-        a("/posts/new") {
-          +"Write a post"
-        }
+      }
+      a("/posts/new") {
+        +"Write a post"
       }
     }
   }
