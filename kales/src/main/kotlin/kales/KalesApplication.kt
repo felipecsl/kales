@@ -52,7 +52,7 @@ class KalesApplication<T : ApplicationLayout>(
     val view = callControllerAction<T>(actionName, call)
     call.respondHtmlTemplate(layout.createInstance()) {
       body {
-        view.render(this)
+        view.renderContent(this)
       }
     }
   }
@@ -64,7 +64,7 @@ class KalesApplication<T : ApplicationLayout>(
     val view = callControllerAction<T>(actionName, call)
     call.respondHtmlTemplate(layout.createInstance()) {
       body {
-        view.render(this)
+        view.renderContent(this)
       }
     }
   }

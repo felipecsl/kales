@@ -1,4 +1,3 @@
 package kales.actionview
 
-interface ViewModel {
-}
+interface ViewModel

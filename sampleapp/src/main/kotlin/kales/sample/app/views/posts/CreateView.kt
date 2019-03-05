@@ -5,11 +5,11 @@ import kales.sample.app.views.shared.PostPartialView
 import kotlinx.html.FlowContent
 import kotlinx.html.h2
 
-class ShowView(
+class CreateView(
     bindings: PostViewModel? = PostViewModel()
 ) : ActionView<PostViewModel>(bindings) {
   override fun FlowContent.render() {
-    h2 { +"Details" }
+    h2 { +"Post created" }
     renderPartial(PostPartialView(bindings))
   }
 }
