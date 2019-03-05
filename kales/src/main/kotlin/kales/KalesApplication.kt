@@ -1,6 +1,5 @@
 package kales
 
-import com.sun.scenario.effect.impl.prism.PrEffectHelper.render
 import io.ktor.application.Application
 import io.ktor.application.ApplicationCall
 import io.ktor.application.call
