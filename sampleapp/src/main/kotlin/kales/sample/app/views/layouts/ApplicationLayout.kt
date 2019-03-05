@@ -10,7 +10,9 @@ class AppLayout : ApplicationLayout() {
       title { +"Kales sample app" }
     }
     body {
-      h1 { +"Kales sample app" }
+      h1 {
+        a(href = "/") { +"Kales sample app" }
+      }
       insert(body)
     }
   }
