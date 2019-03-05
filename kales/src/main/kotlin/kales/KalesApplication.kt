@@ -1,5 +1,6 @@
 package kales
 
+import com.sun.scenario.effect.impl.prism.PrEffectHelper.render
 import io.ktor.application.Application
 import io.ktor.application.ApplicationCall
 import io.ktor.application.call
@@ -52,7 +53,7 @@ class KalesApplication<T : ApplicationLayout>(
     val view = callControllerAction<T>(actionName, call)
     call.respondHtmlTemplate(layout.createInstance()) {
       body {
-        view.render(this)
+        view.renderContent(this)
       }
     }
   }
@@ -64,7 +65,7 @@ class KalesApplication<T : ApplicationLayout>(
     val view = callControllerAction<T>(actionName, call)
     call.respondHtmlTemplate(layout.createInstance()) {
       body {
-        view.render(this)
+        view.renderContent(this)
       }
     }
   }
