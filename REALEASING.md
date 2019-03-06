@@ -1,5 +1,4 @@
-* Bump the version in `gradle.properties` file
-* Bump the version in `install` file
+* Bump the version in `gradle.properties`, `install` and the readme
 * Run `./gradlew publish`
 * Run `./gradlew kales-cli:shadowJar`
 * Run `cp kales-cli/build/libs/kales-cli-<VERSION>-all.jar scripts/kales-cli.jar`
