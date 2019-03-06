@@ -24,7 +24,7 @@ then open `http://localhost:8080` on your browser.
 ## Download
 
 ```
-implementation 'com.felipecsl.kales:kales:0.0.1-SNAPSHOT'
+implementation 'com.felipecsl.kales:kales:0.0.3-SNAPSHOT'
 ```
 
 Snapshots of the development version are available in

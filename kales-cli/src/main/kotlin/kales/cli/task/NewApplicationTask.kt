@@ -27,6 +27,7 @@ class NewApplicationTask(
     val appDir = File(sourcesDir, "app")
     appDir.mkdirs()
     File(sourcesDir, "Main.kt").writeTextWithLogging(mainAppFileContents())
+    File(sourcesDir, "routes.kt").writeTextWithLogging(routesFileContents())
     setOf("controllers", "views", "models").forEach {
       File(appDir, it).mkdirs()
     }
@@ -77,6 +78,17 @@ class NewApplicationTask(
       Files.createFile(this, permissions)
     }
   }
+
+  private fun routesFileContents() = """
+    package $appName
+
+    import kales.KalesApplication
+    import kales.actionview.ApplicationLayout
+
+    fun <T : ApplicationLayout> routes(): KalesApplication<T>.() -> Unit = {
+    }
+
+  """.trimIndent()
 
   private fun appLayoutFileContents() = """
     package $appName.app.views.layouts
@@ -144,8 +156,7 @@ class NewApplicationTask(
       import $appName.app.views.layouts.AppLayout
 
       fun Application.module() {
-        kalesApp(AppLayout::class) {
-        }
+        kalesApp(AppLayout::class, routes())
       }
 
       fun main() {
