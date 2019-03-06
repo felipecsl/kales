@@ -1,15 +1,20 @@
 package kales.cli
 
 import com.github.ajalt.clikt.core.CliktCommand
+import com.github.ajalt.clikt.core.NoRunCliktCommand
 import com.github.ajalt.clikt.core.subcommands
 import com.github.ajalt.clikt.parameters.arguments.argument
 import com.github.ajalt.clikt.parameters.arguments.multiple
-import com.github.ajalt.clikt.parameters.types.file
 import kales.cli.task.*
 import java.io.File
 
-class Cli : CliktCommand() {
-  override fun run() = Unit
+class Cli : NoRunCliktCommand() {
+  override fun aliases() =
+      mapOf(
+          "g" to listOf("generate"),
+          "v" to listOf("version"),
+          "n" to listOf("new")
+      )
 }
 
 class Version : CliktCommand(help = """
@@ -36,12 +41,9 @@ class New : CliktCommand(help = """
   }
 }
 
-class Generate : CliktCommand(help = """
+class Generate : NoRunCliktCommand(help = """
   Runs a Kales generator
-""".trimIndent()) {
-
-  override fun run() = Unit
-}
+""".trimIndent())
 
 class DbMigrate : CliktCommand(name = "db:migrate", help = """
   Migrate the database

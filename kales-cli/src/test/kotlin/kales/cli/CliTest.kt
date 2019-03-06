@@ -32,6 +32,7 @@ class CliTest {
       assertThat(stdOut).isEqualTo("""
            create com.example/build.gradle
            create com.example/src/main/kotlin/com/example/Main.kt
+           create com.example/src/main/kotlin/com/example/routes.kt
            create com.example/src/main/kotlin/com/example/app/views/layouts/AppLayout.kt
            create com.example/src/main/resources/database.yml
            create com.example/gradle/wrapper/gradle-wrapper.properties
@@ -56,6 +57,7 @@ class CliTest {
       assertThat(stdOut).isEqualTo("""
            create com.example/build.gradle
            create com.example/src/main/kotlin/com/example/Main.kt
+           create com.example/src/main/kotlin/com/example/routes.kt
            create com.example/src/main/kotlin/com/example/app/views/layouts/AppLayout.kt
            create com.example/src/main/resources/database.yml
            create com.example/gradle/wrapper/gradle-wrapper.properties
@@ -66,6 +68,7 @@ class CliTest {
         Happy coding!
            identical com.example/build.gradle
            identical com.example/src/main/kotlin/com/example/Main.kt
+           identical com.example/src/main/kotlin/com/example/routes.kt
            identical com.example/src/main/kotlin/com/example/app/views/layouts/AppLayout.kt
            identical com.example/src/main/resources/database.yml
            identical com.example/gradle/wrapper/gradle-wrapper.properties
