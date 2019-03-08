@@ -77,9 +77,10 @@ class GenerateController : CliktCommand(name = "controller", help = """
 }
 
 class GenerateModel : CliktCommand(name = "model", help = """
-    Stubs out a new controller. Pass the CamelCased controller name.
+    Stubs out a new model. Pass the CamelCased model name.
 
-    This generates a controller class in app/controllers.
+    This generates a model class in app/models and an accompanying
+    migration to create the database table
 """.trimIndent()) {
   private val name by argument()
 
@@ -91,10 +92,9 @@ class GenerateModel : CliktCommand(name = "model", help = """
 }
 
 class GenerateMigration : CliktCommand(name = "migration", help = """
-    Stubs out a new model. Pass the CamelCased model name.
+    Stubs out a new database migration. Pass the migration name CamelCased.
 
-    This generates a model class in app/models and an accompanying
-    migration to create the database table.
+    A migration class is generated in db/migrate prefixed by a timestamp of the current date and time.
 """.trimIndent()) {
   private val modelName by argument()
 
