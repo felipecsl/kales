@@ -82,12 +82,10 @@ class GenerateModel : CliktCommand(name = "model", help = """
     This generates a model class in app/models and an accompanying
     migration to create the database table
 """.trimIndent()) {
-  private val name by argument()
-
-  private val actions by argument().multiple()
+  private val modelName by argument()
 
   override fun run() {
-    GenerateControllerTask(workingDir(), name, actions.toSet()).run()
+    GenerateModelTask(workingDir(), modelName).run()
   }
 }
 
@@ -96,10 +94,10 @@ class GenerateMigration : CliktCommand(name = "migration", help = """
 
     A migration class is generated in db/migrate prefixed by a timestamp of the current date and time.
 """.trimIndent()) {
-  private val modelName by argument()
+  private val migrationName by argument()
 
   override fun run() {
-    GenerateModelTask(workingDir(), modelName).run()
+    GenerateMigrationTask(workingDir(), migrationName).run()
   }
 }
 
