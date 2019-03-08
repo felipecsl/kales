@@ -76,21 +76,37 @@ class GenerateController : CliktCommand(name = "controller", help = """
   }
 }
 
-class GenerateMigration : CliktCommand(name = "migration", help = """
-    Stubs out a new database migration. Pass the migration name CamelCased.
+class GenerateModel : CliktCommand(name = "model", help = """
+    Stubs out a new controller. Pass the CamelCased controller name.
 
-    A migration class is generated in db/migrate prefixed by a timestamp of the current date and time.
+    This generates a controller class in app/controllers.
 """.trimIndent()) {
-  private val migrationName by argument()
+  private val name by argument()
+
+  private val actions by argument().multiple()
 
   override fun run() {
-    GenerateMigrationTask(workingDir(), migrationName).run()
+    GenerateControllerTask(workingDir(), name, actions.toSet()).run()
+  }
+}
+
+class GenerateMigration : CliktCommand(name = "migration", help = """
+    Stubs out a new model. Pass the CamelCased model name.
+
+    This generates a model class in app/models and an accompanying
+    migration to create the database table.
+""".trimIndent()) {
+  private val modelName by argument()
+
+  override fun run() {
+    GenerateModelTask(workingDir(), modelName).run()
   }
 }
 
 fun main(args: Array<String>) {
   val generateCommand = Generate()
       .subcommands(GenerateController())
+      .subcommands(GenerateModel())
       .subcommands(GenerateMigration())
   Cli().subcommands(New(), generateCommand, DbMigrate(), DbCreate(), Version())
       .main(args)

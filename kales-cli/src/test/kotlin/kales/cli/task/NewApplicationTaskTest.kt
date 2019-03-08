@@ -1,4 +1,4 @@
-package kales.cli
+package kales.cli.task
 
 import com.google.common.truth.Truth.assertThat
 import kales.cli.task.NewApplicationTask
