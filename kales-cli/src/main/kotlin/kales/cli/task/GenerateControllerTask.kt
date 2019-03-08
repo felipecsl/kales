@@ -42,12 +42,7 @@ class GenerateControllerTask(
   ) {
     val file = buildFileSpec(controllerName)
     val outputPath = controllersDir.toPath().resolve("$controllerName.kt")
-    ByteArrayOutputStream().use { baos ->
-      OutputStreamWriter(baos, StandardCharsets.UTF_8).use { writer ->
-        file.writeTo(writer)
-      }
-      outputPath.toFile().writeTextWithLogging(baos.toString())
-    }
+    file.rawWriteTo(outputPath)
   }
 
   private fun buildFileSpec(controllerName: String): FileSpec {

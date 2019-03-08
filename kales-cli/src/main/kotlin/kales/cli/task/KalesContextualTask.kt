@@ -1,11 +1,16 @@
 package kales.cli.task
 
 import com.github.ajalt.clikt.core.UsageError
-import kales.cli.PackageName
+import com.squareup.kotlinpoet.FileSpec
 import kales.cli.relativePathFor
 import kales.cli.safeListFiles
+import kales.cli.writeTextWithLogging
 import kales.migrations.KalesDatabaseConfig
+import java.io.ByteArrayOutputStream
 import java.io.File
+import java.io.OutputStreamWriter
+import java.nio.charset.StandardCharsets
+import java.nio.file.Path
 
 /**
  * Defines a Kales task that is supposed to run from an existing Kales application root directory,
@@ -65,6 +70,16 @@ abstract class KalesContextualTask(protected val applicationRootDir: File) : Kal
           "Plase make sure it exists under src/main/resources and try again")
     }
     return KalesDatabaseConfig.fromDatabaseYml(databaseYml.inputStream())
+  }
+
+  /** Writes this [FileSpec] to the provided file [Path] */
+  protected fun FileSpec.rawWriteTo(destination: Path) {
+    ByteArrayOutputStream().use { baos ->
+      OutputStreamWriter(baos, StandardCharsets.UTF_8).use { writer ->
+        writeTo(writer)
+      }
+      destination.toFile().writeTextWithLogging(baos.toString())
+    }
   }
 
   private fun File.childDirectories() =
