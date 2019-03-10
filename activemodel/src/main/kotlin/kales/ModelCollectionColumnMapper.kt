@@ -7,7 +7,7 @@ import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type
 import java.sql.ResultSet
 
-class ModelCollectionColumnMapper(private val type: Type) : ColumnMapper<ModelCollectionAssociation<*, *>> {
+internal class ModelCollectionColumnMapper(private val type: Type) : ColumnMapper<ModelCollectionAssociation<*, *>> {
   override fun map(r: ResultSet, columnNumber: Int, ctx: StatementContext): ModelCollectionAssociation<*, *> {
     return if (type is ParameterizedType) {
       val typeArguments = type.actualTypeArguments

@@ -29,7 +29,7 @@ abstract class ApplicationRecord {
       useJdbi {
         val tableName = toTableName<T>()
         val columnNames = columnNames<T>()
-        return it.createQuery("select ${columnNames.joinToString(",")} from $tableName")
+        return it.createQuery("select $columnNames from $tableName")
             .mapTo<T>()
             .list()
       }
@@ -41,7 +41,7 @@ abstract class ApplicationRecord {
         val whereClause = clause.keys.joinToString(" and ") { k -> "$k = :$k" }
         val columnNames = columnNames<T>()
         val query = it.createQuery(
-            "select ${columnNames.joinToString(", ")} from $tableName where $whereClause")
+            "select $columnNames from $tableName where $whereClause")
         clause.forEach { k, v -> query.bind(k, v) }
         return query.mapTo<T>().list()
       }
@@ -66,7 +66,7 @@ abstract class ApplicationRecord {
     inline fun <reified T : ApplicationRecord> findRecord(id: Int): T? {
       useJdbi {
         val tableName = toTableName<T>()
-        val columnNames = columnNames<T>().joinToString(", ")
+        val columnNames = columnNames<T>()
         return it.createQuery("select $columnNames from $tableName where id = :id")
             .bind("id", id)
             .mapTo<T>()
@@ -83,7 +83,7 @@ abstract class ApplicationRecord {
      * column for that property, so we can hook into that from [ModelCollectionColumnMapper] and
      * properly hook the relationship to the other model.
      */
-    inline fun <reified T : ApplicationRecord> columnNames(): List<String> {
+    inline fun <reified T : ApplicationRecord> columnNames(): String {
       val klass = T::class
       val constructor = klass.primaryConstructor
           ?: throw IllegalArgumentException("Please define a primary constructor for $this")
@@ -94,7 +94,7 @@ abstract class ApplicationRecord {
           .mapNotNull { it as? KMutableProperty1<*, *> }
           .filter { !constructor.parameters.any { param -> param.paramName() == it.propName() } }
           .map { "id as ${it.propName()}" } // map relation props to the ID column for JDBI
-      return directProps + relationProps
+      return (directProps + relationProps).joinToString(",")
     }
 
     fun KParameter.paramName() =
@@ -105,7 +105,7 @@ abstract class ApplicationRecord {
 
     inline fun <T> useJdbi(block: (Handle) -> T) = JDBI.use(block)
 
-    inline fun <reified T: ApplicationRecord> toTableName() =
+    inline fun <reified T : ApplicationRecord> toTableName() =
         "${T::class.simpleName!!.toLowerCase()}s"
   }
 }
