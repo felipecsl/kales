@@ -1,6 +1,7 @@
 package kales
 
-import kales.activemodel.ModelCollectionAssociation
+import kales.activemodel.CollectionModelAssociation
+import kales.activemodel.SingleModelAssociation
 import kales.activemodel.use
 import kales.migrations.KalesDatabaseConfig
 import org.jdbi.v3.core.Handle
@@ -9,13 +10,18 @@ import org.jdbi.v3.core.kotlin.mapTo
 import org.jdbi.v3.core.mapper.reflect.ColumnName
 import org.jdbi.v3.core.result.ResultProducers.returningGeneratedKeys
 import kotlin.reflect.KClass
-import kotlin.reflect.KMutableProperty1
 import kotlin.reflect.KParameter
 import kotlin.reflect.full.findAnnotation
-import kotlin.reflect.full.memberProperties
 import kotlin.reflect.full.primaryConstructor
-import kotlin.reflect.jvm.javaField
 
+/**
+ * Maps model classes to database records. Kales follows some conventions when dealing with models:
+ * - All models are expected to have an `id` autoincrement primary key column
+ * - Foreign key columns are mapped using `<model_name>_id` column naming format
+ * - The table name is a plural of the model name, eg: `User` -> table is `users`. We don't do any
+ * fancy pluralization for now, just naively append `s` at the end, which means the table for `Hero`
+ * would be `heros`, awkwardly.
+ */
 abstract class ApplicationRecord {
   companion object {
     val JDBI: Jdbi = JdbiFactory.fromConnectionString(dbConnectionString())
@@ -25,6 +31,7 @@ abstract class ApplicationRecord {
       return KalesDatabaseConfig.fromDatabaseYml(stream).toConnectionString()
     }
 
+    /** Returns a list with all records in the table (potentially dangerous for big tables!) */
     inline fun <reified T : ApplicationRecord> allRecords(): List<T> {
       useJdbi {
         val tableName = toTableName<T>()
@@ -35,10 +42,16 @@ abstract class ApplicationRecord {
       }
     }
 
-    inline fun <reified T : ApplicationRecord> whereRecords(clause: Map<String, Any>): List<T> {
+    /** Returns only the records matching the provided selection criteria */
+    inline fun <reified T : ApplicationRecord> whereRecords(clause: Map<String, Any?>): List<T> {
       useJdbi {
         val tableName = toTableName<T>()
-        val whereClause = clause.keys.joinToString(" and ") { k -> "$k = :$k" }
+        // TODO There is ambiguity with null values in the where clause here.
+        // Since currently all null values are filtered out, it's impossible to query for rows with
+        // a given column being equals to NULL. We need to add an abstraction to map that case.
+        val whereClause = clause.filterValues { v -> v != null }
+            .keys
+            .joinToString(" and ") { k -> "$k = :$k" }
         val columnNames = columnNames<T>()
         val query = it.createQuery(
             "select $columnNames from $tableName where $whereClause")
@@ -62,7 +75,10 @@ abstract class ApplicationRecord {
       }
     }
 
-    /** TODO I think Rails raises RecordNotFound in this case instead of returning null. Should we do the same? */
+    /**
+     * TODO I think Rails raises RecordNotFound in this case instead of returning null.
+     * Should we do the same?
+     */
     inline fun <reified T : ApplicationRecord> findRecord(id: Int): T? {
       useJdbi {
         val tableName = toTableName<T>()
@@ -78,30 +94,28 @@ abstract class ApplicationRecord {
     /**
      * Returns all the param names for the provided [ApplicationRecord] [KClass] for use with
      * `select` statements. We can't just `select *` because relationships are a special case.
-     * [ModelCollectionAssociation] properties are manually injected into the query by selecting the `id`
+     * [CollectionModelAssociation] properties are manually injected into the query by selecting the `id`
      * column `as <propertyName>`. This allows us to "fool" JDBI into thinking there's an extra
-     * column for that property, so we can hook into that from [ModelCollectionColumnMapper] and
+     * column for that property, so we can hook into that from [CollectionModelAssociationColumnMapper] and
      * properly hook the relationship to the other model.
      */
     inline fun <reified T : ApplicationRecord> columnNames(): String {
       val klass = T::class
       val constructor = klass.primaryConstructor
           ?: throw IllegalArgumentException("Please define a primary constructor for $this")
-      val directProps = constructor
-          .parameters
-          .mapNotNull { it.paramName() }
-      val relationProps = klass.memberProperties
-          .mapNotNull { it as? KMutableProperty1<*, *> }
-          .filter { !constructor.parameters.any { param -> param.paramName() == it.propName() } }
-          .map { "id as ${it.propName()}" } // map relation props to the ID column for JDBI
-      return (directProps + relationProps).joinToString(",")
+      val directProps = constructor.parameters.mapNotNull { it.paramName() }
+      return directProps.joinToString(",")
     }
 
-    fun KParameter.paramName() =
-        findAnnotation<ColumnName>()?.value ?: name
-
-    fun KMutableProperty1<*, *>.propName() =
-        javaField?.getAnnotation(ColumnName::class.java)?.value ?: name
+    fun KParameter.paramName(): String? {
+      val propName = findAnnotation<ColumnName>()?.value ?: name
+      val classifier = type.classifier
+      return when (classifier) {
+        CollectionModelAssociation::class -> "id as $propName"
+        SingleModelAssociation::class -> "${name}_id as $propName"
+        else -> propName
+      }
+    }
 
     inline fun <T> useJdbi(block: (Handle) -> T) = JDBI.use(block)
 

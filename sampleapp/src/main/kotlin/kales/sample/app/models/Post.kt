@@ -1,14 +1,14 @@
 package kales.sample.app.models
 
 import kales.ApplicationRecord
-import kales.activemodel.ModelCollectionAssociation
+import kales.activemodel.CollectionModelAssociation
 
 data class Post(
     val id: Int,
     val title: String,
     val content: String
 ) : ApplicationRecord() {
-  lateinit var comments: ModelCollectionAssociation<Post, Comment>
+  lateinit var comments: CollectionModelAssociation<Post, Comment>
 
   companion object {
     fun all() = allRecords<Post>()
