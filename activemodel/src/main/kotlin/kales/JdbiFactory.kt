@@ -6,9 +6,11 @@ import org.jdbi.v3.core.kotlin.KotlinPlugin
 import org.jdbi.v3.postgres.PostgresPlugin
 
 object JdbiFactory {
-  fun fromConnectionString(connString: String): Jdbi =
-      Jdbi.create(connString)
-          .installPlugin(PostgresPlugin())
-          .installPlugin(H2DatabasePlugin())
-          .installPlugin(KotlinPlugin())
+  fun fromConnectionString(connString: String): Jdbi {
+    return Jdbi.create(connString)
+        .registerColumnMapper(ModelCollectionColumnMapperFactory())
+        .installPlugin(PostgresPlugin())
+        .installPlugin(H2DatabasePlugin())
+        .installPlugin(KotlinPlugin())
+  }
 }

@@ -54,6 +54,17 @@ class ApplicationRecordTest {
     }
   }
 
+  @Test fun `test associations`() {
+    withTestDb {
+      TestModel.create("name" to "Hello World")
+      TestModel.create("name" to "Ping Pong")
+      Foo.create()
+      val expectedModel1 = TestModel(1, "Hello World")
+      val expectedModel2 = TestModel(2, "Ping Pong")
+      assertThat(TestModel.all()).containsExactly(expectedModel1, expectedModel2)
+    }
+  }
+
   private fun withTestDb(block: () -> Unit) {
     ApplicationRecord.JDBI.withHandle<Any, RuntimeException> {
       it.execute("CREATE TABLE testmodels (id INTEGER PRIMARY KEY AUTO_INCREMENT, name VARCHAR)")
