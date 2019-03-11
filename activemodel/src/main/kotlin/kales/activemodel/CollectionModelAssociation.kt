@@ -11,19 +11,21 @@ interface CollectionModelAssociation<F : ApplicationRecord, T : ApplicationRecor
 
   companion object {
     inline fun <reified F : ApplicationRecord, T : ApplicationRecord> empty() =
-        object : CollectionModelAssociation<F, T> {
+        object : CollectionModelAssociationImpl<F, T>(F::class) {
           override val collection: List<T> = listOf()
-
-          override fun equals(other: Any?) =
-              if (other is CollectionModelAssociation<*, *>) {
-                collection == other.collection
-              } else {
-                false
-              }
-
-          override fun hashCode() = collection.hashCode()
-
-          override val fromKlass = F::class
         }
   }
+}
+
+abstract class CollectionModelAssociationImpl<F : ApplicationRecord, T : ApplicationRecord>(
+    override val fromKlass: KClass<F>
+) : CollectionModelAssociation<F, T> {
+  override fun equals(other: Any?) =
+      if (other is CollectionModelAssociation<*, *>) {
+        collection == other.collection
+      } else {
+        false
+      }
+
+  override fun hashCode() = collection.hashCode()
 }
