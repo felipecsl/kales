@@ -15,7 +15,8 @@ data class Foo(
     fun where(id: Int? = null, foo: String? = null, testModel: Foo?) =
         whereRecords<Foo>(mapOf("id" to id, "foo" to foo, "testmodel_id" to testModel?.id))
 
-    fun create(foo: String, testModel: TestModel) = createRecord<Foo>(mapOf("foo" to foo))
+    fun create(foo: String, testModel: TestModel) =
+        createRecord<Foo>(mapOf("foo" to foo, "testmodel_id" to testModel.id))
 
     fun find(id: Int) = findRecord<Foo>(id)
   }
