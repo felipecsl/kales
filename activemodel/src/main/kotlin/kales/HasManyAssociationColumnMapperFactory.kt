@@ -8,10 +8,10 @@ import org.jdbi.v3.core.mapper.ColumnMapperFactory
 import java.lang.reflect.Type
 import java.util.*
 
-internal class CollectionModelAssociationColumnMapperFactory : ColumnMapperFactory {
+internal class HasManyAssociationColumnMapperFactory : ColumnMapperFactory {
   override fun build(type: Type, config: ConfigRegistry): Optional<ColumnMapper<*>> {
     return if (GenericTypes.getErasedType(type) == HasManyAssociation::class.java) {
-      Optional.of(CollectionModelAssociationColumnMapper(type))
+      Optional.of(HasManyAssociationColumnMapper(type))
     } else {
       Optional.empty()
     }

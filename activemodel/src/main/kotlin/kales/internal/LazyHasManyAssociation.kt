@@ -1,8 +1,8 @@
-package kales
+package kales.internal
 
+import kales.ApplicationRecord
 import kales.activemodel.HasManyAssociationImpl
 import kales.activemodel.use
-import kales.internal.RecordQueryBuilder
 import kotlin.reflect.KClass
 
 class LazyHasManyAssociation(

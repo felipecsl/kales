@@ -8,8 +8,8 @@ import org.jdbi.v3.postgres.PostgresPlugin
 object JdbiFactory {
   fun fromConnectionString(connString: String): Jdbi {
     return Jdbi.create(connString)
-        .registerColumnMapper(CollectionModelAssociationColumnMapperFactory())
-        .registerColumnMapper(SingleModelAssociationColumnMapperFactory())
+        .registerColumnMapper(HasManyAssociationColumnMapperFactory())
+        .registerColumnMapper(BelongsToAssociationColumnMapperFactory())
         .installPlugin(PostgresPlugin())
         .installPlugin(H2DatabasePlugin())
         .installPlugin(KotlinPlugin())

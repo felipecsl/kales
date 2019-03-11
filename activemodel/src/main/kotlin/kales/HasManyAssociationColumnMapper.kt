@@ -1,6 +1,7 @@
 package kales
 
 import kales.activemodel.HasManyAssociation
+import kales.internal.LazyHasManyAssociation
 import org.jdbi.v3.core.mapper.ColumnMapper
 import org.jdbi.v3.core.statement.StatementContext
 import java.lang.reflect.ParameterizedType
@@ -8,7 +9,7 @@ import java.lang.reflect.Type
 import java.sql.ResultSet
 import java.util.logging.Logger
 
-internal class CollectionModelAssociationColumnMapper(
+internal class HasManyAssociationColumnMapper(
     private val type: Type
 ) : ColumnMapper<HasManyAssociation<*, *>> {
   @Suppress("UNCHECKED_CAST")
@@ -32,6 +33,6 @@ internal class CollectionModelAssociationColumnMapper(
       }
 
   companion object {
-    private val logger = Logger.getLogger(CollectionModelAssociationColumnMapper::class.simpleName)
+    private val logger = Logger.getLogger(HasManyAssociationColumnMapper::class.simpleName)
   }
 }

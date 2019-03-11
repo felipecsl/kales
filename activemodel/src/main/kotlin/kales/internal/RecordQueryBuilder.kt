@@ -1,7 +1,7 @@
 package kales.internal
 
 import kales.ApplicationRecord
-import kales.CollectionModelAssociationColumnMapper
+import kales.HasManyAssociationColumnMapper
 import kales.activemodel.HasManyAssociation
 import kales.activemodel.BelongsToAssociation
 import org.jdbi.v3.core.Handle
@@ -60,7 +60,7 @@ class RecordQueryBuilder(
    * `select` statements. We can't just `select *` because relationships are a special case.
    * [HasManyAssociation] properties are manually injected into the query by selecting the `id`
    * column `as <propertyName>`. This allows us to "fool" JDBI into thinking there's an extra
-   * column for that property, so we can hook into that from [CollectionModelAssociationColumnMapper] and
+   * column for that property, so we can hook into that from [HasManyAssociationColumnMapper] and
    * properly hook the relationship to the other model.
    */
   private fun columnNames(): String {
