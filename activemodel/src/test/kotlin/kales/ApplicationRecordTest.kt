@@ -54,11 +54,22 @@ class ApplicationRecordTest {
     }
   }
 
-  @Test fun `test associations`() {
+  @Test fun `test one-to-many association`() {
+    withTestDb {
+      val pingPong = TestModel.create("Ping Pong")
+      TestModel.create("Fla Flu")
+      TestModel.create("Kit Kat")
+      val blah = Foo.create("blah", pingPong)
+      val bluh = Foo.create("bluh", pingPong)
+      assertThat(TestModel.find(pingPong.id)!!.foos).containsExactly(blah, bluh)
+    }
+  }
+
+  @Test fun `test many-to-one association`() {
     withTestDb {
       val pingPong = TestModel.create("Ping Pong")
       val blah = Foo.create("blah", pingPong)
-      assertThat(TestModel.find(pingPong.id)!!.foos.collection).isEqualTo(listOf(blah))
+      assertThat(Foo.find(blah.id)!!.testModel.value).isEqualTo(pingPong)
     }
   }
 

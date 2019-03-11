@@ -1,10 +1,6 @@
 package kales
 
-import kales.ApplicationRecord.Companion.JDBI
 import kales.activemodel.CollectionModelAssociation
-import kales.activemodel.CollectionModelAssociationImpl
-import kales.activemodel.use
-import kales.internal.RecordQueryBuilder
 import org.jdbi.v3.core.mapper.ColumnMapper
 import org.jdbi.v3.core.statement.StatementContext
 import java.lang.reflect.ParameterizedType
@@ -29,21 +25,8 @@ internal class CollectionModelAssociationColumnMapper(
         logger.info("Resolving model collection association from " +
             "$fromType with ID $fromModelId to $toType")
         val fromKlass = (fromType as Class<ApplicationRecord>).kotlin
-        val toKlass = (toType as Class<out ApplicationRecord>).kotlin
-        object : CollectionModelAssociationImpl<ApplicationRecord, ApplicationRecord>(fromKlass) {
-          override val collection: List<ApplicationRecord>
-            get() {
-              JDBI.use {
-                val queryBuilder = RecordQueryBuilder(it, toKlass)
-                // We're assuming the property name matches the class name - That should always be
-                // the case, e.: For table `Posts`, foreign key is `post_id`
-                val clause = mapOf("${fromKlass.simpleName!!.toLowerCase()}_id" to fromModelId)
-                queryBuilder.where(clause).let { query ->
-                  return query.mapTo(toType).list()
-                }
-              }
-            }
-        }
+        val toKlass = (toType as Class<ApplicationRecord>).kotlin
+        LazyCollectionModelAssociation(fromKlass, toKlass, fromModelId)
       } else {
         throw IllegalArgumentException("Invalid type found $type")
       }
