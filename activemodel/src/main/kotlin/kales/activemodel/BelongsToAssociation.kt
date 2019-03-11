@@ -2,13 +2,13 @@ package kales.activemodel
 
 import kales.ApplicationRecord
 
-interface SingleModelAssociation<T : ApplicationRecord> {
+interface BelongsToAssociation<T : ApplicationRecord> {
   val value: T?
 
   companion object {
-    fun <T : ApplicationRecord> empty() = object : SingleModelAssociation<T> {
+    fun <T : ApplicationRecord> empty() = object : BelongsToAssociation<T> {
       override fun equals(other: Any?) =
-          if (other is SingleModelAssociation<*>) {
+          if (other is BelongsToAssociation<*>) {
             value == other.value
           } else {
             false

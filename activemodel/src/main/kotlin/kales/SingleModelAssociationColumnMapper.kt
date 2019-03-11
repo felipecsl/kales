@@ -1,28 +1,32 @@
 package kales
 
-import kales.activemodel.SingleModelAssociation
+import kales.activemodel.BelongsToAssociation
 import org.jdbi.v3.core.mapper.ColumnMapper
 import org.jdbi.v3.core.statement.StatementContext
 import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type
 import java.sql.ResultSet
+import java.util.logging.Logger
 
 class SingleModelAssociationColumnMapper(
     private val type: Type
-) : ColumnMapper<SingleModelAssociation<*>> {
+) : ColumnMapper<BelongsToAssociation<*>> {
   override fun map(
       resultSet: ResultSet,
       columnNumber: Int,
       context: StatementContext
-  ): SingleModelAssociation<*> =
-      if (type is ParameterizedType && type.rawType == SingleModelAssociation::class.java) {
+  ): BelongsToAssociation<*> =
+      if (type is ParameterizedType && type.rawType == BelongsToAssociation::class.java) {
         val toType = type.actualTypeArguments.first()
         val fromModelId = resultSet.getInt(columnNumber)
-        println("SingleModelAssociationColumnMapper Model type is $toType with ID $fromModelId to $toType")
+        logger.info("Resolving model single association with ID $fromModelId to $toType")
         // TODO implement this
-        SingleModelAssociation.empty<ApplicationRecord>()
+        BelongsToAssociation.empty<ApplicationRecord>()
       } else {
         throw IllegalArgumentException("Invalid type found $type")
       }
 
+  companion object {
+    private val logger = Logger.getLogger(SingleModelAssociationColumnMapper::class.simpleName)
+  }
 }

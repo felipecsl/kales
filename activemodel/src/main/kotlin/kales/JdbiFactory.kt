@@ -1,6 +1,5 @@
 package kales
 
-import kales.activemodel.SingleModelAssociation
 import org.jdbi.v3.core.Jdbi
 import org.jdbi.v3.core.h2.H2DatabasePlugin
 import org.jdbi.v3.core.kotlin.KotlinPlugin

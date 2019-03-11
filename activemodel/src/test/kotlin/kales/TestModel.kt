@@ -1,13 +1,13 @@
 package kales
 
-import kales.activemodel.CollectionModelAssociation
-import kales.activemodel.CollectionModelAssociation.Companion.empty
-import kales.activemodel.SingleModelAssociation
+import kales.activemodel.HasManyAssociation
+import kales.activemodel.HasManyAssociation.Companion.empty
+import kales.activemodel.BelongsToAssociation
 
 data class Foo(
     val id: Int,
     val foo: String,
-    val testModel: SingleModelAssociation<TestModel>
+    val testModel: BelongsToAssociation<TestModel>
 ) : ApplicationRecord() {
   companion object {
     fun all() = allRecords<Foo>()
@@ -25,7 +25,7 @@ data class Foo(
 data class TestModel(
     val id: Int,
     val name: String,
-    val foos: CollectionModelAssociation<TestModel, Foo> = empty()
+    val foos: HasManyAssociation<TestModel, Foo> = empty()
 ) : ApplicationRecord() {
   companion object {
     fun all() = allRecords<TestModel>()

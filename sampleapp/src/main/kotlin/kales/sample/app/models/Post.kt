@@ -1,13 +1,13 @@
 package kales.sample.app.models
 
 import kales.ApplicationRecord
-import kales.activemodel.CollectionModelAssociation
+import kales.activemodel.HasManyAssociation
 
 data class Post(
     val id: Int,
     val title: String,
     val content: String,
-    val comments: CollectionModelAssociation<Post, Comment>
+    val comments: HasManyAssociation<Post, Comment>
 ) : ApplicationRecord() {
 
   companion object {

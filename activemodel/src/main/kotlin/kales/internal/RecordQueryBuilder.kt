@@ -2,8 +2,8 @@ package kales.internal
 
 import kales.ApplicationRecord
 import kales.CollectionModelAssociationColumnMapper
-import kales.activemodel.CollectionModelAssociation
-import kales.activemodel.SingleModelAssociation
+import kales.activemodel.HasManyAssociation
+import kales.activemodel.BelongsToAssociation
 import org.jdbi.v3.core.Handle
 import org.jdbi.v3.core.mapper.reflect.ColumnName
 import org.jdbi.v3.core.statement.Query
@@ -58,7 +58,7 @@ class RecordQueryBuilder(
   /**
    * Returns all the param names for the provided [ApplicationRecord] [KClass] for use with
    * `select` statements. We can't just `select *` because relationships are a special case.
-   * [CollectionModelAssociation] properties are manually injected into the query by selecting the `id`
+   * [HasManyAssociation] properties are manually injected into the query by selecting the `id`
    * column `as <propertyName>`. This allows us to "fool" JDBI into thinking there's an extra
    * column for that property, so we can hook into that from [CollectionModelAssociationColumnMapper] and
    * properly hook the relationship to the other model.
@@ -74,8 +74,8 @@ class RecordQueryBuilder(
     val propName = findAnnotation<ColumnName>()?.value ?: name
     val classifier = type.classifier
     return when (classifier) {
-      CollectionModelAssociation::class -> "id as $propName"
-      SingleModelAssociation::class -> "${name}_id as $propName"
+      HasManyAssociation::class -> "id as $propName"
+      BelongsToAssociation::class -> "${name}_id as $propName"
       else -> propName
     }
   }

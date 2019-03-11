@@ -1,6 +1,6 @@
 package kales
 
-import kales.activemodel.CollectionModelAssociation
+import kales.activemodel.HasManyAssociation
 import org.jdbi.v3.core.mapper.ColumnMapper
 import org.jdbi.v3.core.statement.StatementContext
 import java.lang.reflect.ParameterizedType
@@ -10,14 +10,14 @@ import java.util.logging.Logger
 
 internal class CollectionModelAssociationColumnMapper(
     private val type: Type
-) : ColumnMapper<CollectionModelAssociation<*, *>> {
+) : ColumnMapper<HasManyAssociation<*, *>> {
   @Suppress("UNCHECKED_CAST")
   override fun map(
       resultSet: ResultSet,
       columnNumber: Int,
       context: StatementContext
   ) =
-      if (type is ParameterizedType && type.rawType == CollectionModelAssociation::class.java) {
+      if (type is ParameterizedType && type.rawType == HasManyAssociation::class.java) {
         val typeArguments = type.actualTypeArguments
         val fromType = typeArguments.first()
         val toType = typeArguments.last()
@@ -26,7 +26,7 @@ internal class CollectionModelAssociationColumnMapper(
             "$fromType with ID $fromModelId to $toType")
         val fromKlass = (fromType as Class<ApplicationRecord>).kotlin
         val toKlass = (toType as Class<ApplicationRecord>).kotlin
-        LazyCollectionModelAssociation(fromKlass, toKlass, fromModelId)
+        LazyHasManyAssociation(fromKlass, toKlass, fromModelId)
       } else {
         throw IllegalArgumentException("Invalid type found $type")
       }
