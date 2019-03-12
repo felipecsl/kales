@@ -16,7 +16,9 @@ import org.jdbi.v3.core.result.ResultProducers.returningGeneratedKeys
  * fancy pluralization for now, just naively append `s` at the end, which means the table for `Hero`
  * would be `heros`, awkwardly.
  */
-abstract class ApplicationRecord {
+interface ApplicationRecord {
+  val id: Int
+
   companion object {
     val JDBI: Jdbi = JdbiFactory.fromConnectionString(dbConnectionString())
 

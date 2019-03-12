@@ -33,7 +33,10 @@ abstract class HasManyAssociationImpl<F : ApplicationRecord, T : ApplicationReco
 
   override fun equals(other: Any?) =
       if (other is HasManyAssociation<*, *>) {
-        collection == other.collection
+        // We need to perform a "shallow" equals here because otherwise we'd cause a stack overflow
+        // due to the wya HasMany/BelongsTo relationships work between models, by nature they have
+        // to reference each other, causing a circular dependency and, thus, stack overflow.
+        collection.map { it.id } == other.collection.map { it.id }
       } else {
         false
       }

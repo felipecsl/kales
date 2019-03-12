@@ -1,11 +1,13 @@
 package kales.sample.app.models
 
 import kales.ApplicationRecord
+import kales.ApplicationRecord.Companion.allRecords
+import kales.ApplicationRecord.Companion.findRecord
 
 data class Comment(
-    val id: Int,
+    override val id: Int,
     val post: Post
-) : ApplicationRecord() {
+) : ApplicationRecord {
   companion object {
     fun all() = allRecords<Comment>()
 

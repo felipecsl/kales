@@ -69,7 +69,7 @@ class ApplicationRecordTest {
     withTestDb {
       val pingPong = TestModel.create("Ping Pong")
       val blah = Foo.create("blah", pingPong)
-      assertThat(Foo.find(blah.id)!!.testModel.value).isEqualTo(pingPong)
+      assertThat(Foo.find(blah.id)!!.testModel!!.value).isEqualTo(pingPong)
     }
   }
 
