@@ -1,13 +1,24 @@
 package kales
 
 import kales.activemodel.use
+import kales.internal.RecordQueryBuilder
 import kales.migrations.KalesDatabaseConfig
 import org.jdbi.v3.core.Handle
 import org.jdbi.v3.core.Jdbi
 import org.jdbi.v3.core.kotlin.mapTo
 import org.jdbi.v3.core.result.ResultProducers.returningGeneratedKeys
 
-abstract class ApplicationRecord {
+/**
+ * Maps model classes to database records. Kales follows some conventions when dealing with models:
+ * - All models are expected to have an `id` autoincrement primary key column
+ * - Foreign key columns are mapped using `<model_name>_id` column naming format
+ * - The table name is a plural of the model name, eg: `User` -> table is `users`. We don't do any
+ * fancy pluralization for now, just naively append `s` at the end, which means the table for `Hero`
+ * would be `heros`, awkwardly.
+ */
+interface ApplicationRecord {
+  val id: Int
+
   companion object {
     val JDBI: Jdbi = JdbiFactory.fromConnectionString(dbConnectionString())
 
@@ -16,44 +27,47 @@ abstract class ApplicationRecord {
       return KalesDatabaseConfig.fromDatabaseYml(stream).toConnectionString()
     }
 
+    /** Returns a list with all records in the table (potentially dangerous for big tables!) */
     inline fun <reified T : ApplicationRecord> allRecords(): List<T> {
       useJdbi {
-        val tableName = toTableName<T>()
-        return it.createQuery("select * from $tableName").mapTo<T>().list()
+        val queryBuilder = RecordQueryBuilder(it, T::class)
+        return queryBuilder.allRecords()
+            .mapTo<T>()
+            .list()
       }
     }
 
-    inline fun <reified T : ApplicationRecord> whereRecords(clause: Map<String, Any>): List<T> {
+    /** Returns only the records matching the provided selection criteria */
+    inline fun <reified T : ApplicationRecord> whereRecords(clause: Map<String, Any?>): List<T> {
       useJdbi {
-        val tableName = toTableName<T>()
-        val whereClause = clause.keys.joinToString(" and ") { k -> "$k = :$k" }
-        val query = it.createQuery("select * from $tableName where $whereClause")
-        clause.forEach { k, v -> query.bind(k, v) }
-        return query.mapTo<T>().list()
+        val queryBuilder = RecordQueryBuilder(it, T::class)
+        queryBuilder.where(clause).let { query ->
+          return query.mapTo<T>().list()
+        }
       }
     }
 
     inline fun <reified T : ApplicationRecord> createRecord(values: Map<String, Any>): T {
       useJdbi {
-        val tableName = toTableName<T>()
-        val cols = values.keys.joinToString(prefix = "(", postfix = ")")
-        val refs = values.keys.joinToString(prefix = "(", postfix = ")") { k -> ":$k" }
-        val update = it.createUpdate("insert into $tableName $cols values $refs")
-        values.forEach { k, v -> update.bind(k, v) }
-        return update.execute(returningGeneratedKeys())
-            .mapTo<Int>()
-            .findFirst()
-            .map { id -> findRecord<T>(id) }
-            .orElseThrow { RuntimeException("Failed to create record.") }!!
+        val queryBuilder = RecordQueryBuilder(it, T::class)
+        queryBuilder.update(values).let { update ->
+          return update.execute(returningGeneratedKeys())
+              .mapTo<Int>()
+              .findFirst()
+              .map { id -> findRecord<T>(id) }
+              .orElseThrow { RuntimeException("Failed to create record.") }!!
+        }
       }
     }
 
-    /** TODO I think Rails raises RecordNotFound in this case instead of returning null. Should we do the same? */
+    /**
+     * TODO I think Rails raises RecordNotFound in this case instead of returning null.
+     * Should we do the same?
+     */
     inline fun <reified T : ApplicationRecord> findRecord(id: Int): T? {
       useJdbi {
-        val tableName = toTableName<T>()
-        return it.createQuery("select * from $tableName where id = :id")
-            .bind("id", id)
+        val queryBuilder = RecordQueryBuilder(it, T::class)
+        return queryBuilder.findRecord(id)
             .mapTo<T>()
             .findFirst()
             .orElse(null)
@@ -61,7 +75,5 @@ abstract class ApplicationRecord {
     }
 
     inline fun <T> useJdbi(block: (Handle) -> T) = JDBI.use(block)
-
-    inline fun <reified T> toTableName() = "${T::class.simpleName!!.toLowerCase()}s"
   }
 }
