@@ -6,12 +6,13 @@ import kales.ApplicationRecord.Companion.createRecord
 import kales.ApplicationRecord.Companion.findRecord
 import kales.ApplicationRecord.Companion.whereRecords
 import kales.activemodel.HasManyAssociation
+import kales.activemodel.HasManyAssociation.Companion.empty
 
 data class Post(
     override val id: Int,
     val title: String,
     val content: String,
-    val comments: HasManyAssociation<Post, Comment>
+    val comments: HasManyAssociation<Post, Comment> = empty()
 ) : ApplicationRecord {
 
   companion object {

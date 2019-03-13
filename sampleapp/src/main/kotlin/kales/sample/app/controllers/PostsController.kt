@@ -3,6 +3,7 @@ package kales.sample.app.controllers
 import io.ktor.application.ApplicationCall
 import io.ktor.request.receiveParameters
 import kales.actionpack.ApplicationController
+import kales.sample.app.models.Comment
 import kales.sample.app.models.Post
 import kales.sample.app.views.posts.IndexViewModel
 import kales.sample.app.views.posts.PostViewModel
@@ -24,5 +25,15 @@ class PostsController(call: ApplicationCall) : ApplicationController(call) {
   suspend fun create() {
     val params = call.receiveParameters()
     bindings = PostViewModel(Post.create(params["title"]!!, params["content"]!!))
+  }
+
+  suspend fun writeComment() {
+    val params = call.receiveParameters()
+    val commentText = params["comment_text"]
+        ?: throw IllegalArgumentException("Missing param `comment_text`")
+    val id = params["id"]?.toInt()
+        ?: throw IllegalArgumentException("Missing param `id`")
+    Comment.create(commentText, id)
+    bindings = PostViewModel(Post.find(id))
   }
 }

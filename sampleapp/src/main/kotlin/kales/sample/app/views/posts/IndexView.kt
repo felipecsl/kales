@@ -8,30 +8,46 @@ class IndexView(
     bindings: IndexViewModel? = IndexViewModel("Unknown", listOf())
 ) : ActionView<IndexViewModel>(bindings) {
   override fun FlowContent.render() {
-    h2 {
-      +"Hello, ${bindings?.name}"
-    }
-    p {
-      +"Below you can see a list of posts"
-    }
-    h3 {
-      +"Posts"
-    }
-    if (bindings?.posts?.any() == true) {
-      ul {
-        bindings.posts.forEach { p ->
-          li {
-            a(href = "/posts/${p.id}") {
-              +p.title
+    div("container") {
+      div("row") {
+        div("col-sm-12") {
+          h2 { +"Hello, ${bindings?.name}" }
+        }
+      }
+      div("row") {
+        div("col-sm-12") {
+          p { +"Below you can see a list of all posts" }
+        }
+      }
+      div("row") {
+        div("col-sm-12") {
+          h3 { +"Posts" }
+        }
+      }
+      div("row") {
+        div("col-sm-12") {
+          if (bindings?.posts?.any() == true) {
+            ul {
+              bindings.posts.forEach { p ->
+                li {
+                  a(href = "/posts/${p.id}") {
+                    +p.title
+                  }
+                }
+              }
             }
+          } else {
+            p { +"No posts yet." }
           }
         }
       }
-    } else {
-      p { +"No posts yet." }
-    }
-    a("/posts/new") {
-      +"Write a post"
+      div("row") {
+        div("col-sm-12") {
+          a("/posts/new") {
+            +"Write a post"
+          }
+        }
+      }
     }
   }
 }
