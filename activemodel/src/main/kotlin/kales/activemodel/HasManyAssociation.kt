@@ -4,15 +4,15 @@ import kales.ApplicationRecord
 import kotlin.reflect.KClass
 
 /** Represents a one-to-many association between models [F] and [T] respectively */
-interface HasManyAssociation<F : ApplicationRecord, T : ApplicationRecord> : Collection<T> {
+interface HasManyAssociation<F : ApplicationRecord, T : ApplicationRecord> : MutableCollection<T> {
   val fromKlass: KClass<F>
 
-  val collection: List<T>
+  val collection: MutableList<T>
 
   companion object {
     inline fun <reified F : ApplicationRecord, T : ApplicationRecord> empty() =
         object : HasManyAssociationImpl<F, T>(F::class) {
-          override val collection: List<T> = listOf()
+          override val collection: MutableList<T> = mutableListOf()
         }
   }
 }
@@ -20,8 +20,21 @@ interface HasManyAssociation<F : ApplicationRecord, T : ApplicationRecord> : Col
 abstract class HasManyAssociationImpl<F : ApplicationRecord, T : ApplicationRecord>(
     override val fromKlass: KClass<F>
 ) : HasManyAssociation<F, T> {
-  override val size: Int
-    get() = collection.size
+  override fun add(element: T) = collection.add(element)
+
+  override fun addAll(elements: Collection<T>) = collection.addAll(elements)
+
+  override fun clear() {
+    collection.clear()
+  }
+
+  override fun remove(element: T) = collection.remove(element)
+
+  override fun removeAll(elements: Collection<T>) = collection.removeAll(elements)
+
+  override fun retainAll(elements: Collection<T>) = collection.retainAll(elements)
+
+  override val size get() = collection.size
 
   override fun contains(element: T) = collection.contains(element)
 

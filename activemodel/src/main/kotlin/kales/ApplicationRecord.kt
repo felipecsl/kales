@@ -7,6 +7,7 @@ import org.jdbi.v3.core.Handle
 import org.jdbi.v3.core.Jdbi
 import org.jdbi.v3.core.kotlin.mapTo
 import org.jdbi.v3.core.result.ResultProducers.returningGeneratedKeys
+import java.sql.SQLException
 
 /**
  * Maps model classes to database records. Kales follows some conventions when dealing with models:
@@ -47,15 +48,28 @@ interface ApplicationRecord {
       }
     }
 
-    inline fun <reified T : ApplicationRecord> createRecord(values: Map<String, Any>): T {
+    inline fun <reified T : ApplicationRecord> createRecord(values: Map<String, Any?>): T {
       useJdbi {
         val queryBuilder = RecordQueryBuilder(it, T::class)
-        queryBuilder.update(values).let { update ->
-          return update.execute(returningGeneratedKeys())
+        queryBuilder.create(values).let { create ->
+          return create.execute(returningGeneratedKeys())
               .mapTo<Int>()
               .findFirst()
               .map { id -> findRecord<T>(id) }
               .orElseThrow { RuntimeException("Failed to create record.") }!!
+        }
+      }
+    }
+
+    inline fun <reified T : ApplicationRecord> T.saveRecord(): T {
+      useJdbi {
+        val queryBuilder = RecordQueryBuilder(it, T::class)
+        queryBuilder.update(this).let { update ->
+          return if (update.execute() != 1) {
+            throw SQLException("Failed to update record $this")
+          } else {
+            this
+          }
         }
       }
     }

@@ -23,6 +23,15 @@ class ApplicationRecordTest {
     }
   }
 
+  @Test fun `test update model`() {
+    withTestDb {
+      val helloWorld = TestModel.create("Hello World")
+      val updated = helloWorld.copy(name = "H3ll0 W0r1d")
+      updated.save()
+      assertThat(TestModel.find(helloWorld.id)!!).isEqualTo(updated)
+    }
+  }
+
   @Test fun `test where`() {
     withTestDb {
       TestModel.create("Hello World")
@@ -70,6 +79,16 @@ class ApplicationRecordTest {
       val pingPong = TestModel.create("Ping Pong")
       val blah = Foo.create("blah", pingPong)
       assertThat(Foo.find(blah.id)!!.testModel!!.value).isEqualTo(pingPong)
+    }
+  }
+
+  @Test fun `test update association`() {
+    withTestDb {
+      val pingPong = TestModel.create("Ping Pong")
+      val blah = Foo.create("blah")
+      pingPong.foos.add(blah)
+      pingPong.save()
+      assertThat(Foo.find(blah.id)!!.testModel).isEqualTo(pingPong)
     }
   }
 

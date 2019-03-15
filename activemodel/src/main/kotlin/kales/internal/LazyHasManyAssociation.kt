@@ -10,7 +10,7 @@ class LazyHasManyAssociation(
     private val toKlass: KClass<ApplicationRecord>,
     private val fromModelId: Int
 ) : HasManyAssociationImpl<ApplicationRecord, ApplicationRecord>(fromKlass) {
-  override val collection: List<ApplicationRecord>
+  override val collection: MutableList<ApplicationRecord>
       by lazy {
         ApplicationRecord.JDBI.use {
           val queryBuilder = RecordQueryBuilder(it, toKlass)

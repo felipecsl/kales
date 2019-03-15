@@ -3,6 +3,7 @@ package kales
 import kales.ApplicationRecord.Companion.allRecords
 import kales.ApplicationRecord.Companion.createRecord
 import kales.ApplicationRecord.Companion.findRecord
+import kales.ApplicationRecord.Companion.saveRecord
 import kales.ApplicationRecord.Companion.whereRecords
 import kales.activemodel.HasManyAssociation
 import kales.activemodel.HasManyAssociation.Companion.empty
@@ -19,8 +20,8 @@ data class Foo(
     fun where(id: Int? = null, foo: String? = null, testModel: Foo?) =
         whereRecords<Foo>(mapOf("id" to id, "foo" to foo, "testmodel_id" to testModel?.id))
 
-    fun create(foo: String, testModel: TestModel) =
-        createRecord<Foo>(mapOf("foo" to foo, "testmodel_id" to testModel.id))
+    fun create(foo: String, testModel: TestModel? = null) =
+        createRecord<Foo>(mapOf("foo" to foo, "testmodel_id" to testModel?.id))
 
     fun find(id: Int) = findRecord<Foo>(id)
   }
@@ -31,6 +32,8 @@ data class TestModel(
     val name: String,
     val foos: HasManyAssociation<TestModel, Foo> = empty()
 ) : ApplicationRecord {
+  fun save() = saveRecord()
+
   companion object {
     fun all() = allRecords<TestModel>()
 
