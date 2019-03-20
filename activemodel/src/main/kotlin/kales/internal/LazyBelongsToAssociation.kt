@@ -11,7 +11,7 @@ class LazyBelongsToAssociation(
 ) : BelongsToAssociationImpl<ApplicationRecord>() {
   override val value: ApplicationRecord? by lazy {
       ApplicationRecord.JDBI.use {
-        val queryBuilder = RecordQueryBuilder(it, toKlass)
+        val queryBuilder = RecordQueryBuilder(it, KApplicationRecordClass(toKlass))
         queryBuilder.findRecord(toRecordId)
             .mapTo(toKlass.java)
             .findFirst()

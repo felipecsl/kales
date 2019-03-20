@@ -1,6 +1,7 @@
 package kales
 
 import kales.activemodel.use
+import kales.internal.KApplicationRecordClass
 import kales.internal.RecordQueryBuilder
 import kales.migrations.KalesDatabaseConfig
 import org.jdbi.v3.core.Handle
@@ -31,7 +32,7 @@ interface ApplicationRecord {
     /** Returns a list with all records in the table (potentially dangerous for big tables!) */
     inline fun <reified T : ApplicationRecord> allRecords(): List<T> {
       useJdbi {
-        val queryBuilder = RecordQueryBuilder(it, T::class)
+        val queryBuilder = RecordQueryBuilder(it, KApplicationRecordClass(T::class))
         return queryBuilder.allRecords()
             .mapTo<T>()
             .list()
@@ -41,7 +42,7 @@ interface ApplicationRecord {
     /** Returns only the records matching the provided selection criteria */
     inline fun <reified T : ApplicationRecord> whereRecords(clause: Map<String, Any?>): List<T> {
       useJdbi {
-        val queryBuilder = RecordQueryBuilder(it, T::class)
+        val queryBuilder = RecordQueryBuilder(it, KApplicationRecordClass(T::class))
         queryBuilder.where(clause).let { query ->
           return query.mapTo<T>().list()
         }
@@ -50,7 +51,7 @@ interface ApplicationRecord {
 
     inline fun <reified T : ApplicationRecord> createRecord(values: Map<String, Any?>): T {
       useJdbi {
-        val queryBuilder = RecordQueryBuilder(it, T::class)
+        val queryBuilder = RecordQueryBuilder(it, KApplicationRecordClass(T::class))
         queryBuilder.create(values).let { create ->
           return create.execute(returningGeneratedKeys())
               .mapTo<Int>()
@@ -63,7 +64,7 @@ interface ApplicationRecord {
 
     inline fun <reified T : ApplicationRecord> T.saveRecord(): T {
       useJdbi {
-        val queryBuilder = RecordQueryBuilder(it, T::class)
+        val queryBuilder = RecordQueryBuilder(it, KApplicationRecordClass(T::class))
         queryBuilder.update(this).let { update ->
           return if (update.execute() != 1) {
             throw SQLException("Failed to update record $this")
@@ -80,7 +81,7 @@ interface ApplicationRecord {
      */
     inline fun <reified T : ApplicationRecord> findRecord(id: Int): T? {
       useJdbi {
-        val queryBuilder = RecordQueryBuilder(it, T::class)
+        val queryBuilder = RecordQueryBuilder(it, KApplicationRecordClass(T::class))
         return queryBuilder.findRecord(id)
             .mapTo<T>()
             .findFirst()

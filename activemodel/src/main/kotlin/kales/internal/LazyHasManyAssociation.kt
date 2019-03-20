@@ -13,7 +13,7 @@ class LazyHasManyAssociation(
   override val collection: MutableList<ApplicationRecord>
       by lazy {
         ApplicationRecord.JDBI.use {
-          val queryBuilder = RecordQueryBuilder(it, toKlass)
+          val queryBuilder = RecordQueryBuilder(it, KApplicationRecordClass(toKlass))
           // We're assuming the property name matches the class name - That should always be
           // the case, e.: For table `Posts`, foreign key is `post_id`
           val clause = mapOf("${fromKlass.simpleName!!.toLowerCase()}_id" to fromModelId)

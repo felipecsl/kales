@@ -4,7 +4,8 @@ import kales.ApplicationRecord
 import kotlin.reflect.KClass
 
 /** Represents a one-to-many association between models [F] and [T] respectively */
-interface HasManyAssociation<F : ApplicationRecord, T : ApplicationRecord> : MutableCollection<T> {
+interface HasManyAssociation<F : ApplicationRecord, T : ApplicationRecord>
+  : MutableCollection<T>, Association {
   val fromKlass: KClass<F>
 
   val collection: MutableList<T>

@@ -6,7 +6,7 @@ import kales.ApplicationRecord
  * Represents an association where a model A's table contains a foreign key to another model B's
  * [ApplicationRecord] object, in a "A belongs to B" fashion.
  */
-interface BelongsToAssociation<T : ApplicationRecord> {
+interface BelongsToAssociation<T : ApplicationRecord> : Association {
   val value: T?
 }
 

@@ -8,23 +8,18 @@ import org.jdbi.v3.core.Handle
 import org.jdbi.v3.core.mapper.reflect.ColumnName
 import org.jdbi.v3.core.statement.Query
 import org.jdbi.v3.core.statement.Update
-import java.lang.reflect.ParameterizedType
 import kotlin.reflect.KClass
 import kotlin.reflect.KParameter
-import kotlin.reflect.full.declaredMemberProperties
 import kotlin.reflect.full.findAnnotation
-import kotlin.reflect.full.primaryConstructor
-import kotlin.reflect.jvm.javaType
 
 class RecordQueryBuilder(
     private val handle: Handle,
-    private val klass: KClass<out ApplicationRecord>
+    private val applicationRecordClass: KApplicationRecordClass,
+    private val recordUpdater: RecordUpdater = RecordUpdater(handle, applicationRecordClass)
 ) {
-  private val tableName = "${klass.simpleName!!.toLowerCase()}s"
+  private val tableName = applicationRecordClass.tableName
 
-  private val constructor
-    get() = klass.primaryConstructor
-        ?: throw IllegalArgumentException("Please define a primary constructor for $this")
+  private val constructor = applicationRecordClass.constructor
 
   fun where(clause: Map<String, Any?>): Query {
     // TODO There is ambiguity with null values in the where clause here.
@@ -65,26 +60,7 @@ class RecordQueryBuilder(
   }
 
   fun update(record: ApplicationRecord): Update {
-    // TODO: we need to make sure that the `record` class matches the constructor KClass
-    val properties = record.javaClass.kotlin.declaredMemberProperties
-    // When updating a record, we need to take some precautions around which columns we can update:
-    // - We need to filter out association columns (eg HasManyAssociation) since they don't directly
-    //   map to a record column and are sort of a "synthetic" property, so they needs to be handled
-    //   separately during an update
-    // - We need filter out the "id" column since it cannot be updated (it's set to autoincrement by
-    //   default)
-    val validParameterNames = constructor.parameters
-        .filterNot { it.isAssociation() }
-        .mapNotNull { it.name }
-    val colunmNamesAndValues = validParameterNames
-        .associate { param -> param to properties.first { it.name == param }.get(record) }
-    val colsToUpdate = validParameterNames
-        .filter { it != "id" }
-        .joinToString(", ") { k -> "$k = :$k" }
-    val queryString = "update $tableName set $colsToUpdate where id = :id"
-    return handle.createUpdate(queryString).also { update ->
-      colunmNamesAndValues.forEach { k, v -> update.bind(k, v) }
-    }
+    return recordUpdater.update(record)
   }
 
   /**
@@ -97,11 +73,6 @@ class RecordQueryBuilder(
    */
   private fun columnNames(): String {
     return constructor.parameters.mapNotNull { it.paramName() }.joinToString(",")
-  }
-
-  private fun KParameter.isAssociation(): Boolean {
-    val javaType = type.javaType
-    return javaType is ParameterizedType && javaType.rawType == HasManyAssociation::class.java
   }
 
   private fun KParameter.paramName(): String? {
