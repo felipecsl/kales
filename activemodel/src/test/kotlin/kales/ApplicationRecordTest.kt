@@ -78,17 +78,29 @@ class ApplicationRecordTest {
     withTestDb {
       val pingPong = TestModel.create("Ping Pong")
       val blah = Foo.create("blah", pingPong)
-      assertThat(Foo.find(blah.id)!!.testModel!!.value).isEqualTo(pingPong)
+      assertThat(Foo.find(blah.id)!!.testModel.value).isEqualTo(pingPong)
     }
   }
 
-  @Test fun `test update association`() {
+  @Test fun `test update has many association`() {
     withTestDb {
       val pingPong = TestModel.create("Ping Pong")
       val blah = Foo.create("blah")
       pingPong.foos.add(blah)
       pingPong.save()
-      assertThat(Foo.find(blah.id)!!.testModel!!.value).isEqualTo(pingPong)
+      val updatedBlah = Foo.find(blah.id)!!
+      assertThat(updatedBlah.testModel.value).isEqualTo(pingPong)
+      assertThat(TestModel.find(pingPong.id)!!.foos).containsExactly(updatedBlah)
+    }
+  }
+
+  @Test fun `test update belongs to association`() {
+    withTestDb {
+      val pingPong = TestModel.create("Ping Pong")
+      val blah = Foo.create("blah")
+      blah.testModel.value = pingPong
+      blah.save()
+      assertThat(Foo.find(blah.id)!!.testModel.value).isEqualTo(pingPong)
     }
   }
 

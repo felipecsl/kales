@@ -1,6 +1,7 @@
 package kales.internal
 
 import kales.ApplicationRecord
+import kales.activemodel.BelongsToAssociation
 import kales.activemodel.HasManyAssociation
 import java.lang.reflect.ParameterizedType
 import kotlin.reflect.KClass
@@ -30,8 +31,14 @@ class KApplicationRecordClass(val klass: KClass<out ApplicationRecord>) {
     (it.type.javaType as? ParameterizedType)?.rawType == HasManyAssociation::class.java
   }
 
+  val belongsToAssociations = associations.filter {
+    (it.type.javaType as? ParameterizedType)?.rawType == BelongsToAssociation::class.java
+  }
+
   private fun KParameter.isAssociation(): Boolean {
     val javaType = type.javaType
-    return javaType is ParameterizedType && javaType.rawType == HasManyAssociation::class.java
+    return javaType is ParameterizedType
+        && (javaType.rawType == HasManyAssociation::class.java
+        || javaType.rawType == BelongsToAssociation::class.java)
   }
 }

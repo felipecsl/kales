@@ -37,14 +37,13 @@ class RecordUpdater(
       val toType = associationType.actualTypeArguments[1] as Class<out ApplicationRecord>
       val toRecordClass = KApplicationRecordClass(toType.kotlin)
       val fromRecordClass = KApplicationRecordClass(fromType.kotlin)
-      val assocValue = properties.first { it.name == assocParam.name }.get(record) as Association
-      when (assocValue) {
-        is HasManyAssociation<*, *> ->
-          updateHasManyAssociation(record, fromRecordClass, toRecordClass, assocValue)
-        is BelongsToAssociation<*> ->
-          updateBelongsToAssociation(record, fromRecordClass, toRecordClass, assocValue)
-        else -> throw IllegalArgumentException("Invalid association type found $assocValue")
-      }
+      val assocValue = properties.first { it.name == assocParam.name }.get(record) as HasManyAssociation<*, *>
+      updateHasManyAssociation(record, fromRecordClass, toRecordClass, assocValue)
+    }
+    recordClass.belongsToAssociations.forEach { assocParam ->
+      val associationType = assocParam.type.javaType as ParameterizedType
+      val toType = associationType.actualTypeArguments[0] as Class<out ApplicationRecord>
+      val toRecordClass = KApplicationRecordClass(toType.kotlin)
     }
   }
 

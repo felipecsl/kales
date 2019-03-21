@@ -6,14 +6,15 @@ import kales.ApplicationRecord.Companion.findRecord
 import kales.ApplicationRecord.Companion.saveRecord
 import kales.ApplicationRecord.Companion.whereRecords
 import kales.activemodel.HasManyAssociation
-import kales.activemodel.HasManyAssociation.Companion.empty
 import kales.activemodel.BelongsToAssociation
 
 data class Foo(
     override val id: Int,
     val foo: String,
-    val testModel: BelongsToAssociation<TestModel>? = null
+    val testModel: BelongsToAssociation<TestModel> = BelongsToAssociation.empty()
 ) : ApplicationRecord {
+  fun save() = saveRecord()
+
   companion object {
     fun all() = allRecords<Foo>()
 
@@ -30,7 +31,7 @@ data class Foo(
 data class TestModel(
     override val id: Int,
     val name: String,
-    val foos: HasManyAssociation<TestModel, Foo> = empty()
+    val foos: HasManyAssociation<TestModel, Foo> = HasManyAssociation.empty()
 ) : ApplicationRecord {
   fun save() = saveRecord()
 
