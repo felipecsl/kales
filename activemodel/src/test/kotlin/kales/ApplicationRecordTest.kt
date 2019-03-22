@@ -101,6 +101,7 @@ class ApplicationRecordTest {
       blah.testModel.value = pingPong
       blah.save()
       assertThat(Foo.find(blah.id)!!.testModel.value).isEqualTo(pingPong)
+      assertThat(TestModel.find(pingPong.id)!!.foos).containsExactly(blah)
     }
   }
 

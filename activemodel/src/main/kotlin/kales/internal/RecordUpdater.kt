@@ -37,13 +37,18 @@ class RecordUpdater(
       val toType = associationType.actualTypeArguments[1] as Class<out ApplicationRecord>
       val toRecordClass = KApplicationRecordClass(toType.kotlin)
       val fromRecordClass = KApplicationRecordClass(fromType.kotlin)
-      val assocValue = properties.first { it.name == assocParam.name }.get(record) as HasManyAssociation<*, *>
+      val assocValue = properties.first { it.name == assocParam.name }
+          .get(record) as HasManyAssociation<*, *>
       updateHasManyAssociation(record, fromRecordClass, toRecordClass, assocValue)
     }
     recordClass.belongsToAssociations.forEach { assocParam ->
       val associationType = assocParam.type.javaType as ParameterizedType
       val toType = associationType.actualTypeArguments[0] as Class<out ApplicationRecord>
+      val fromRecordClass = KApplicationRecordClass(record.javaClass.kotlin)
       val toRecordClass = KApplicationRecordClass(toType.kotlin)
+      val assocValue = properties.first { it.name == assocParam.name }
+          .get(record) as BelongsToAssociation<*>
+      updateBelongsToAssociation(record, fromRecordClass, toRecordClass, assocValue)
     }
   }
 
@@ -53,7 +58,10 @@ class RecordUpdater(
       toRecordClass: KApplicationRecordClass,
       assocValue: BelongsToAssociation<*>
   ) {
-    TODO()
+    if (assocValue.value != null) {
+      updateRecordSingleColumn(fromRecordClass.tableName, toRecordClass.foreignKeyColumnName,
+          assocValue.value!!.id, record.id)
+    }
   }
 
   private fun updateHasManyAssociation(
