@@ -1,12 +1,14 @@
 package kales
 
 import kales.activemodel.use
+import kales.internal.KApplicationRecordClass
 import kales.internal.RecordQueryBuilder
 import kales.migrations.KalesDatabaseConfig
 import org.jdbi.v3.core.Handle
 import org.jdbi.v3.core.Jdbi
 import org.jdbi.v3.core.kotlin.mapTo
 import org.jdbi.v3.core.result.ResultProducers.returningGeneratedKeys
+import java.sql.SQLException
 
 /**
  * Maps model classes to database records. Kales follows some conventions when dealing with models:
@@ -30,7 +32,7 @@ interface ApplicationRecord {
     /** Returns a list with all records in the table (potentially dangerous for big tables!) */
     inline fun <reified T : ApplicationRecord> allRecords(): List<T> {
       useJdbi {
-        val queryBuilder = RecordQueryBuilder(it, T::class)
+        val queryBuilder = RecordQueryBuilder(it, KApplicationRecordClass(T::class))
         return queryBuilder.allRecords()
             .mapTo<T>()
             .list()
@@ -40,22 +42,35 @@ interface ApplicationRecord {
     /** Returns only the records matching the provided selection criteria */
     inline fun <reified T : ApplicationRecord> whereRecords(clause: Map<String, Any?>): List<T> {
       useJdbi {
-        val queryBuilder = RecordQueryBuilder(it, T::class)
+        val queryBuilder = RecordQueryBuilder(it, KApplicationRecordClass(T::class))
         queryBuilder.where(clause).let { query ->
           return query.mapTo<T>().list()
         }
       }
     }
 
-    inline fun <reified T : ApplicationRecord> createRecord(values: Map<String, Any>): T {
+    inline fun <reified T : ApplicationRecord> createRecord(values: Map<String, Any?>): T {
       useJdbi {
-        val queryBuilder = RecordQueryBuilder(it, T::class)
-        queryBuilder.update(values).let { update ->
-          return update.execute(returningGeneratedKeys())
+        val queryBuilder = RecordQueryBuilder(it, KApplicationRecordClass(T::class))
+        queryBuilder.create(values).let { create ->
+          return create.execute(returningGeneratedKeys())
               .mapTo<Int>()
               .findFirst()
               .map { id -> findRecord<T>(id) }
               .orElseThrow { RuntimeException("Failed to create record.") }!!
+        }
+      }
+    }
+
+    inline fun <reified T : ApplicationRecord> T.saveRecord(): T {
+      useJdbi {
+        val queryBuilder = RecordQueryBuilder(it, KApplicationRecordClass(T::class))
+        queryBuilder.update(this).let { update ->
+          return if (update.execute() != 1) {
+            throw SQLException("Failed to update record $this")
+          } else {
+            this
+          }
         }
       }
     }
@@ -66,7 +81,7 @@ interface ApplicationRecord {
      */
     inline fun <reified T : ApplicationRecord> findRecord(id: Int): T? {
       useJdbi {
-        val queryBuilder = RecordQueryBuilder(it, T::class)
+        val queryBuilder = RecordQueryBuilder(it, KApplicationRecordClass(T::class))
         return queryBuilder.findRecord(id)
             .mapTo<T>()
             .findFirst()

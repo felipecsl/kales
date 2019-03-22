@@ -2,8 +2,8 @@ package kales.internal
 
 import kales.ApplicationRecord
 import kales.HasManyAssociationColumnMapper
-import kales.activemodel.HasManyAssociation
 import kales.activemodel.BelongsToAssociation
+import kales.activemodel.HasManyAssociation
 import org.jdbi.v3.core.Handle
 import org.jdbi.v3.core.mapper.reflect.ColumnName
 import org.jdbi.v3.core.statement.Query
@@ -11,13 +11,15 @@ import org.jdbi.v3.core.statement.Update
 import kotlin.reflect.KClass
 import kotlin.reflect.KParameter
 import kotlin.reflect.full.findAnnotation
-import kotlin.reflect.full.primaryConstructor
 
 class RecordQueryBuilder(
     private val handle: Handle,
-    private val klass: KClass<out ApplicationRecord>
+    private val applicationRecordClass: KApplicationRecordClass,
+    private val recordUpdater: RecordUpdater = RecordUpdater(handle, applicationRecordClass)
 ) {
-  private val tableName = "${klass.simpleName!!.toLowerCase()}s"
+  private val tableName = applicationRecordClass.tableName
+
+  private val constructor = applicationRecordClass.constructor
 
   fun where(clause: Map<String, Any?>): Query {
     // TODO There is ambiguity with null values in the where clause here.
@@ -46,13 +48,19 @@ class RecordQueryBuilder(
     return handle.createQuery(queryString).bind("id", id)
   }
 
-  fun update(values: Map<String, Any>): Update {
-    val cols = values.keys.joinToString(prefix = "(", postfix = ")")
-    val refs = values.keys.joinToString(prefix = "(", postfix = ")") { k -> ":$k" }
+  fun create(values: Map<String, Any?>): Update {
+    val nonNullPairs = values.filterValues { it != null }
+    val nonNullKeys = nonNullPairs.keys
+    val cols = nonNullKeys.joinToString(prefix = "(", postfix = ")")
+    val refs = nonNullKeys.joinToString(prefix = "(", postfix = ")") { k -> ":$k" }
     val queryString = "insert into $tableName $cols values $refs"
-    return handle.createUpdate(queryString).also { update ->
-      values.forEach { k, v -> update.bind(k, v) }
+    return handle.createUpdate(queryString).also { insert ->
+      nonNullPairs.forEach { k, v -> insert.bind(k, v) }
     }
+  }
+
+  fun update(record: ApplicationRecord): Update {
+    return recordUpdater.update(record)
   }
 
   /**
@@ -64,10 +72,7 @@ class RecordQueryBuilder(
    * properly hook the relationship to the other model.
    */
   private fun columnNames(): String {
-    val constructor = klass.primaryConstructor
-        ?: throw IllegalArgumentException("Please define a primary constructor for $this")
-    val directProps = constructor.parameters.mapNotNull { it.paramName() }
-    return directProps.joinToString(",")
+    return constructor.parameters.mapNotNull { it.paramName() }.joinToString(",")
   }
 
   private fun KParameter.paramName(): String? {
