@@ -1,8 +1,8 @@
 package kales.sample.app.views.posts
 
 import kales.actionview.ActionView
-import kales.sample.app.views.shared.PostPartialView
 import kotlinx.html.*
+import kotlinx.html.FormMethod.*
 
 class IndexView(
     bindings: IndexViewModel? = IndexViewModel("Unknown", listOf())
@@ -25,13 +25,16 @@ class IndexView(
         }
       }
       div("row") {
-        div("col-sm-12") {
+        div("col-sm-8") {
           if (bindings?.posts?.any() == true) {
-            ul {
+            ul(classes = "list-group") {
               bindings.posts.forEach { p ->
-                li {
-                  a(href = "/posts/${p.id}") {
-                    +p.title
+                li(classes = "list-group-item") {
+                  a(href = "/posts/${p.id}") { +p.title }
+                  form(action = "/posts/${p.id}", method = post, classes = "float-right") {
+                    input(type = InputType.submit, classes = "btn btn-outline-danger btn-sm") {
+                      value = "Delete"
+                    }
                   }
                 }
               }
@@ -44,7 +47,7 @@ class IndexView(
       div("row") {
         div("col-sm-12") {
           a("/posts/new") {
-            +"Write a post"
+            +"Write a new post"
           }
         }
       }

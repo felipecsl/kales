@@ -21,6 +21,10 @@ import java.sql.SQLException
 interface ApplicationRecord {
   val id: Int
 
+  fun destroy() {
+    TODO()
+  }
+
   companion object {
     val JDBI: Jdbi = JdbiFactory.fromConnectionString(dbConnectionString())
 

@@ -27,6 +27,12 @@ class PostsController(call: ApplicationCall) : ApplicationController(call) {
     bindings = PostViewModel(Post.create(params["title"]!!, params["content"]!!))
   }
 
+  suspend fun destroy() {
+    val params = call.receiveParameters()
+    val post = Post.find(params["id"]!!.toInt())!!
+    post.destroy()
+  }
+
   suspend fun writeComment() {
     val params = call.receiveParameters()
     val commentText = params["comment_text"]

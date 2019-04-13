@@ -10,10 +10,7 @@ import io.ktor.html.respondHtmlTemplate
 import io.ktor.http.content.files
 import io.ktor.http.content.static
 import io.ktor.http.content.staticRootFolder
-import io.ktor.routing.Route
-import io.ktor.routing.Routing
-import io.ktor.routing.get
-import io.ktor.routing.post
+import io.ktor.routing.*
 import kales.actionpack.ApplicationController
 import kales.actionview.ActionView
 import kales.actionview.ApplicationLayout
@@ -61,6 +58,30 @@ class KalesApplication<T : ApplicationLayout>(
       path: String,
       actionName: String
   ): Route = routing.post(path) {
+    val view = callControllerAction<T>(actionName, call)
+    call.respondHtmlTemplate(layout.createInstance()) {
+      body {
+        view.renderContent(this)
+      }
+    }
+  }
+
+  inline fun <reified T : ApplicationController> put(
+      path: String,
+      actionName: String
+  ): Route = routing.put(path) {
+    val view = callControllerAction<T>(actionName, call)
+    call.respondHtmlTemplate(layout.createInstance()) {
+      body {
+        view.renderContent(this)
+      }
+    }
+  }
+
+  inline fun <reified T : ApplicationController> delete(
+      path: String,
+      actionName: String
+  ): Route = routing.delete(path) {
     val view = callControllerAction<T>(actionName, call)
     call.respondHtmlTemplate(layout.createInstance()) {
       body {
