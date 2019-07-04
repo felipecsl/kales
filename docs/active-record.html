@@ -1,0 +1,150 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Active Record Basics · Kales</title><meta name="viewport" content="width=device-width"/><meta name="generator" content="Docusaurus"/><meta name="description" content="&lt;h2&gt;&lt;a class=&quot;anchor&quot; aria-hidden=&quot;true&quot; id=&quot;what-is-active-record&quot;&gt;&lt;/a&gt;&lt;a href=&quot;#what-is-active-record&quot; aria-hidden=&quot;true&quot; class=&quot;hash-link&quot;&gt;&lt;svg class=&quot;hash-link-icon&quot; aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;What is Active Record?&lt;/h2&gt;
+"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Active Record Basics · Kales"/><meta property="og:type" content="website"/><meta property="og:url" content="https://kales.dev/index.html"/><meta property="og:description" content="&lt;h2&gt;&lt;a class=&quot;anchor&quot; aria-hidden=&quot;true&quot; id=&quot;what-is-active-record&quot;&gt;&lt;/a&gt;&lt;a href=&quot;#what-is-active-record&quot; aria-hidden=&quot;true&quot; class=&quot;hash-link&quot;&gt;&lt;svg class=&quot;hash-link-icon&quot; aria-hidden=&quot;true&quot; height=&quot;16&quot; version=&quot;1.1&quot; viewBox=&quot;0 0 16 16&quot; width=&quot;16&quot;&gt;&lt;path fill-rule=&quot;evenodd&quot; d=&quot;M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z&quot;&gt;&lt;/path&gt;&lt;/svg&gt;&lt;/a&gt;What is Active Record?&lt;/h2&gt;
+"/><meta property="og:image" content="https://kales.dev/img/docusaurus.png"/><meta name="twitter:card" content="summary"/><meta name="twitter:image" content="https://kales.dev/img/docusaurus.png"/><link rel="shortcut icon" href="/img/leaf.png"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><link rel="stylesheet" href="/css/main.css"/><script src="/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/"><img class="logo" src="/img/leaf.svg" alt="Kales"/><h2 class="headerTitleWithLogo">Kales</h2></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class="siteNavGroupActive"><a href="/docs/getting-started" target="_self">Docs</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="container docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><i></i></div><h2><i>›</i><span>Introduction</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Introduction</h3><ul class=""><li class="navListItem"><a class="navItem" href="/docs/foreword">Foreword</a></li><li class="navListItem"><a class="navItem" href="/docs/installation">Installing Kales</a></li><li class="navListItem"><a class="navItem" href="/docs/getting-started">Getting Started</a></li><li class="navListItem"><a class="navItem" href="/docs/hot-reloading">Hot Reloading</a></li><li class="navListItem"><a class="navItem" href="/docs/migrations">Database Migrations</a></li><li class="navListItem navListItemActive"><a class="navItem" href="/docs/active-record">Active Record Basics</a></li></ul></div></div></section></div><script>
+            var coll = document.getElementsByClassName('collapsible');
+            var checkActiveCategory = true;
+            for (var i = 0; i < coll.length; i++) {
+              var links = coll[i].nextElementSibling.getElementsByTagName('*');
+              if (checkActiveCategory){
+                for (var j = 0; j < links.length; j++) {
+                  if (links[j].classList.contains('navListItemActive')){
+                    coll[i].nextElementSibling.classList.toggle('hide');
+                    coll[i].childNodes[1].classList.toggle('rotate');
+                    checkActiveCategory = false;
+                    break;
+                  }
+                }
+              }
+
+              coll[i].addEventListener('click', function() {
+                var arrow = this.childNodes[1];
+                arrow.classList.toggle('rotate');
+                var content = this.nextElementSibling;
+                content.classList.toggle('hide');
+              });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              const headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                if (event.target.tagName === 'A') {
+                  document.body.classList.remove('tocActive');
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1 class="postHeaderTitle">Active Record Basics</h1></header><article><div><span><h2><a class="anchor" aria-hidden="true" id="what-is-active-record"></a><a href="#what-is-active-record" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>What is Active Record?</h2>
+<p>Quoting from the <a href="https://guides.rubyonrails.org/active_record_basics.html">Rails docs</a> on
+this topic:</p>
+<blockquote>
+<p>Active Record is the M in MVC - the model - which is the layer of the system responsible
+for representing business data and logic. Active Record facilitates the creation and use of
+business objects whose data requires persistent storage to a database. It is an
+implementation of the Active Record pattern which itself is a description of an Object
+Relational Mapping system.</p>
+</blockquote>
+<h2><a class="anchor" aria-hidden="true" id="convention-over-configuration"></a><a href="#convention-over-configuration" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Convention over Configuration</h2>
+<p>Just like Rails, Active Record in Kales relies heavily in conventions that can be used
+interchangeably. That means, if you already know how Rails works, chances are
+you'll <em>get</em> Kales very quickly too, so you don't need to re-learn everything. If you're
+not familiar with Rails, that's fine too, as Kales provides a simple API that's follows
+a <em>batteries included</em> approach. Again quoting the
+<a href="https://guides.rubyonrails.org/active_record_basics.html#convention-over-configuration-in-active-record">Rails docs</a>:</p>
+<blockquote>
+<p>When writing applications using other programming languages or frameworks, it may be
+necessary to write a lot of configuration code. This is particularly true for ORM
+frameworks in general. However, if you follow the conventions adopted by Rails, you'll
+need to write very little configuration (in some cases no configuration at all) when
+creating Active Record models. The idea is that if you configure your applications in
+the very same way most of the time then this should be the default way. Thus, explicit
+configuration would be needed only in those cases where you can't follow the standard
+convention.</p>
+</blockquote>
+<h3><a class="anchor" aria-hidden="true" id="naming-conventions"></a><a href="#naming-conventions" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Naming conventions</h3>
+<p>By default, Active Record uses some naming conventions to find out how the mapping between
+models and database tables should be created. Kales will pluralize your class names to find
+the respective database table. So, for a class <code>Book</code>, you should have a database table
+called <strong>books</strong>.
+Kales is <a href="https://github.com/felipecsl/kales/issues/49">not yet capable</a> of pluralizing (or
+singularizing) irregular words neither converting them to
+<a href="https://github.com/felipecsl/kales/issues/50">camelCase</a>.</p>
+<h3><a class="anchor" aria-hidden="true" id="schema-conventions"></a><a href="#schema-conventions" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Schema conventions</h3>
+<p>Active Record uses naming conventions for the columns in database tables, depending on the
+purpose of these columns.</p>
+<ul>
+<li>Foreign keys - These fields should be named following the pattern
+<code>singularized_table_name_id</code> (e.g., <code>item_id</code>, <code>order_id</code>). These are the fields that
+Active Record will look for when you create associations between your models.</li>
+<li>Primary keys - By default, Active Record will use an integer column named <code>id</code> as the
+table's primary key. When using Active Record Migrations to create your tables, this column
+will be automatically created.</li>
+</ul>
+<h2><a class="anchor" aria-hidden="true" id="creating-models"></a><a href="#creating-models" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Creating models</h2>
+<p>When creating Active Record models, you can either manually create a the class under your application's
+<code>app/models</code> package or run the <code>kales generate model &lt;ModelName&gt;</code> command. Either way, you should
+have a class that looks somewhat like this:</p>
+<pre><code class="hljs css language-kotlin"><span class="hljs-keyword">package</span> com.example.app.models
+
+<span class="hljs-keyword">import</span> kales.ApplicationRecord
+<span class="hljs-keyword">import</span> kales.ApplicationRecord.Companion.*
+<span class="hljs-keyword">import</span> kotlin.<span class="hljs-built_in">Int</span>
+
+<span class="hljs-keyword">data</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Product</span></span>(<span class="hljs-keyword">val</span> id: <span class="hljs-built_in">Int</span>, <span class="hljs-keyword">val</span> name: String) : ApplicationRecord() {
+  <span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">save</span><span class="hljs-params">()</span></span> = saveRecord()
+  <span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">destroy</span><span class="hljs-params">()</span></span> = destroyRecord()
+
+  <span class="hljs-keyword">companion</span> <span class="hljs-keyword">object</span> {
+      <span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">all</span><span class="hljs-params">()</span></span> = allRecords&lt;Product&gt;()
+      <span class="hljs-function"><span class="hljs-keyword">fun</span> <span class="hljs-title">find</span><span class="hljs-params">(id: <span class="hljs-type">Int</span>)</span></span> = findRecord&lt;Product&gt;(id)
+  }
+}
+</code></pre>
+<p>This will create a <code>Product</code> model, mapped to a <code>products</code> table at the database. By doing this you'll
+also have the ability to map the columns of each row in that table with the attributes of the
+instances of your model.</p>
+<h2><a class="anchor" aria-hidden="true" id="reading-and-wrinting-data"></a><a href="#reading-and-wrinting-data" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Reading and Wrinting data</h2>
+<p>Kales currently exposes a (very basic) API for manipulating data. Over time more methods will be
+added to closely match what Rails can do. For now, the folowing basic scenarios are supported:</p>
+<h3><a class="anchor" aria-hidden="true" id="create"></a><a href="#create" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Create</h3>
+<p><strong>TODO</strong>: The <code>create</code> record API is still being worked out.
+It is <a href="https://github.com/felipecsl/kales/issues/51">not yet possible</a> to create a record using the
+<code>save</code> API.</p>
+<h3><a class="anchor" aria-hidden="true" id="read"></a><a href="#read" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Read</h3>
+<p><strong>TODO</strong>: The <code>where</code> record API that allows querying records by property name is still being worked out.</p>
+<pre><code class="hljs css language-kotlin"><span class="hljs-comment">// return a collection with all products</span>
+<span class="hljs-keyword">val</span> products = Product.all()
+</code></pre>
+<pre><code class="hljs css language-kotlin"><span class="hljs-comment">// return the product with ID=1 or null if none found</span>
+<span class="hljs-keyword">val</span> product = Product.find(<span class="hljs-number">1</span>)
+</code></pre>
+<h3><a class="anchor" aria-hidden="true" id="update"></a><a href="#update" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Update</h3>
+<pre><code class="hljs css language-kotlin"><span class="hljs-comment">// create product then update its name</span>
+<span class="hljs-keyword">val</span> product = Product(<span class="hljs-number">1</span>, <span class="hljs-string">"Beautiful Mug"</span>)
+product.save()
+<span class="hljs-keyword">val</span> updated = product.copy(name = <span class="hljs-string">"Ugly Mug"</span>)
+updated.save()
+</code></pre>
+<h3><a class="anchor" aria-hidden="true" id="delete"></a><a href="#delete" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Delete</h3>
+<pre><code class="hljs css language-kotlin"><span class="hljs-comment">// create then delete a record </span>
+<span class="hljs-keyword">val</span> product = Product(<span class="hljs-number">1</span>, <span class="hljs-string">"Beautiful Mug"</span>)
+product.save()
+product.destroy()
+</code></pre>
+</span></div></article></div><div class="docs-prevnext"><a class="docs-prev button" href="/docs/migrations"><span class="arrow-prev">← </span><span>Database Migrations</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#what-is-active-record">What is Active Record?</a></li><li><a href="#convention-over-configuration">Convention over Configuration</a><ul class="toc-headings"><li><a href="#naming-conventions">Naming conventions</a></li><li><a href="#schema-conventions">Schema conventions</a></li></ul></li><li><a href="#creating-models">Creating models</a></li><li><a href="#reading-and-wrinting-data">Reading and Wrinting data</a><ul class="toc-headings"><li><a href="#create">Create</a></li><li><a href="#read">Read</a></li><li><a href="#update">Update</a></li><li><a href="#delete">Delete</a></li></ul></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><a href="/" class="nav-home"><img src="/img/leaf.svg" alt="Kales" width="66" height="58"/></a><div><h5>Docs</h5><a href="/docs/en/installation.html">Installing Kales</a><a href="/docs/en/getting-started.html">Getting Started</a></div><div><h5>Community</h5><a href="/en/users.html">User Showcase</a><a href="http://stackoverflow.com/questions/tagged/" target="_blank" rel="noreferrer noopener">Stack Overflow</a><a href="https://discordapp.com/">Project Chat</a><a href="https://twitter.com/" target="_blank" rel="noreferrer noopener">Twitter</a></div><div><h5>More</h5><a href="/blog">Blog</a><a href="https://github.com/felipecsl/kales">GitHub</a><a class="github-button" href="https://github.com/felipecsl/kales" data-icon="octicon-star" data-count-href="/felipecsl/kales/stargazers" data-show-count="true" data-count-aria-label="# stargazers on GitHub" aria-label="Star this project on GitHub">Star</a></div></section><section class="copyright">Copyright © 2019 Felipe Lima</section></footer></div></body></html>
