@@ -21,6 +21,16 @@ you need to bootstrap a new web app.
 ```
 then open `http://localhost:8080` on your browser.
 
+## Hot reloading
+
+Ktor supports hot reloading out of the box, simply open a new terminal window and run:
+
+```
+./gradlew -t sampleapp:jar
+```
+
+and it will automatically rebuild as you make new changes.
+
 ## Download
 
 ```
