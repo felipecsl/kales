@@ -30,6 +30,7 @@ class RecordUpdater(
         .also { update ->
           // TODO: This throws if the record hasn't been previously saved. Need a way to check
           //  whether this record exists in the database before trying to delete it
+          // https://github.com/felipecsl/kales/issues/53
           if (update.execute() != 1) {
             throw SQLException("Failed to update record $this")
           }

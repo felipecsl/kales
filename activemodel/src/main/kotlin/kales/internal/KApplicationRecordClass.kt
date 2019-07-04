@@ -16,7 +16,7 @@ class KApplicationRecordClass(val klass: KClass<out ApplicationRecord>) {
    * TODO Pluralize irregular words (#49)
    * TODO Camelize it (#50)
    */
-  val tableName = asSymbol.pluralize().camel
+  val tableName = asSymbol.pluralize()
 
   /** eg: Video class -> video_id, Post class -> post_id */
   val foreignKeyColumnName = "${asSymbol}_id"
