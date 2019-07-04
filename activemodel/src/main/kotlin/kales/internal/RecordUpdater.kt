@@ -17,25 +17,30 @@ class RecordUpdater(
   private val constructor = recordClass.constructor
 
   fun update(record: ApplicationRecord) {
-    if (record.javaClass.kotlin != recordClass.klass) {
-      throw IllegalArgumentException("Record class ${record.javaClass.kotlin} does not match $recordClass")
-    }
+    checkRecordClass(record)
     updateRecordColumns(record)
     updateRecordAssociations(record)
   }
 
   fun destroy(record: ApplicationRecord) {
-    if (record.javaClass.kotlin != recordClass.klass) {
-      throw IllegalArgumentException("Record class ${record.javaClass.kotlin} does not match $recordClass")
-    }
+    checkRecordClass(record)
     val updateStatement = "delete from $tableName where id = :id"
     handle.createUpdate(updateStatement)
         .bind("id", record.id)
         .also { update ->
+          // TODO: This throws if the record hasn't been previously saved. Need a way to check
+          //  whether this record exists in the database before trying to delete it
           if (update.execute() != 1) {
             throw SQLException("Failed to update record $this")
           }
         }
+  }
+
+  private fun checkRecordClass(record: ApplicationRecord) {
+    if (record.javaClass.kotlin != recordClass.klass) {
+      throw IllegalArgumentException(
+          "Record class ${record.javaClass.kotlin} does not match $recordClass")
+    }
   }
 
   @Suppress("UNCHECKED_CAST")

@@ -1,6 +1,7 @@
 package kales
 
 import com.google.common.truth.Truth.assertThat
+import org.junit.Ignore
 import org.junit.Test
 
 class ApplicationRecordTest {
@@ -80,6 +81,14 @@ class ApplicationRecordTest {
       assertThat(TestModel.find(1)).isEqualTo(TestModel(1, "Ping Pong"))
       pingPong.destroy()
       assertThat(TestModel.find(1)).isNull()
+    }
+  }
+
+  @Ignore("This test currently fails")
+  @Test fun `test destroy unsaved record`() {
+    withTestDb {
+      val pingPong = TestModel(1, "Ping Pong")
+      pingPong.destroy()
     }
   }
 

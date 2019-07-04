@@ -3,7 +3,7 @@ id: migrations
 title: Database Migrations
 ---
 
-## Migration Overview
+## Migrations Overview
 
 Quoting from the [Rails docs](https://edgeguides.rubyonrails.org/active_record_migrations.html) on
 this topic: 
