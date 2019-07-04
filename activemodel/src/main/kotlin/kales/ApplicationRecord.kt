@@ -80,10 +80,6 @@ interface ApplicationRecord {
       }
     }
 
-    /**
-     * TODO I think Rails raises RecordNotFound in this case instead of returning null.
-     * Should we do the same?
-     */
     inline fun <reified T : ApplicationRecord> findRecord(id: Int): T? {
       useJdbi {
         val queryBuilder = RecordQueryBuilder(it, KApplicationRecordClass(T::class))

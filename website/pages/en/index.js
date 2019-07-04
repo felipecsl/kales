@@ -111,11 +111,13 @@ class Index extends React.Component {
           <p>
             Run the command below from the directory where you want to install Kales, eg.: <code>~/.kales</code>
           </p>
-          <iframe
-              src="https://carbon.now.sh/embed/?bg=rgba(255%2C255%2C255%2C1)&t=lucario&wt=none&l=application%2Fx-sh&ds=true&dsyoff=20px&dsblur=68px&wc=true&wa=true&pv=56px&ph=56px&ln=false&fm=Hack&fs=14px&lh=133%25&si=false&code=curl%2520https%253A%252F%252Fraw.githubusercontent.com%252Ffelipecsl%252Fkales%252Fmaster%252Fscripts%252Finstall%2520-sSf%2520%257C%2520sh&es=4x&wm=false"
-              style={{transform: 'scale(1.1)', width: '1024px', height: '200px', border: '0', overflow: 'hidden'}}
-              sandbox="allow-scripts allow-same-origin">
-          </iframe>
+          <div className="try-out-frame">
+            <iframe
+                src="https://carbon.now.sh/embed/?bg=rgba(255%2C255%2C255%2C1)&t=lucario&wt=none&l=application%2Fx-sh&ds=false&dsyoff=20px&dsblur=68px&wc=true&wa=true&pv=56px&ph=56px&ln=false&fm=Hack&fs=14px&lh=133%25&si=false&es=1x&wm=false&code=curl%2520https%253A%252F%252Fraw.githubusercontent.com%252Ffelipecsl%252Fkales%252Fmaster%252Fscripts%252Finstall%2520-sSf%2520%257C%2520sh"
+                style={{border: '0', overflow: 'hidden', width: '100%', height: '250px'}}
+                sandbox="allow-scripts allow-same-origin">
+            </iframe>
+          </div>
         </div>
       </Container>
     );

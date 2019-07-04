@@ -1,6 +1,6 @@
 {
   "docs": {
-    "Introduction": ["foreword","installation", "getting-started", "hot-reloading", "migrations"]
+    "Introduction": ["foreword","installation", "getting-started", "hot-reloading", "migrations", "active-record"]
   }
 }
 

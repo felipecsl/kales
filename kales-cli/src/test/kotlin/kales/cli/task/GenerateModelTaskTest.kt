@@ -22,7 +22,7 @@ class GenerateModelTaskTest {
     GenerateModelTask(appDir, "Bar") { date }.run()
     val dbMigrateDir = File(appDir, "src/main/kotlin/com/example/testapp/db/migrate")
     val migrationFile = File(dbMigrateDir, "M${timestamp}_CreateBar.kt")
-    assertThat(dbMigrateDir.listFiles().toList()).containsExactly(migrationFile)
+    assertThat(dbMigrateDir.listFiles()!!.toList()).containsExactly(migrationFile)
     assertThat(migrationFile.readText()).isEqualTo("""
       package com.example.testapp.db.migrate
 

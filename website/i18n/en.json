@@ -5,6 +5,9 @@
     "previous": "Previous",
     "tagline": "Build modern websites quickly and with confidence.",
     "docs": {
+      "active-record": {
+        "title": "Active Record Basics"
+      },
       "foreword": {
         "title": "Foreword"
       },

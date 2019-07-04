@@ -12,7 +12,10 @@ import kotlin.reflect.jvm.javaType
 class KApplicationRecordClass(val klass: KClass<out ApplicationRecord>) {
   val asSymbol = klass.simpleName!!.toLowerCase()
 
-  /** Video class -> video TODO should we also camelize it? */
+  /** Video class -> video
+   * TODO Pluralize irregular words (#49)
+   * TODO Camelize it (#50)
+   */
   val tableName = asSymbol.pluralize()
 
   /** eg: Video class -> video_id, Post class -> post_id */
