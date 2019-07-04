@@ -12,7 +12,7 @@ class PostPartialView(
     div("container") {
       form(action = "/posts/${bindings?.post?.id}", method = FormMethod.post) {
         div("form-group") {
-          div("col-sm-12") {
+          div("col-sm-8 offset-sm-2") {
             label { +"Title" }
             textInput(classes = "form-control", name = "post[title]") {
               value = "${bindings?.post?.title}"
@@ -20,7 +20,7 @@ class PostPartialView(
           }
         }
         div("form-group") {
-          div("col-sm-12") {
+          div("col-sm-8 offset-sm-2") {
             label { +"Content" }
             textArea(rows = "5", classes = "form-control", name = "post[content]") {
               +"${bindings?.post?.content}"
@@ -28,13 +28,13 @@ class PostPartialView(
           }
         }
         div("form-group") {
-          div("col-sm-12") {
+          div("col-sm-8 offset-sm-2") {
             submitInput(name = "Save", classes = "btn btn-primary")
           }
         }
       }
       div("row") {
-        div("col-sm-12") {
+        div("col-sm-6 offset-sm-3") {
           h4 { +"Write a comment" }
         }
       }
@@ -53,13 +53,13 @@ class PostPartialView(
         }
       }
       div("row") {
-        div("col-sm-12") {
+        div("col-sm-6 offset-sm-3") {
           h4 { +"Comments "}
         }
       }
       bindings?.post?.comments?.forEach { comment ->
         div("row") {
-          div("col-sm-12") {
+          div("col-sm-6 offset-sm-3") {
             p { +comment.comment_text }
           }
         }

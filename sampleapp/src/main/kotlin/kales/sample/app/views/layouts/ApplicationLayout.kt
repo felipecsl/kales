@@ -7,18 +7,19 @@ import kotlinx.html.*
 class AppLayout : ApplicationLayout() {
   override fun HTML.apply() {
     head {
-      title { +"Kales sample app" }
+      title { +"Kales Demo App" }
       link(
           rel = "stylesheet",
           href = "https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
       )
+      styleLink("/assets/sampleapp.css")
     }
     body {
       div("container") {
         div("row") {
           div("col-sm-12") {
-            h1 {
-              a(href = "/") { +"Kales sample app" }
+            h1("app-title") {
+              a(href = "/") { +"Kales Demo App" }
             }
           }
         }

@@ -12,7 +12,7 @@ class ShowView(
   override fun FlowContent.render() {
     div("container") {
       div("row") {
-        div("col-sm-12") {
+        div("col-sm-8 offset-sm-2") {
           h2 { +"Details" }
         }
       }

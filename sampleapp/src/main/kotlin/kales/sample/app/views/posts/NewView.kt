@@ -13,7 +13,7 @@ class NewView(
   override fun FlowContent.render() {
     div("container") {
       div("row") {
-        div("col-sm-12") {
+        div("col-sm-8 offset-sm-2") {
           h2 {
             +"New Post"
           }
@@ -22,17 +22,19 @@ class NewView(
     }
     div("container") {
       div("row") {
-        div("col-sm-6 offset-sm-3") {
+        div("col-sm-8 offset-sm-2") {
           form(action = "/posts", method = post) {
             div("form-group") {
-              label { +"Title" }
+              label { +"Post title" }
               input(type = text, name = "title", classes = "form-control")
             }
             div("form-group") {
-              label { +"Content" }
-              textArea(rows = "3", classes = "form-control", name = "content")
+              label { +"Post content" }
+              textArea(rows = "10", classes = "form-control", name = "content")
             }
-            submitInput(name = "Create", classes = "btn btn-primary")
+            submitInput(name = "Create", classes = "btn btn-primary") {
+              value = "Create"
+            }
           }
         }
       }

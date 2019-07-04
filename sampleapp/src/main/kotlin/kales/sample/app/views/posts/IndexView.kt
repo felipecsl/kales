@@ -10,22 +10,22 @@ class IndexView(
   override fun FlowContent.render() {
     div("container") {
       div("row") {
-        div("col-sm-12") {
+        div("col-sm-8 offset-sm-2") {
           h2 { +"Hello, ${bindings?.name}" }
         }
       }
       div("row") {
-        div("col-sm-12") {
+        div("col-sm-8 offset-sm-2") {
           p { +"Below you can see a list of all posts" }
         }
       }
       div("row") {
-        div("col-sm-12") {
+        div("col-sm-8 offset-sm-2") {
           h3 { +"Posts" }
         }
       }
       div("row") {
-        div("col-sm-8") {
+        div("col-sm-8 offset-sm-2") {
           if (bindings?.posts?.any() == true) {
             ul(classes = "list-group") {
               bindings.posts.forEach { p ->
@@ -45,8 +45,8 @@ class IndexView(
         }
       }
       div("row") {
-        div("col-sm-12") {
-          a("/posts/new") {
+        div("col-sm-8 offset-sm-2") {
+          a(href = "/posts/new", classes = "btn btn-outline-primary") {
             +"Write a new post"
           }
         }
