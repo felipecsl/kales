@@ -32,7 +32,8 @@ Ktor supports hot reloading out of the box, simply open a new terminal window an
 ## Deploying the docs website
 
 ```
-GIT_USER=felipecsl \
+$ cd website
+$ GIT_USER=felipecsl \
  CURRENT_BRANCH=master \
  USE_SSH=true \
  yarn run publish-gh-pages
