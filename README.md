@@ -29,6 +29,15 @@ Ktor supports hot reloading out of the box, simply open a new terminal window an
 ./gradlew -t sampleapp:jar
 ```
 
+## Deploying the docs website
+
+```
+GIT_USER=felipecsl \
+ CURRENT_BRANCH=master \
+ USE_SSH=true \
+ yarn run publish-gh-pages
+```
+
 and it will automatically rebuild as you make new changes.
 
 ## Download
