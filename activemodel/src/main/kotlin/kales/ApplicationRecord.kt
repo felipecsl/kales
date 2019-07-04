@@ -21,10 +21,6 @@ import java.sql.SQLException
 interface ApplicationRecord {
   val id: Int
 
-  fun destroy() {
-    TODO()
-  }
-
   companion object {
     val JDBI: Jdbi = JdbiFactory.fromConnectionString(dbConnectionString())
 
@@ -71,13 +67,16 @@ interface ApplicationRecord {
     inline fun <reified T : ApplicationRecord> T.saveRecord(): T {
       useJdbi {
         val queryBuilder = RecordQueryBuilder(it, KApplicationRecordClass(T::class))
-        queryBuilder.update(this).let { update ->
-          return if (update.execute() != 1) {
-            throw SQLException("Failed to update record $this")
-          } else {
-            this
-          }
-        }
+        queryBuilder.update(this)
+        return this
+      }
+    }
+
+    inline fun <reified T : ApplicationRecord> T.destroyRecord(): T {
+      useJdbi {
+        val queryBuilder = RecordQueryBuilder(it, KApplicationRecordClass(javaClass.kotlin))
+        queryBuilder.destroy(this)
+        return this
       }
     }
 

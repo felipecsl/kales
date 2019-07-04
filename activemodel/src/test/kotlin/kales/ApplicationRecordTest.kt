@@ -74,6 +74,15 @@ class ApplicationRecordTest {
     }
   }
 
+  @Test fun `test destroy record`() {
+    withTestDb {
+      val pingPong = TestModel.create("Ping Pong")
+      assertThat(TestModel.find(1)).isEqualTo(TestModel(1, "Ping Pong"))
+      pingPong.destroy()
+      assertThat(TestModel.find(1)).isNull()
+    }
+  }
+
   @Test fun `test many-to-one association`() {
     withTestDb {
       val pingPong = TestModel.create("Ping Pong")
