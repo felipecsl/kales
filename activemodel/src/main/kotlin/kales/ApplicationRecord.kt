@@ -14,9 +14,9 @@ import java.sql.SQLException
  * Maps model classes to database records. Kales follows some conventions when dealing with models:
  * - All models are expected to have an `id` autoincrement primary key column
  * - Foreign key columns are mapped using `<model_name>_id` column naming format
- * - The table name is a plural of the model name, eg: `User` -> table is `users`. We don't do any
- * fancy pluralization for now, just naively append `s` at the end, which means the table for `Hero`
- * would be `heros`, awkwardly.
+ * - The table name is a pluralized lowercase model name, eg: `User` -> table is `users`. We don't
+ *   do any fancy pluralization for now, just naively append `s` at the end, which means the table
+ *   for `Hero` would be `heros`, awkwardly.
  */
 interface ApplicationRecord {
   val id: Int
@@ -30,6 +30,8 @@ interface ApplicationRecord {
 
     private fun dbConnectionString(): String {
       val stream = ApplicationRecord::class.java.classLoader.getResourceAsStream("database.yml")
+          ?: throw RuntimeException("Failed to load 'database.yml' file. " +
+              "Please make sure it's in your 'resources' directory")
       return KalesDatabaseConfig.fromDatabaseYml(stream).toConnectionString()
     }
 
