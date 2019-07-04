@@ -30,7 +30,7 @@ class NewView(
             }
             div("form-group") {
               label { +"Content" }
-              textArea(rows = "3", classes = "form-control", content = "", name = "content")
+              textArea(rows = "3", classes = "form-control", name = "content")
             }
             submitInput(name = "Create", classes = "btn btn-primary")
           }
@@ -47,10 +47,10 @@ fun FlowOrInteractiveOrPhrasingContent.textArea(
     wrap: TextAreaWrap? = null,
     classes: String? = null,
     name: String? = null,
-    content: String = ""): Unit =
+    block : TEXTAREA.() -> Unit = {}): Unit =
     TEXTAREA(attributesMapOf(
         "rows", rows,
         "name", name,
         "cols", cols,
         "wrap", wrap?.enumEncode(),
-        "class", classes), consumer).visit { +content }
+        "class", classes), consumer).visit(block)

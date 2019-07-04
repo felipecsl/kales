@@ -40,7 +40,8 @@ internal class HarmonicaUp(
 
   private companion object {
     val engine by lazy {
-      ScriptEngineManager().getEngineByName("kotlin") as KotlinJsr223JvmLocalScriptEngine
+      val factory = ScriptEngineManager().getEngineByExtension("kts").factory
+      factory.scriptEngine as KotlinJsr223JvmLocalScriptEngine
     }
 
     /**

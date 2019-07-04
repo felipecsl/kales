@@ -10,14 +10,27 @@ class PostPartialView(
 ) : ActionPartialView<PostViewModel>(bindings) {
   override fun FlowContent.render() {
     div("container") {
-      div("row") {
-        div("col-sm-12") {
-          h3 { +"${bindings?.post?.title}" }
+      form(action = "/posts/${bindings?.post?.id}", method = FormMethod.post) {
+        div("form-group") {
+          div("col-sm-12") {
+            label { +"Title" }
+            textInput(classes = "form-control", name = "post[title]") {
+              value = "${bindings?.post?.title}"
+            }
+          }
         }
-      }
-      div("row") {
-        div("col-sm-12") {
-          p { +"${bindings?.post?.content}" }
+        div("form-group") {
+          div("col-sm-12") {
+            label { +"Content" }
+            textArea(rows = "5", classes = "form-control", name = "post[content]") {
+              +"${bindings?.post?.content}"
+            }
+          }
+        }
+        div("form-group") {
+          div("col-sm-12") {
+            submitInput(name = "Save", classes = "btn btn-primary")
+          }
         }
       }
       div("row") {
@@ -33,7 +46,7 @@ class PostPartialView(
               hiddenInput(name = "id") {
                 value = bindings?.post?.id?.toString()!!
               }
-              textArea(rows = "3", classes = "form-control", content = "", name = "comment_text")
+              textArea(rows = "3", classes = "form-control", name = "comment_text")
             }
             submitInput(name = "OK", classes = "btn btn-primary")
           }

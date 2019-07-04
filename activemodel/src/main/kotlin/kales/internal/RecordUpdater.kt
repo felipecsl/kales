@@ -1,11 +1,9 @@
 package kales.internal
 
 import kales.ApplicationRecord
-import kales.activemodel.Association
 import kales.activemodel.BelongsToAssociation
 import kales.activemodel.HasManyAssociation
 import org.jdbi.v3.core.Handle
-import org.jdbi.v3.core.statement.Update
 import java.lang.reflect.ParameterizedType
 import java.sql.SQLException
 import kotlin.reflect.full.declaredMemberProperties
@@ -16,16 +14,28 @@ class RecordUpdater(
     private val recordClass: KApplicationRecordClass
 ) {
   private val tableName = recordClass.tableName
-
   private val constructor = recordClass.constructor
 
-  fun update(record: ApplicationRecord): Update {
+  fun update(record: ApplicationRecord) {
     if (record.javaClass.kotlin != recordClass.klass) {
       throw IllegalArgumentException("Record class ${record.javaClass.kotlin} does not match $recordClass")
     }
-    return updateRecordColumns(record).also {
-      updateRecordAssociations(record)
+    updateRecordColumns(record)
+    updateRecordAssociations(record)
+  }
+
+  fun destroy(record: ApplicationRecord) {
+    if (record.javaClass.kotlin != recordClass.klass) {
+      throw IllegalArgumentException("Record class ${record.javaClass.kotlin} does not match $recordClass")
     }
+    val updateStatement = "delete from $tableName where id = :id"
+    handle.createUpdate(updateStatement)
+        .bind("id", record.id)
+        .also { update ->
+          if (update.execute() != 1) {
+            throw SQLException("Failed to update record $this")
+          }
+        }
   }
 
   @Suppress("UNCHECKED_CAST")
@@ -78,7 +88,7 @@ class RecordUpdater(
     }
   }
 
-  private fun updateRecordColumns(record: ApplicationRecord): Update {
+  private fun updateRecordColumns(record: ApplicationRecord) {
     val properties = record.javaClass.kotlin.declaredMemberProperties
     // When updating a record, we need to take some precautions around which columns we can update:
     // - We need to filter out association columns (eg HasManyAssociation) since they don't directly
@@ -91,11 +101,14 @@ class RecordUpdater(
     val colsToUpdate = validParameterNames.filter { it != "id" }
         .joinToString(", ") { k -> "$k = :$k" }
     val updateStatement = "update $tableName set $colsToUpdate where id = :id"
-    return handle.createUpdate(updateStatement).also { update ->
-      val colunmNamesAndValues = validParameterNames.associate { param ->
-        param to properties.first { it.name == param }.get(record)
+    val update = handle.createUpdate(updateStatement).also { update ->
+      val colunmNamesAndValues = validParameterNames.associateWith { param ->
+        properties.first { it.name == param }.get(record)
       }
-      colunmNamesAndValues.forEach { k, v -> update.bind(k, v) }
+      colunmNamesAndValues.forEach { (k, v) -> update.bind(k, v) }
+    }
+    if (update.execute() != 1) {
+      throw SQLException("Failed to update record $this")
     }
   }
 

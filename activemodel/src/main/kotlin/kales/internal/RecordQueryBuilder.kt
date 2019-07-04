@@ -32,7 +32,7 @@ class RecordQueryBuilder(
     val columnNames = columnNames()
     val queryString = "select $columnNames from $tableName where $whereClause"
     return handle.createQuery(queryString).also { query ->
-      clause.forEach { k, v -> query.bind(k, v) }
+      clause.forEach { (k, v) -> query.bind(k, v) }
     }
   }
 
@@ -55,12 +55,16 @@ class RecordQueryBuilder(
     val refs = nonNullKeys.joinToString(prefix = "(", postfix = ")") { k -> ":$k" }
     val queryString = "insert into $tableName $cols values $refs"
     return handle.createUpdate(queryString).also { insert ->
-      nonNullPairs.forEach { k, v -> insert.bind(k, v) }
+      nonNullPairs.forEach { (k, v) -> insert.bind(k, v) }
     }
   }
 
-  fun update(record: ApplicationRecord): Update {
-    return recordUpdater.update(record)
+  fun update(record: ApplicationRecord) {
+    recordUpdater.update(record)
+  }
+
+  fun destroy(record: ApplicationRecord) {
+    recordUpdater.destroy(record)
   }
 
   /**
@@ -77,8 +81,7 @@ class RecordQueryBuilder(
 
   private fun KParameter.paramName(): String? {
     val propName = findAnnotation<ColumnName>()?.value ?: name
-    val classifier = type.classifier
-    return when (classifier) {
+    return when (type.classifier) {
       HasManyAssociation::class -> "id as $propName"
       BelongsToAssociation::class -> "${name}_id as $propName"
       else -> propName

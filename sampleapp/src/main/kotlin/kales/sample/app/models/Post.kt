@@ -5,6 +5,7 @@ import kales.ApplicationRecord.Companion.allRecords
 import kales.ApplicationRecord.Companion.createRecord
 import kales.ApplicationRecord.Companion.findRecord
 import kales.ApplicationRecord.Companion.whereRecords
+import kales.ApplicationRecord.Companion.destroyRecord
 import kales.activemodel.HasManyAssociation
 import kales.activemodel.HasManyAssociation.Companion.empty
 
@@ -14,6 +15,7 @@ data class Post(
     val content: String,
     val comments: HasManyAssociation<Post, Comment> = empty()
 ) : ApplicationRecord {
+  fun destroy() = destroyRecord()
 
   companion object {
     fun all() = allRecords<Post>()

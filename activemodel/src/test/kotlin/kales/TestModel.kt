@@ -5,6 +5,7 @@ import kales.ApplicationRecord.Companion.createRecord
 import kales.ApplicationRecord.Companion.findRecord
 import kales.ApplicationRecord.Companion.saveRecord
 import kales.ApplicationRecord.Companion.whereRecords
+import kales.ApplicationRecord.Companion.destroyRecord
 import kales.activemodel.HasManyAssociation
 import kales.activemodel.BelongsToAssociation
 
@@ -34,6 +35,8 @@ data class TestModel(
     val foos: HasManyAssociation<TestModel, Foo> = HasManyAssociation.empty()
 ) : ApplicationRecord {
   fun save() = saveRecord()
+
+  fun destroy() = destroyRecord()
 
   companion object {
     fun all() = allRecords<TestModel>()

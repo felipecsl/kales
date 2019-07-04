@@ -2,7 +2,7 @@ plugins {
   id 'java-library'
   id 'maven-publish'
   id 'signing'
-  id "org.jetbrains.kotlin.jvm" version "1.3.21"
+  id "org.jetbrains.kotlin.jvm"
 }
 
 project.ext.artifact = 'kales-activemodel'
