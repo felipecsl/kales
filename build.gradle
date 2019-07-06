@@ -18,6 +18,12 @@ allprojects {
   }
 }
 
+subprojects {
+  if (!['sampleapp', 'kales-cli'].contains(project.name)) {
+    apply from: "$rootDir/gradle/publish.gradle"
+  }
+}
+
 buildScan {
   termsOfServiceUrl = "https://gradle.com/terms-of-service"
   termsOfServiceAgree = "yes"
