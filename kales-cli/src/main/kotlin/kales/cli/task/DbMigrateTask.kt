@@ -14,7 +14,7 @@ class DbMigrateTask(workingDirectory: File) : KalesContextualTask(workingDirecto
       dbName = kalesDbConfig.database
       user = kalesDbConfig.username
       password = kalesDbConfig.password
-      host = kalesDbConfig.password
+      host = kalesDbConfig.host
       dbms = when (kalesDbConfig.adapter) {
         "postgresql" -> Dbms.PostgreSQL
         "mysql" -> Dbms.MySQL
