@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+set -eu
+version=$VERSION
+./gradlew kales-cli:shadowJar
+cp kales-cli/build/libs/kales-cli-${version}-all.jar scripts/kales-cli.jar
+tar -cvzf kales-${version}.tar.gz -C scripts kales-cli.jar kales
