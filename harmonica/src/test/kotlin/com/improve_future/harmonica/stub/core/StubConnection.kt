@@ -29,7 +29,6 @@ class StubConnection : ConnectionInterface {
   val executedSqlList = mutableListOf<String>()
 
   override fun transaction(block: Connection.() -> Unit) {
-
   }
 
   override fun execute(sql: String): Boolean {

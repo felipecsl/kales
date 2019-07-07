@@ -2,9 +2,7 @@ package kales
 
 import com.google.common.truth.Truth.assertThat
 import kales.activemodel.RecordId
-import org.junit.Ignore
 import org.junit.Test
-import java.lang.IllegalStateException
 
 class ApplicationRecordTest {
   @Test fun `test no records`() {
@@ -129,9 +127,9 @@ class ApplicationRecordTest {
     ApplicationRecord.JDBI.withHandle<Any, RuntimeException> {
       it.execute("CREATE TABLE testmodels (id INTEGER PRIMARY KEY AUTO_INCREMENT, name VARCHAR)")
       it.execute("CREATE TABLE foos (" +
-          "id INTEGER PRIMARY KEY AUTO_INCREMENT, " +
-          "foo VARCHAR, " +
-          "testmodel_id INTEGER)")
+        "id INTEGER PRIMARY KEY AUTO_INCREMENT, " +
+        "foo VARCHAR, " +
+        "testmodel_id INTEGER)")
       block()
     }
   }

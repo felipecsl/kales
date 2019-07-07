@@ -9,15 +9,14 @@ import org.jdbi.v3.core.Handle
 import org.jdbi.v3.core.mapper.reflect.ColumnName
 import org.jdbi.v3.core.statement.Query
 import org.jdbi.v3.core.statement.Update
-import java.lang.IllegalStateException
 import kotlin.reflect.KClass
 import kotlin.reflect.KParameter
 import kotlin.reflect.full.findAnnotation
 
 class RecordQueryBuilder(
-    private val handle: Handle,
-    private val applicationRecordClass: KApplicationRecordClass,
-    private val recordUpdater: RecordUpdater = RecordUpdater(handle, applicationRecordClass)
+  private val handle: Handle,
+  private val applicationRecordClass: KApplicationRecordClass,
+  private val recordUpdater: RecordUpdater = RecordUpdater(handle, applicationRecordClass)
 ) {
   private val tableName = applicationRecordClass.tableName
 
@@ -28,9 +27,9 @@ class RecordQueryBuilder(
     // Since currently all null values are filtered out, it's impossible to query for rows with
     // a given column being equals to NULL. We need to add an abstraction to map that case.
     val whereClause = clause
-        .filterValues { v -> v != null }
-        .keys
-        .joinToString(" and ") { k -> "$k = :$k" }
+      .filterValues { v -> v != null }
+      .keys
+      .joinToString(" and ") { k -> "$k = :$k" }
     val columnNames = columnNames()
     val queryString = "select $columnNames from $tableName where $whereClause"
     return handle.createQuery(queryString).also { query ->
@@ -72,7 +71,7 @@ class RecordQueryBuilder(
   fun destroy(record: ApplicationRecord) {
     if (record.id is NoneId) {
       throw IllegalStateException(
-          "Record does not have an ID, has it been previously saved in the DB?")
+        "Record does not have an ID, has it been previously saved in the DB?")
     }
     recordUpdater.destroy(record)
   }

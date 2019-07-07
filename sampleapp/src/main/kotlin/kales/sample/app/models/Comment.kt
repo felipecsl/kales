@@ -9,9 +9,9 @@ import kales.activemodel.MaybeRecordId
 import kales.activemodel.NoneId
 
 data class Comment(
-    override val id: MaybeRecordId = NoneId,
-    val comment_text: String, // TODO we should automatically "camelize" the parameters
-    val post: BelongsToAssociation<Post>? = null
+  override val id: MaybeRecordId = NoneId,
+  val comment_text: String, // TODO we should automatically "camelize" the parameters
+  val post: BelongsToAssociation<Post>? = null
 ) : ApplicationRecord {
   companion object {
     fun create(commentText: String, postId: Int) =

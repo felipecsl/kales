@@ -1,9 +1,6 @@
 package kales.cli.task
 
 import com.google.common.truth.Truth.assertThat
-import kales.cli.task.NewApplicationTask
-import org.gradle.api.plugins.buildcomparison.outcome.internal.BuildOutcome
-import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome
 import org.junit.Rule
@@ -39,9 +36,9 @@ class NewApplicationTaskTest {
     NewApplicationTask(root, appName).run()
     val appDir = File(root, appName)
     val result = GradleRunner.create()
-        .withProjectDir(appDir)
-        .withArguments("jar")
-        .build()
+      .withProjectDir(appDir)
+      .withArguments("jar")
+      .build()
     assertThat(result.task(":jar")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
   }
 }

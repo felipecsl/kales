@@ -11,10 +11,10 @@ import kales.activemodel.HasManyAssociation.Companion.empty
 import kales.activemodel.MaybeRecordId
 
 data class Post(
-    override val id: MaybeRecordId,
-    val title: String,
-    val content: String,
-    val comments: HasManyAssociation<Post, Comment> = empty()
+  override val id: MaybeRecordId,
+  val title: String,
+  val content: String,
+  val comments: HasManyAssociation<Post, Comment> = empty()
 ) : ApplicationRecord {
   fun destroy() = destroyRecord()
 

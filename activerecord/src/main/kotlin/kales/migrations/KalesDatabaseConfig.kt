@@ -5,12 +5,12 @@ import java.io.InputStream
 
 /** Represents a Kales database config as defined in a database.yml file */
 data class KalesDatabaseConfig(
-    val environment: String,
-    val adapter: String,
-    val host: String,
-    val database: String,
-    val username: String,
-    val password: String
+  val environment: String,
+  val adapter: String,
+  val host: String,
+  val database: String,
+  val username: String,
+  val password: String
 ) {
   override fun toString(): String {
     return if (adapter == "h2") {
@@ -38,7 +38,7 @@ data class KalesDatabaseConfig(
     }
 
     private fun throwMissingField(name: String): Nothing =
-        throw IllegalArgumentException(
-            "Please set a value for the field '$name' in the file database.yml")
+      throw IllegalArgumentException(
+        "Please set a value for the field '$name' in the file database.yml")
   }
 }

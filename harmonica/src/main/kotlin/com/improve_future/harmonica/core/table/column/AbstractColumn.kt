@@ -20,11 +20,10 @@ package com.improve_future.harmonica.core.table.column
 
 import com.improve_future.harmonica.core.Index
 
-
 internal typealias Type = Int
 
 abstract class AbstractColumn(
-    val name: String
+  val name: String
 ) {
   val indexList: MutableList<Index> = mutableListOf()
 
@@ -70,7 +69,6 @@ abstract class AbstractColumn(
 
   var nullable = true
 
-
   abstract var sqlDefault: String?
 
   val hasDefault: Boolean
@@ -82,9 +80,9 @@ abstract class AbstractColumn(
   val hasReference: Boolean
     get() {
       return !(
-          referenceTable.isNullOrBlank() ||
-              referenceColumn.isNullOrBlank()
-          )
+        referenceTable.isNullOrBlank() ||
+          referenceColumn.isNullOrBlank()
+        )
     }
 
   var comment: String? = null

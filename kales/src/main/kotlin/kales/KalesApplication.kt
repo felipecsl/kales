@@ -22,8 +22,8 @@ import kotlin.reflect.full.declaredFunctions
 import kotlin.reflect.full.primaryConstructor
 
 class KalesApplication<T : ApplicationLayout>(
-    private val application: Application,
-    val layout: KClass<T>
+  private val application: Application,
+  val layout: KClass<T>
 ) {
   lateinit var routing: Routing
 
@@ -43,8 +43,8 @@ class KalesApplication<T : ApplicationLayout>(
   }
 
   inline fun <reified T : ApplicationController> get(
-      path: String,
-      actionName: String
+    path: String,
+    actionName: String
   ): Route = routing.get(path) {
     val view = callControllerAction<T>(actionName, call)
     call.respondHtmlTemplate(layout.createInstance()) {
@@ -55,8 +55,8 @@ class KalesApplication<T : ApplicationLayout>(
   }
 
   inline fun <reified T : ApplicationController> post(
-      path: String,
-      actionName: String
+    path: String,
+    actionName: String
   ): Route = routing.post(path) {
     val view = callControllerAction<T>(actionName, call)
     call.respondHtmlTemplate(layout.createInstance()) {
@@ -67,8 +67,8 @@ class KalesApplication<T : ApplicationLayout>(
   }
 
   inline fun <reified T : ApplicationController> put(
-      path: String,
-      actionName: String
+    path: String,
+    actionName: String
   ): Route = routing.put(path) {
     val view = callControllerAction<T>(actionName, call)
     call.respondHtmlTemplate(layout.createInstance()) {
@@ -79,8 +79,8 @@ class KalesApplication<T : ApplicationLayout>(
   }
 
   inline fun <reified T : ApplicationController> delete(
-      path: String,
-      actionName: String
+    path: String,
+    actionName: String
   ): Route = routing.delete(path) {
     val view = callControllerAction<T>(actionName, call)
     call.respondHtmlTemplate(layout.createInstance()) {
@@ -91,8 +91,8 @@ class KalesApplication<T : ApplicationLayout>(
   }
 
   suspend inline fun <reified T : ApplicationController> callControllerAction(
-      actionName: String,
-      call: ApplicationCall
+    actionName: String,
+    call: ApplicationCall
   ): ActionView<*> {
     val controllerClassName = T::class.simpleName?.replace("Controller", "")?.toLowerCase()
         ?: throw RuntimeException("Cannot determine the class name for Controller")
@@ -124,8 +124,8 @@ class KalesApplication<T : ApplicationLayout>(
    * "com.example.app.views.foo.IndexView"
    */
   inline fun <reified T : ApplicationController> findViewClass(
-      actionName: String,
-      controllerClassName: String
+    actionName: String,
+    controllerClassName: String
   ): Class<ActionView<*>> {
     val applicationPackage = extractAppPackageNameFromControllerClass<T>()
     val viewClassName = "${actionName.capitalize()}View"
@@ -151,8 +151,8 @@ class KalesApplication<T : ApplicationLayout>(
 }
 
 fun <T : ApplicationLayout> Application.kalesApp(
-    layout: KClass<T>,
-    routes: KalesApplication<T>.() -> Unit
+  layout: KClass<T>,
+  routes: KalesApplication<T>.() -> Unit
 ) {
   KalesApplication(this, layout).initRoutes(routes)
 }

@@ -5,7 +5,7 @@ import kotlinx.html.*
 import kotlinx.html.FormMethod.*
 
 class IndexView(
-    bindings: IndexViewModel? = IndexViewModel("Unknown", listOf())
+  bindings: IndexViewModel? = IndexViewModel("Unknown", listOf())
 ) : ActionView<IndexViewModel>(bindings) {
   override fun FlowContent.render() {
     div("container") {

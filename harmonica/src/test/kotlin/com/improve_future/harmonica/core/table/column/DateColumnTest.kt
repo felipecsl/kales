@@ -51,7 +51,7 @@ class DateColumnTest {
     assertEquals(8, actualDate.get(Calendar.MONTH) + 1)
     assertEquals(19, actualDate.get(Calendar.DAY_OF_MONTH))
     assertEquals(
-        LocalDate.of(2345, 8, 19), dateColumn.defaultLocalDate
+      LocalDate.of(2345, 8, 19), dateColumn.defaultLocalDate
     )
 
     val calendar = Calendar.getInstance()

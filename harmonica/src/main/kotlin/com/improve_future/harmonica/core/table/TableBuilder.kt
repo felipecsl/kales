@@ -49,11 +49,11 @@ class TableBuilder {
    * @return
    */
   fun decimal(
-      columnName: String,
-      precision: Int? = null,
-      scale: Int? = null,
-      nullable: Boolean = true,
-      default: Double? = null
+    columnName: String,
+    precision: Int? = null,
+    scale: Int? = null,
+    nullable: Boolean = true,
+    default: Double? = null
   ): ColumnBuilder {
     val decimalColumn = DecimalColumn(columnName).also {
       it.nullable = nullable
@@ -76,11 +76,11 @@ class TableBuilder {
    * @return
    */
   fun decimal(
-      columnName: String,
-      precision: Int? = null,
-      scale: Int? = null,
-      nullable: Boolean = true,
-      default: RawSql
+    columnName: String,
+    precision: Int? = null,
+    scale: Int? = null,
+    nullable: Boolean = true,
+    default: RawSql
   ): ColumnBuilder {
     val decimalColumn = DecimalColumn(columnName).also {
       it.nullable = nullable
@@ -102,10 +102,10 @@ class TableBuilder {
    * @return
    */
   fun integer(
-      columnName: String,
-      nullable: Boolean = true,
-      default: Long? = null,
-      unsigned: Boolean = false
+    columnName: String,
+    nullable: Boolean = true,
+    default: Long? = null,
+    unsigned: Boolean = false
   ): ColumnBuilder {
     val builder = ColumnBuilder(IntegerColumn(columnName).also {
       it.nullable = nullable
@@ -125,10 +125,10 @@ class TableBuilder {
    * @return
    */
   fun integer(
-      columnName: String,
-      nullable: Boolean = true,
-      default: RawSql,
-      unsigned: Boolean = false
+    columnName: String,
+    nullable: Boolean = true,
+    default: RawSql,
+    unsigned: Boolean = false
   ): ColumnBuilder {
     val builder = ColumnBuilder(IntegerColumn(columnName).also {
       it.nullable = nullable
@@ -150,10 +150,10 @@ class TableBuilder {
    * @return
    */
   fun varchar(
-      columnName: String,
-      size: Int? = null,
-      nullable: Boolean = true,
-      default: String? = null
+    columnName: String,
+    size: Int? = null,
+    nullable: Boolean = true,
+    default: String? = null
   ): ColumnBuilder {
     val builder = ColumnBuilder(VarcharColumn(columnName).also {
       it.nullable = nullable
@@ -176,10 +176,10 @@ class TableBuilder {
    * @return
    */
   fun varchar(
-      columnName: String,
-      size: Int? = null,
-      nullable: Boolean = true,
-      default: RawSql
+    columnName: String,
+    size: Int? = null,
+    nullable: Boolean = true,
+    default: RawSql
   ): ColumnBuilder {
     val builder = ColumnBuilder(VarcharColumn(columnName).also {
       it.nullable = nullable
@@ -202,10 +202,10 @@ class TableBuilder {
    * @return
    */
   fun string(
-      columnName: String,
-      size: Int? = null,
-      nullable: Boolean = true,
-      default: String? = null
+    columnName: String,
+    size: Int? = null,
+    nullable: Boolean = true,
+    default: String? = null
   ): ColumnBuilder {
     return varchar(columnName, size, nullable, default)
   }
@@ -222,14 +222,13 @@ class TableBuilder {
    * @return
    */
   fun string(
-      columnName: String,
-      size: Int? = null,
-      nullable: Boolean = true,
-      default: RawSql
+    columnName: String,
+    size: Int? = null,
+    nullable: Boolean = true,
+    default: RawSql
   ): ColumnBuilder {
     return varchar(columnName, size, nullable, default)
   }
-
 
   /**
    * add boolean column
@@ -240,9 +239,9 @@ class TableBuilder {
    * @return
    */
   fun boolean(
-      columnName: String,
-      nullable: Boolean = true,
-      default: Boolean? = null
+    columnName: String,
+    nullable: Boolean = true,
+    default: Boolean? = null
   ): ColumnBuilder {
     val builder = ColumnBuilder(BooleanColumn(columnName).also {
       it.nullable = nullable
@@ -261,9 +260,9 @@ class TableBuilder {
    * @return
    */
   fun boolean(
-      columnName: String,
-      nullable: Boolean = true,
-      default: RawSql
+    columnName: String,
+    nullable: Boolean = true,
+    default: RawSql
   ): ColumnBuilder {
     val builder = ColumnBuilder(BooleanColumn(columnName).also {
       it.nullable = nullable
@@ -282,9 +281,9 @@ class TableBuilder {
    * @return
    */
   fun date(
-      columnName: String,
-      nullable: Boolean = true,
-      default: Date
+    columnName: String,
+    nullable: Boolean = true,
+    default: Date
   ): ColumnBuilder {
     val builder = ColumnBuilder(DateColumn(columnName).also {
       it.nullable = nullable
@@ -303,9 +302,9 @@ class TableBuilder {
    * @return
    */
   fun date(
-      columnName: String,
-      nullable: Boolean = true,
-      default: String? = null
+    columnName: String,
+    nullable: Boolean = true,
+    default: String? = null
   ): ColumnBuilder {
     val builder = ColumnBuilder(DateColumn(columnName).also {
       it.nullable = nullable
@@ -324,9 +323,9 @@ class TableBuilder {
    * @return
    */
   fun date(
-      columnName: String,
-      nullable: Boolean = true,
-      default: LocalDate
+    columnName: String,
+    nullable: Boolean = true,
+    default: LocalDate
   ): ColumnBuilder {
     val builder = ColumnBuilder(DateColumn(columnName).also {
       it.nullable = nullable
@@ -345,9 +344,9 @@ class TableBuilder {
    * @return
    */
   fun date(
-      columnName: String,
-      nullable: Boolean = true,
-      default: RawSql
+    columnName: String,
+    nullable: Boolean = true,
+    default: RawSql
   ): ColumnBuilder {
     val builder = ColumnBuilder(DateColumn(columnName).also {
       it.nullable = nullable
@@ -366,9 +365,9 @@ class TableBuilder {
    * @return
    */
   fun text(
-      columnName: String,
-      nullable: Boolean = true,
-      default: String? = null
+    columnName: String,
+    nullable: Boolean = true,
+    default: String? = null
   ): ColumnBuilder {
     val builder = ColumnBuilder(TextColumn(columnName).also {
       it.nullable = nullable
@@ -387,9 +386,9 @@ class TableBuilder {
    * @return
    */
   fun text(
-      columnName: String,
-      nullable: Boolean = true,
-      default: RawSql
+    columnName: String,
+    nullable: Boolean = true,
+    default: RawSql
   ): ColumnBuilder {
     val builder = ColumnBuilder(TextColumn(columnName).also {
       it.nullable = nullable
@@ -412,9 +411,9 @@ class TableBuilder {
    * @return
    */
   fun blob(
-      columnName: String,
-      nullable: Boolean = true,
-      default: ByteArray? = null
+    columnName: String,
+    nullable: Boolean = true,
+    default: ByteArray? = null
   ): ColumnBuilder {
     val builder = ColumnBuilder(BlobColumn(columnName).also {
       it.nullable = nullable
@@ -437,9 +436,9 @@ class TableBuilder {
    * @return
    */
   fun blob(
-      columnName: String,
-      nullable: Boolean = true,
-      default: RawSql
+    columnName: String,
+    nullable: Boolean = true,
+    default: RawSql
   ): ColumnBuilder {
     val builder = ColumnBuilder(BlobColumn(columnName).also {
       it.nullable = nullable
@@ -459,10 +458,10 @@ class TableBuilder {
    * @return
    */
   fun time(
-      columnName: String,
-      nullable: Boolean = true,
-      default: LocalTime? = null,
-      withTimeZone: Boolean = false
+    columnName: String,
+    nullable: Boolean = true,
+    default: LocalTime? = null,
+    withTimeZone: Boolean = false
   ): ColumnBuilder {
     val builder = ColumnBuilder(TimeColumn(columnName).also {
       it.nullable = nullable
@@ -484,10 +483,10 @@ class TableBuilder {
    * @return
    */
   fun time(
-      columnName: String,
-      nullable: Boolean = true,
-      default: String,
-      withTimeZone: Boolean = false
+    columnName: String,
+    nullable: Boolean = true,
+    default: String,
+    withTimeZone: Boolean = false
   ): ColumnBuilder {
     val builder = ColumnBuilder(TimeColumn(columnName).also {
       it.nullable = nullable
@@ -508,10 +507,10 @@ class TableBuilder {
    * @return
    */
   fun time(
-      columnName: String,
-      nullable: Boolean = true,
-      default: Date,
-      withTimeZone: Boolean = false
+    columnName: String,
+    nullable: Boolean = true,
+    default: Date,
+    withTimeZone: Boolean = false
   ): ColumnBuilder {
     val builder = ColumnBuilder(TimeColumn(columnName).also {
       it.nullable = nullable
@@ -532,10 +531,10 @@ class TableBuilder {
    * @return
    */
   fun time(
-      columnName: String,
-      nullable: Boolean = true,
-      default: RawSql,
-      withTimeZone: Boolean = false
+    columnName: String,
+    nullable: Boolean = true,
+    default: RawSql,
+    withTimeZone: Boolean = false
   ): ColumnBuilder {
     val builder = ColumnBuilder(TimeColumn(columnName).also {
       it.nullable = nullable
@@ -562,10 +561,10 @@ class TableBuilder {
    * @return
    */
   fun timestamp(
-      columnName: String,
-      nullable: Boolean = true,
-      default: String? = null,
-      withTimeZone: Boolean = false
+    columnName: String,
+    nullable: Boolean = true,
+    default: String? = null,
+    withTimeZone: Boolean = false
   ): ColumnBuilder {
     val builder = ColumnBuilder(TimestampColumn(columnName).also {
       it.nullable = nullable
@@ -592,10 +591,10 @@ class TableBuilder {
    * @return
    */
   fun timestamp(
-      columnName: String,
-      nullable: Boolean = true,
-      default: Date,
-      withTimeZone: Boolean = false
+    columnName: String,
+    nullable: Boolean = true,
+    default: Date,
+    withTimeZone: Boolean = false
   ): ColumnBuilder {
     val builder = ColumnBuilder(TimestampColumn(columnName).also {
       it.nullable = nullable
@@ -622,10 +621,10 @@ class TableBuilder {
    * @return
    */
   fun timestamp(
-      columnName: String,
-      nullable: Boolean = true,
-      default: LocalDateTime,
-      withTimeZone: Boolean = false
+    columnName: String,
+    nullable: Boolean = true,
+    default: LocalDateTime,
+    withTimeZone: Boolean = false
   ): ColumnBuilder {
     val builder = ColumnBuilder(TimestampColumn(columnName).also {
       it.nullable = nullable
@@ -652,10 +651,10 @@ class TableBuilder {
    * @return
    */
   fun timestamp(
-      columnName: String,
-      nullable: Boolean = true,
-      default: RawSql,
-      withTimeZone: Boolean = false
+    columnName: String,
+    nullable: Boolean = true,
+    default: RawSql,
+    withTimeZone: Boolean = false
   ): ColumnBuilder {
     val builder = ColumnBuilder(TimestampColumn(columnName).also {
       it.nullable = nullable
@@ -679,9 +678,9 @@ class TableBuilder {
    * @return
    */
   fun dateTime(
-      columnName: String,
-      nullable: Boolean = true,
-      default: Date
+    columnName: String,
+    nullable: Boolean = true,
+    default: Date
   ): ColumnBuilder {
     val builder = ColumnBuilder(DateTimeColumn(columnName).also {
       it.nullable = nullable
@@ -704,9 +703,9 @@ class TableBuilder {
    * @return
    */
   fun dateTime(
-      columnName: String,
-      nullable: Boolean = true,
-      default: String? = null
+    columnName: String,
+    nullable: Boolean = true,
+    default: String? = null
   ): ColumnBuilder {
     val builder = ColumnBuilder(DateTimeColumn(columnName).also {
       it.nullable = nullable
@@ -728,9 +727,9 @@ class TableBuilder {
    * @param default
    */
   fun dateTime(
-      columnName: String,
-      nullable: Boolean = true,
-      default: LocalDateTime
+    columnName: String,
+    nullable: Boolean = true,
+    default: LocalDateTime
   ): ColumnBuilder {
     val builder = ColumnBuilder(DateTimeColumn(columnName).also {
       it.nullable = nullable
@@ -752,9 +751,9 @@ class TableBuilder {
    * @param default
    */
   fun dateTime(
-      columnName: String,
-      nullable: Boolean = true,
-      default: RawSql
+    columnName: String,
+    nullable: Boolean = true,
+    default: RawSql
   ): ColumnBuilder {
     val builder = ColumnBuilder(DateTimeColumn(columnName).also {
       it.nullable = nullable
@@ -777,18 +776,18 @@ class TableBuilder {
    * @return
    */
   fun refer(
-      tableName: String,
-      nullable: Boolean = true,
-      default: Long? = null,
-      columnName: String = "id"
+    tableName: String,
+    nullable: Boolean = true,
+    default: Long? = null,
+    columnName: String = "id"
   ): ColumnBuilder {
     val builder =
-        integer(
-            tableName + "_" + columnName,
-            nullable = nullable,
-            default = default,
-            unsigned = true
-        )
+      integer(
+        tableName + "_" + columnName,
+        nullable = nullable,
+        default = default,
+        unsigned = true
+      )
     builder.refer(tableName, columnName)
     return builder
   }

@@ -8,8 +8,8 @@ import java.io.File
 import javax.script.ScriptEngineManager
 
 internal class HarmonicaUp(
-    private val migrationsDirectory: File,
-    private val connection: Connection
+  private val migrationsDirectory: File,
+  private val connection: Connection
 ) {
   private val versionService = VersionService("schema_migrations")
 
@@ -61,6 +61,6 @@ internal class HarmonicaUp(
     }
 
     private fun removePackageStatement(script: String) =
-        script.replace("^\\s*package\\s+.+".toRegex(), "")
+      script.replace("^\\s*package\\s+.+".toRegex(), "")
   }
 }

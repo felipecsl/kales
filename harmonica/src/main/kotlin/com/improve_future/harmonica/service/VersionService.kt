@@ -29,7 +29,7 @@ class VersionService(private val migrationTableName: String) {
   fun setupHarmonicaMigrationTable(connection: Connection) {
     if (!connection.doesTableExist(migrationTableName)) {
       connection.execute(
-          """
+        """
                 CREATE TABLE $migrationTableName (
                     version VARCHAR(255)
                 )""".trimIndent()
@@ -47,7 +47,7 @@ class VersionService(private val migrationTableName: String) {
     val resultSet: ResultSet
     try {
       resultSet = statement.executeQuery(
-          "SELECT COUNT(1) FROM $migrationTableName WHERE version = '$version';"
+        "SELECT COUNT(1) FROM $migrationTableName WHERE version = '$version';"
       )
       resultSet.next()
       result = (resultSet.getLong(1) > 0)
@@ -65,7 +65,7 @@ class VersionService(private val migrationTableName: String) {
    */
   fun saveVersion(connection: Connection, version: String) {
     connection.execute(
-        "INSERT INTO $migrationTableName(version) VALUES('$version');"
+      "INSERT INTO $migrationTableName(version) VALUES('$version');"
     )
   }
 
@@ -74,7 +74,7 @@ class VersionService(private val migrationTableName: String) {
    */
   fun removeVersion(connection: Connection, version: String) {
     connection.execute(
-        "DELETE FROM $migrationTableName WHERE version = '$version'"
+      "DELETE FROM $migrationTableName WHERE version = '$version'"
     )
   }
 
@@ -86,7 +86,7 @@ class VersionService(private val migrationTableName: String) {
     val statement = connection.createStatement()
     try {
       val resultSet = statement.executeQuery(
-          """
+        """
                 SELECT version
                   FROM $migrationTableName
                  ORDER BY version DESC
@@ -127,7 +127,7 @@ class VersionService(private val migrationTableName: String) {
    * Date format to use for Version Number
    */
   private val dateFormat: SimpleDateFormat =
-      SimpleDateFormat("yyyyMMddHHmmssSSS")
+    SimpleDateFormat("yyyyMMddHHmmssSSS")
 
   /**
    * Create new version number
@@ -145,7 +145,8 @@ class VersionService(private val migrationTableName: String) {
   }
 
   internal fun filterClassCandidateWithVersion(
-      classList: List<Class<out AbstractMigration>>, version: String
+    classList: List<Class<out AbstractMigration>>,
+    version: String
   ): List<Class<out AbstractMigration>> {
     return classList.filter {
       pickUpVersionFromClassName(it.simpleName) == version

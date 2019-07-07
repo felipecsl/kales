@@ -30,7 +30,7 @@ class BlobColumnTest {
     assertEquals(false, blobColumn.hasDefault)
     blobColumn.default = byteArrayOf(1)
     assertEquals(
-        byteArrayOf(1).toHexString(), blobColumn.default?.toHexString()
+      byteArrayOf(1).toHexString(), blobColumn.default?.toHexString()
     )
     assertEquals(true, blobColumn.hasDefault)
     assertEquals("E'\\\\x01'", blobColumn.sqlDefault)

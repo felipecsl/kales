@@ -25,7 +25,7 @@ import com.improve_future.harmonica.core.table.column.AbstractColumn
 import com.improve_future.harmonica.core.table.column.AddingColumnOption
 
 internal class SqliteAdapter(connection: ConnectionInterface) :
-    DbAdapter(connection) {
+  DbAdapter(connection) {
   override fun createTable(tableName: String, tableBuilder: TableBuilder) {
     var sql = "CREATE TABLE $tableName (\n"
     if (tableBuilder.id) {
@@ -41,8 +41,10 @@ internal class SqliteAdapter(connection: ConnectionInterface) :
   }
 
   override fun createIndex(
-      tableName: String, columnNameArray: Array<String>, unique: Boolean,
-      method: IndexMethod?
+    tableName: String,
+    columnNameArray: Array<String>,
+    unique: Boolean,
+    method: IndexMethod?
   ) {
     var sql = "CREATE "
     if (unique) sql += "UNIQUE "
@@ -57,9 +59,9 @@ internal class SqliteAdapter(connection: ConnectionInterface) :
   }
 
   override fun addColumn(
-      tableName: String,
-      column: AbstractColumn,
-      option: AddingColumnOption
+    tableName: String,
+    column: AbstractColumn,
+    option: AddingColumnOption
   ) {
     var sql = "ALTER TABLE $tableName ADD COLUMN "
     sql += buildColumnDeclarationForCreateTableSql(column)
@@ -73,36 +75,36 @@ internal class SqliteAdapter(connection: ConnectionInterface) :
   }
 
   override fun renameIndex(
-      tableName: String,
-      oldIndexName: String,
-      newIndexName: String
+    tableName: String,
+    oldIndexName: String,
+    newIndexName: String
   ) {
     // SQLite must drop index and create new index
-    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
   }
 
   override fun addForeignKey(
-      tableName: String,
-      columnName: String,
-      referencedTableName: String,
-      referencedColumnName: String
+    tableName: String,
+    columnName: String,
+    referencedTableName: String,
+    referencedColumnName: String
   ) {
     // SQLite doesn't support add Foreign Key function.
     // Foreign key must be added on table creation.
-    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
   }
 
   override fun dropForeignKey(
-      tableName: String,
-      columnName: String,
-      keyName: String
+    tableName: String,
+    columnName: String,
+    keyName: String
   ) {
-    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
   }
 
   internal companion object : DbAdapter.CompanionInterface() {
     private fun buildColumnDeclarationForCreateTableSql(
-        column: AbstractColumn
+      column: AbstractColumn
     ): String {
       var sql = column.name + " " + sqlType(column)
       if (!column.nullable) sql += " NOT NULL"

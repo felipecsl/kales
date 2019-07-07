@@ -26,32 +26,32 @@ import java.sql.DriverManager
 import java.sql.Statement
 
 open class Connection(
-    override val config: DbConfig
+  override val config: DbConfig
 ) : Closeable, ConnectionInterface {
   private lateinit var coreConnection: java.sql.Connection
 
   private fun connect(config: DbConfig) {
     if (config.dbms != Dbms.SQLite) {
       coreConnection =
-          object : java.sql.Connection by DriverManager.getConnection(
-              buildConnectionUriFromDbConfig(config),
-              config.user,
-              config.password
-          ) {
-            override fun setTransactionIsolation(level: Int) {}
-          }
+        object : java.sql.Connection by DriverManager.getConnection(
+          buildConnectionUriFromDbConfig(config),
+          config.user,
+          config.password
+        ) {
+          override fun setTransactionIsolation(level: Int) {}
+        }
     } else {
       coreConnection = DriverManager.getConnection(
-          buildConnectionUriFromDbConfig(config)
+        buildConnectionUriFromDbConfig(config)
       )
     }
     database =
-        if (PluginConfig.hasExposed())
-          Database.connect({ coreConnection })
-        else null
+      if (PluginConfig.hasExposed())
+        Database.connect({ coreConnection })
+      else null
     if (config.dbms == Dbms.SQLite && PluginConfig.hasExposed()) {
       TransactionManager.manager.defaultIsolationLevel =
-          java.sql.Connection.TRANSACTION_SERIALIZABLE
+        java.sql.Connection.TRANSACTION_SERIALIZABLE
     }
     coreConnection.autoCommit = false
   }
@@ -117,17 +117,17 @@ open class Connection(
     javaConnection.autoCommit = false
     if (PluginConfig.hasExposed()) {
       TransactionManager.currentOrNew(TransactionManager.manager.defaultIsolationLevel)
-          .let {
-            try {
-              block()
-              it.commit()
-              it.close()
-            } catch (e: Exception) {
-              it.rollback()
-              it.close()
-              throw e
-            }
+        .let {
+          try {
+            block()
+            it.commit()
+            it.close()
+          } catch (e: Exception) {
+            it.rollback()
+            it.close()
+            throw e
           }
+        }
     } else {
       try {
         block()
@@ -148,7 +148,7 @@ open class Connection(
       val tr = TransactionManager.currentOrNull()
       if (tr == null) {
         val newTr = TransactionManager.currentOrNew(
-            TransactionManager.manager.defaultIsolationLevel
+          TransactionManager.manager.defaultIsolationLevel
         )
         newTr.exec(sql)
         newTr.close()
@@ -168,7 +168,7 @@ open class Connection(
 
   override fun doesTableExist(tableName: String): Boolean {
     val resultSet = javaConnection.metaData.getTables(
-        null, null, tableName, null
+      null, null, tableName, null
     )
     val result = resultSet.next()
     resultSet.close()

@@ -35,16 +35,18 @@ internal abstract class DbAdapter(internal val connection: ConnectionInterface) 
   }
 
   abstract fun createIndex(
-      tableName: String, columnNameArray: Array<String>, unique: Boolean = false,
-      method: IndexMethod? = null
+    tableName: String,
+    columnNameArray: Array<String>,
+    unique: Boolean = false,
+    method: IndexMethod? = null
   )
 
   abstract fun dropIndex(tableName: String, indexName: String)
 
   abstract fun addColumn(
-      tableName: String,
-      column: AbstractColumn,
-      option: AddingColumnOption
+    tableName: String,
+    column: AbstractColumn,
+    option: AddingColumnOption
   )
 
   fun removeColumn(tableName: String, columnName: String) {
@@ -54,39 +56,48 @@ internal abstract class DbAdapter(internal val connection: ConnectionInterface) 
   abstract fun renameTable(oldTableName: String, newTableName: String)
 
   fun renameColumn(
-      tableName: String, oldColumnName: String, newColumnName: String
+    tableName: String,
+    oldColumnName: String,
+    newColumnName: String
   ) {
     connection.execute(
-        "ALTER TABLE $tableName" +
-            " RENAME COLUMN $oldColumnName TO $newColumnName;"
+      "ALTER TABLE $tableName" +
+        " RENAME COLUMN $oldColumnName TO $newColumnName;"
     )
   }
 
   abstract fun renameIndex(
-      tableName: String, oldIndexName: String, newIndexName: String
+    tableName: String,
+    oldIndexName: String,
+    newIndexName: String
   )
 
   abstract fun addForeignKey(
-      tableName: String, columnName: String,
-      referencedTableName: String, referencedColumnName: String
+    tableName: String,
+    columnName: String,
+    referencedTableName: String,
+    referencedColumnName: String
   )
 
   fun dropForeignKey(
-      tableName: String, columnName: String
+    tableName: String,
+    columnName: String
   ) {
     dropForeignKey(
-        tableName, columnName,
-        buildForeignKeyName(tableName, columnName)
+      tableName, columnName,
+      buildForeignKeyName(tableName, columnName)
     )
   }
 
   abstract fun dropForeignKey(
-      tableName: String, columnName: String,
-      keyName: String
+    tableName: String,
+    columnName: String,
+    keyName: String
   )
 
   protected open fun buildForeignKeyName(
-      tableName: String, columnName: String
+    tableName: String,
+    columnName: String
   ) = "${tableName}_${columnName}_fkey"
 
   internal abstract class CompanionInterface {

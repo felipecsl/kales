@@ -29,5 +29,4 @@ internal class DecimalColumn(name: String) : AbstractColumn(name) {
 
   var precision: Int? = null
   var scale: Int? = null
-
 }

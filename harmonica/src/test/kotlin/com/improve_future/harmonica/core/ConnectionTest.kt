@@ -25,18 +25,18 @@ class ConnectionTest {
   @Test
   fun testBuildConnectionUriFromDbConfig() {
     val method = Connection::class.java
-        .getDeclaredMethod(
-            "buildConnectionUriFromDbConfig",
-            DbConfig::class.java
-        ).also { it.isAccessible = true }
+      .getDeclaredMethod(
+        "buildConnectionUriFromDbConfig",
+        DbConfig::class.java
+      ).also { it.isAccessible = true }
     // MySQL
     val mySqlConfig = object : DbConfig({
       dbms = Dbms.MySQL
       dbName = "test"
     }) {}
     assertEquals(
-        "jdbc:mysql://127.0.0.1:3306/test?autoReconnect=true",
-        method.invoke(Connection.Companion, mySqlConfig) as String
+      "jdbc:mysql://127.0.0.1:3306/test?autoReconnect=true",
+      method.invoke(Connection.Companion, mySqlConfig) as String
     )
     // SQLite
     val sqliteConfig = object : DbConfig({
@@ -44,8 +44,8 @@ class ConnectionTest {
       dbName = "test"
     }) {}
     assertEquals(
-        "jdbc:sqlite:test.db",
-        method.invoke(Connection.Companion, sqliteConfig) as String
+      "jdbc:sqlite:test.db",
+      method.invoke(Connection.Companion, sqliteConfig) as String
     )
   }
 }

@@ -29,16 +29,16 @@ internal class StubDbAdapter : DbAdapter(StubConnection()) {
   val addingForeignKeyList = mutableListOf<AddingForeignKey>()
 
   data class AddingColumn(
-      val tableName: String,
-      val column: AbstractColumn,
-      val option: AddingColumnOption
+    val tableName: String,
+    val column: AbstractColumn,
+    val option: AddingColumnOption
   )
 
   data class AddingForeignKey(
-      val tableName: String,
-      val columnName: String,
-      val referencedTableName: String,
-      val referencedColumnName: String
+    val tableName: String,
+    val columnName: String,
+    val referencedTableName: String,
+    val referencedColumnName: String
   )
 
   override fun createTable(tableName: String, tableBuilder: TableBuilder) {
@@ -48,15 +48,17 @@ internal class StubDbAdapter : DbAdapter(StubConnection()) {
   }
 
   override fun createIndex(
-      tableName: String, columnNameArray: Array<String>, unique: Boolean,
-      method: IndexMethod?
+    tableName: String,
+    columnNameArray: Array<String>,
+    unique: Boolean,
+    method: IndexMethod?
   ) {
   }
 
   override fun renameIndex(
-      tableName: String,
-      oldIndexName: String,
-      newIndexName: String
+    tableName: String,
+    oldIndexName: String,
+    newIndexName: String
   ) {
   }
 
@@ -64,30 +66,30 @@ internal class StubDbAdapter : DbAdapter(StubConnection()) {
   }
 
   override fun addColumn(
-      tableName: String,
-      column: AbstractColumn,
-      option: AddingColumnOption
+    tableName: String,
+    column: AbstractColumn,
+    option: AddingColumnOption
   ) {
     addingColumnList.add(AddingColumn(tableName, column, option))
   }
 
   override fun addForeignKey(
-      tableName: String,
-      columnName: String,
-      referencedTableName: String,
-      referencedColumnName: String
+    tableName: String,
+    columnName: String,
+    referencedTableName: String,
+    referencedColumnName: String
   ) {
     addingForeignKeyList.add(
-        AddingForeignKey(
-            tableName, columnName, referencedTableName, referencedColumnName
-        )
+      AddingForeignKey(
+        tableName, columnName, referencedTableName, referencedColumnName
+      )
     )
   }
 
   override fun dropForeignKey(
-      tableName: String,
-      columnName: String,
-      keyName: String
+    tableName: String,
+    columnName: String,
+    keyName: String
   ) {
     TODO("not implemented")
   }

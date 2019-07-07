@@ -7,7 +7,6 @@ import org.jdbi.v3.core.mapper.ColumnMapper
 import org.jdbi.v3.core.mapper.ColumnMapperFactory
 import java.lang.reflect.Type
 import java.util.*
-import java.util.logging.Logger
 
 internal class HasManyAssociationColumnMapperFactory : ColumnMapperFactory {
   override fun build(type: Type, config: ConfigRegistry): Optional<ColumnMapper<*>> {

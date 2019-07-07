@@ -69,8 +69,10 @@ abstract class AbstractMigration {
    * valid only for MySQL.
    */
   private fun addColumn(
-      tableName: String, column: AbstractColumn,
-      first: Boolean = false, justBeforeColumnName: String? = null
+    tableName: String,
+    column: AbstractColumn,
+    first: Boolean = false,
+    justBeforeColumnName: String? = null
   ) {
     val option = AddingColumnOption().also {
       it.first = first
@@ -93,11 +95,13 @@ abstract class AbstractMigration {
    * (valid only for MySQL)
    */
   fun addIntegerColumn(
-      tableName: String, columnName: String,
-      nullable: Boolean = true, default: Long? = null,
-      unsigned: Boolean = false,
-      first: Boolean = false,
-      justBeforeColumnName: String? = null
+    tableName: String,
+    columnName: String,
+    nullable: Boolean = true,
+    default: Long? = null,
+    unsigned: Boolean = false,
+    first: Boolean = false,
+    justBeforeColumnName: String? = null
   ) {
     val integerColumn = IntegerColumn(columnName)
     integerColumn.also {
@@ -121,11 +125,13 @@ abstract class AbstractMigration {
    * (valid only for MySQL)
    */
   fun addIntegerColumn(
-      tableName: String, columnName: String,
-      nullable: Boolean = true, default: RawSql,
-      unsigned: Boolean = false,
-      first: Boolean = false,
-      justBeforeColumnName: String? = null
+    tableName: String,
+    columnName: String,
+    nullable: Boolean = true,
+    default: RawSql,
+    unsigned: Boolean = false,
+    first: Boolean = false,
+    justBeforeColumnName: String? = null
   ) {
     val integerColumn = IntegerColumn(columnName)
     integerColumn.also {
@@ -144,11 +150,14 @@ abstract class AbstractMigration {
    * (valid only for MySQL)
    */
   fun addDecimalColumn(
-      tableName: String, columnName: String,
-      precision: Int? = null, scale: Int? = null,
-      nullable: Boolean = true, default: Double? = null,
-      first: Boolean = false,
-      justBeforeColumnName: String? = null
+    tableName: String,
+    columnName: String,
+    precision: Int? = null,
+    scale: Int? = null,
+    nullable: Boolean = true,
+    default: Double? = null,
+    first: Boolean = false,
+    justBeforeColumnName: String? = null
   ) {
     val decimalColumn = DecimalColumn(columnName).also {
       it.precision = precision
@@ -167,11 +176,14 @@ abstract class AbstractMigration {
    * (valid only for MySQL)
    */
   fun addDecimalColumn(
-      tableName: String, columnName: String,
-      precision: Int? = null, scale: Int? = null,
-      nullable: Boolean = true, default: RawSql,
-      first: Boolean = false,
-      justBeforeColumnName: String? = null
+    tableName: String,
+    columnName: String,
+    precision: Int? = null,
+    scale: Int? = null,
+    nullable: Boolean = true,
+    default: RawSql,
+    first: Boolean = false,
+    justBeforeColumnName: String? = null
   ) {
     val decimalColumn = DecimalColumn(columnName).also {
       it.precision = precision
@@ -195,9 +207,13 @@ abstract class AbstractMigration {
    * (valid only for MySQL)
    */
   fun addVarcharColumn(
-      tableName: String, columnName: String, size: Int? = null,
-      nullable: Boolean = true, default: String? = null,
-      first: Boolean = false, justBeforeColumnName: String? = null
+    tableName: String,
+    columnName: String,
+    size: Int? = null,
+    nullable: Boolean = true,
+    default: String? = null,
+    first: Boolean = false,
+    justBeforeColumnName: String? = null
   ) {
     val varcharColumn = VarcharColumn(columnName)
     varcharColumn.also {
@@ -221,9 +237,13 @@ abstract class AbstractMigration {
    * (valid only for MySQL)
    */
   fun addVarcharColumn(
-      tableName: String, columnName: String, size: Int? = null,
-      nullable: Boolean = true, default: RawSql,
-      first: Boolean = false, justBeforeColumnName: String? = null
+    tableName: String,
+    columnName: String,
+    size: Int? = null,
+    nullable: Boolean = true,
+    default: RawSql,
+    first: Boolean = false,
+    justBeforeColumnName: String? = null
   ) {
     val varcharColumn = VarcharColumn(columnName)
     varcharColumn.also {
@@ -233,7 +253,6 @@ abstract class AbstractMigration {
     }
     addColumn(tableName, varcharColumn, first, justBeforeColumnName)
   }
-
 
   /**
    * Add new boolean column to existing table.
@@ -250,9 +269,12 @@ abstract class AbstractMigration {
    * (valid only for MySQL)
    */
   fun addBooleanColumn(
-      tableName: String, columnName: String,
-      nullable: Boolean = true, default: Boolean? = null,
-      first: Boolean = false, justBeforeColumnName: String? = null
+    tableName: String,
+    columnName: String,
+    nullable: Boolean = true,
+    default: Boolean? = null,
+    first: Boolean = false,
+    justBeforeColumnName: String? = null
   ) {
     val booleanColumn = BooleanColumn(columnName)
     booleanColumn.also {
@@ -277,9 +299,12 @@ abstract class AbstractMigration {
    * (valid only for MySQL)
    */
   fun addBooleanColumn(
-      tableName: String, columnName: String,
-      nullable: Boolean = true, default: RawSql,
-      first: Boolean = false, justBeforeColumnName: String? = null
+    tableName: String,
+    columnName: String,
+    nullable: Boolean = true,
+    default: RawSql,
+    first: Boolean = false,
+    justBeforeColumnName: String? = null
   ) {
     val booleanColumn = BooleanColumn(columnName)
     booleanColumn.also {
@@ -301,9 +326,12 @@ abstract class AbstractMigration {
    * valid only for MySQL
    */
   fun addDateColumn(
-      tableName: String, columnName: String,
-      nullable: Boolean = true, default: Date,
-      first: Boolean = false, justBeforeColumnName: String? = null
+    tableName: String,
+    columnName: String,
+    nullable: Boolean = true,
+    default: Date,
+    first: Boolean = false,
+    justBeforeColumnName: String? = null
   ) {
     val dateColumn = DateColumn(columnName).also {
       it.nullable = nullable
@@ -324,9 +352,12 @@ abstract class AbstractMigration {
    * (valid only for MySQL)
    */
   fun addDateColumn(
-      tableName: String, columnName: String,
-      nullable: Boolean = true, default: String? = null,
-      first: Boolean = false, justBeforeColumnName: String? = null
+    tableName: String,
+    columnName: String,
+    nullable: Boolean = true,
+    default: String? = null,
+    first: Boolean = false,
+    justBeforeColumnName: String? = null
   ) {
     val dateColumn = DateColumn(columnName).also {
       it.nullable = nullable
@@ -347,9 +378,12 @@ abstract class AbstractMigration {
    * (valid only for MySQL)
    */
   fun addDateColumn(
-      tableName: String, columnName: String,
-      nullable: Boolean = true, default: LocalDate,
-      first: Boolean = false, justBeforeColumnName: String? = null
+    tableName: String,
+    columnName: String,
+    nullable: Boolean = true,
+    default: LocalDate,
+    first: Boolean = false,
+    justBeforeColumnName: String? = null
   ) {
     val dateColumn = DateColumn(columnName).also {
       it.nullable = nullable
@@ -370,9 +404,12 @@ abstract class AbstractMigration {
    * valid only for MySQL
    */
   fun addDateColumn(
-      tableName: String, columnName: String,
-      nullable: Boolean = true, default: RawSql,
-      first: Boolean = false, justBeforeColumnName: String? = null
+    tableName: String,
+    columnName: String,
+    nullable: Boolean = true,
+    default: RawSql,
+    first: Boolean = false,
+    justBeforeColumnName: String? = null
   ) {
     val dateColumn = DateColumn(columnName).also {
       it.nullable = nullable
@@ -393,9 +430,12 @@ abstract class AbstractMigration {
    * valid only for MySQL
    */
   fun addTextColumn(
-      tableName: String, columnName: String,
-      nullable: Boolean = true, default: String? = null,
-      first: Boolean = false, justBeforeColumnName: String? = null
+    tableName: String,
+    columnName: String,
+    nullable: Boolean = true,
+    default: String? = null,
+    first: Boolean = false,
+    justBeforeColumnName: String? = null
   ) {
     val textColumn = TextColumn(columnName)
     textColumn.also {
@@ -417,9 +457,12 @@ abstract class AbstractMigration {
    * valid only for MySQL
    */
   fun addTextColumn(
-      tableName: String, columnName: String,
-      nullable: Boolean = true, default: RawSql,
-      first: Boolean = false, justBeforeColumnName: String? = null
+    tableName: String,
+    columnName: String,
+    nullable: Boolean = true,
+    default: RawSql,
+    first: Boolean = false,
+    justBeforeColumnName: String? = null
   ) {
     val textColumn = TextColumn(columnName)
     textColumn.also {
@@ -445,9 +488,12 @@ abstract class AbstractMigration {
    * valid only for MySQL
    */
   fun addBlobColumn(
-      tableName: String, columnName: String,
-      nullable: Boolean = true, default: ByteArray? = null,
-      first: Boolean = false, justBeforeColumnName: String? = null
+    tableName: String,
+    columnName: String,
+    nullable: Boolean = true,
+    default: ByteArray? = null,
+    first: Boolean = false,
+    justBeforeColumnName: String? = null
   ) {
     val blobColumn = BlobColumn(columnName)
     blobColumn.also {
@@ -473,9 +519,12 @@ abstract class AbstractMigration {
    * valid only for MySQL
    */
   fun addBlobColumn(
-      tableName: String, columnName: String,
-      nullable: Boolean = true, default: RawSql,
-      first: Boolean = false, justBeforeColumnName: String? = null
+    tableName: String,
+    columnName: String,
+    nullable: Boolean = true,
+    default: RawSql,
+    first: Boolean = false,
+    justBeforeColumnName: String? = null
   ) {
     val blobColumn = BlobColumn(columnName)
     blobColumn.also {
@@ -498,10 +547,13 @@ abstract class AbstractMigration {
    * valid only for MySQL
    */
   fun addTimeColumn(
-      tableName: String, columnName: String,
-      nullable: Boolean = false, default: LocalTime,
-      withTimeZone: Boolean = false,
-      first: Boolean = false, justBeforeColumnName: String? = null
+    tableName: String,
+    columnName: String,
+    nullable: Boolean = false,
+    default: LocalTime,
+    withTimeZone: Boolean = false,
+    first: Boolean = false,
+    justBeforeColumnName: String? = null
   ) {
     val timeColumn = TimeColumn(columnName).also {
       it.nullable = nullable
@@ -524,10 +576,13 @@ abstract class AbstractMigration {
    * valid only for MySQL
    */
   fun addTimeColumn(
-      tableName: String, columnName: String,
-      nullable: Boolean = false, default: String? = null,
-      withTimeZone: Boolean = false,
-      first: Boolean = false, justBeforeColumnName: String? = null
+    tableName: String,
+    columnName: String,
+    nullable: Boolean = false,
+    default: String? = null,
+    withTimeZone: Boolean = false,
+    first: Boolean = false,
+    justBeforeColumnName: String? = null
   ) {
     val timeColumn = TimeColumn(columnName).also {
       it.nullable = nullable
@@ -550,10 +605,13 @@ abstract class AbstractMigration {
    * valid only for MySQL
    */
   fun addTimeColumn(
-      tableName: String, columnName: String,
-      nullable: Boolean = false, default: Date,
-      withTimeZone: Boolean = false,
-      first: Boolean = false, justBeforeColumnName: String? = null
+    tableName: String,
+    columnName: String,
+    nullable: Boolean = false,
+    default: Date,
+    withTimeZone: Boolean = false,
+    first: Boolean = false,
+    justBeforeColumnName: String? = null
   ) {
     val timeColumn = TimeColumn(columnName).also {
       it.nullable = nullable
@@ -576,10 +634,13 @@ abstract class AbstractMigration {
    * valid only for MySQL
    */
   fun addTimeColumn(
-      tableName: String, columnName: String,
-      nullable: Boolean = false, default: RawSql,
-      withTimeZone: Boolean = false,
-      first: Boolean = false, justBeforeColumnName: String? = null
+    tableName: String,
+    columnName: String,
+    nullable: Boolean = false,
+    default: RawSql,
+    withTimeZone: Boolean = false,
+    first: Boolean = false,
+    justBeforeColumnName: String? = null
   ) {
     val timeColumn = TimeColumn(columnName).also {
       it.nullable = nullable
@@ -605,9 +666,12 @@ abstract class AbstractMigration {
    * valid only for MySQL
    */
   fun addDateTimeColumn(
-      tableName: String, columnName: String,
-      nullable: Boolean = false, default: String? = null,
-      first: Boolean = false, justBeforeColumnName: String? = null
+    tableName: String,
+    columnName: String,
+    nullable: Boolean = false,
+    default: String? = null,
+    first: Boolean = false,
+    justBeforeColumnName: String? = null
   ) {
     val dateTimeColumn = DateTimeColumn(columnName).also {
       it.nullable = nullable
@@ -631,9 +695,12 @@ abstract class AbstractMigration {
    * valid only for MySQL
    */
   fun addDateTimeColumn(
-      tableName: String, columnName: String,
-      nullable: Boolean = false, default: Date,
-      first: Boolean = false, justBeforeColumnName: String? = null
+    tableName: String,
+    columnName: String,
+    nullable: Boolean = false,
+    default: Date,
+    first: Boolean = false,
+    justBeforeColumnName: String? = null
   ) {
     val dateTimeColumn = DateTimeColumn(columnName).also {
       it.nullable = nullable
@@ -657,9 +724,12 @@ abstract class AbstractMigration {
    * valid only for MySQL
    */
   fun addDateTimeColumn(
-      tableName: String, columnName: String,
-      nullable: Boolean = false, default: LocalDateTime,
-      first: Boolean = false, justBeforeColumnName: String? = null
+    tableName: String,
+    columnName: String,
+    nullable: Boolean = false,
+    default: LocalDateTime,
+    first: Boolean = false,
+    justBeforeColumnName: String? = null
   ) {
     val dateTimeColumn = DateTimeColumn(columnName).also {
       it.nullable = nullable
@@ -683,9 +753,12 @@ abstract class AbstractMigration {
    * valid only for MySQL
    */
   fun addDateTimeColumn(
-      tableName: String, columnName: String,
-      nullable: Boolean = false, default: RawSql,
-      first: Boolean = false, justBeforeColumnName: String? = null
+    tableName: String,
+    columnName: String,
+    nullable: Boolean = false,
+    default: RawSql,
+    first: Boolean = false,
+    justBeforeColumnName: String? = null
   ) {
     val dateTimeColumn = DateTimeColumn(columnName).also {
       it.nullable = nullable
@@ -707,10 +780,13 @@ abstract class AbstractMigration {
    * valid only for MySQL
    */
   fun addTimestampColumn(
-      tableName: String, columnName: String,
-      nullable: Boolean = false, default: String? = null,
-      withTimeZone: Boolean = true,
-      first: Boolean = false, justBeforeColumnName: String? = null
+    tableName: String,
+    columnName: String,
+    nullable: Boolean = false,
+    default: String? = null,
+    withTimeZone: Boolean = true,
+    first: Boolean = false,
+    justBeforeColumnName: String? = null
   ) {
     val timestampColumn = TimestampColumn(columnName).also {
       it.nullable = nullable
@@ -732,10 +808,13 @@ abstract class AbstractMigration {
    * valid only for MySQL
    */
   fun addTimestampColumn(
-      tableName: String, columnName: String,
-      nullable: Boolean = false, default: Date,
-      withTimeZone: Boolean = true,
-      first: Boolean = false, justBeforeColumnName: String? = null
+    tableName: String,
+    columnName: String,
+    nullable: Boolean = false,
+    default: Date,
+    withTimeZone: Boolean = true,
+    first: Boolean = false,
+    justBeforeColumnName: String? = null
   ) {
     val timestampColumn = TimestampColumn(columnName).also {
       it.nullable = nullable
@@ -758,10 +837,13 @@ abstract class AbstractMigration {
    * valid only for MySQL
    */
   fun addTimestampColumn(
-      tableName: String, columnName: String,
-      nullable: Boolean = false, default: LocalDateTime,
-      withTimeZone: Boolean = true,
-      first: Boolean = false, justBeforeColumnName: String? = null
+    tableName: String,
+    columnName: String,
+    nullable: Boolean = false,
+    default: LocalDateTime,
+    withTimeZone: Boolean = true,
+    first: Boolean = false,
+    justBeforeColumnName: String? = null
   ) {
     val timestampColumn = TimestampColumn(columnName).also {
       it.nullable = nullable
@@ -784,10 +866,13 @@ abstract class AbstractMigration {
    * valid only for MySQL
    */
   fun addTimestampColumn(
-      tableName: String, columnName: String,
-      nullable: Boolean = false, default: RawSql,
-      withTimeZone: Boolean = true,
-      first: Boolean = false, justBeforeColumnName: String? = null
+    tableName: String,
+    columnName: String,
+    nullable: Boolean = false,
+    default: RawSql,
+    withTimeZone: Boolean = true,
+    first: Boolean = false,
+    justBeforeColumnName: String? = null
   ) {
     val timestampColumn = TimestampColumn(columnName).also {
       it.nullable = nullable
@@ -806,8 +891,10 @@ abstract class AbstractMigration {
    * @param method `null` means database default.
    */
   fun createIndex(
-      tableName: String, columnName: String,
-      unique: Boolean = false, method: IndexMethod? = null
+    tableName: String,
+    columnName: String,
+    unique: Boolean = false,
+    method: IndexMethod? = null
   ) {
     println("Add Index: $tableName $columnName")
     adapter.createIndex(tableName, arrayOf(columnName), unique, method)
@@ -822,8 +909,10 @@ abstract class AbstractMigration {
    * @param method `null` means database default.
    */
   fun createIndex(
-      tableName: String, columnNameArray: Array<String>,
-      unique: Boolean = false, method: IndexMethod? = null
+    tableName: String,
+    columnNameArray: Array<String>,
+    unique: Boolean = false,
+    method: IndexMethod? = null
   ) {
     println("Add Index: $tableName (${columnNameArray.joinToString(", ")})")
     adapter.createIndex(tableName, columnNameArray, unique, method)
@@ -838,21 +927,16 @@ abstract class AbstractMigration {
    * @param method `null` means database default.
    */
   fun createIndex(
-      tableName: String, columnNameCollection: Collection<String>,
-      unique: Boolean = false, method: IndexMethod? = null
+    tableName: String,
+    columnNameCollection: Collection<String>,
+    unique: Boolean = false,
+    method: IndexMethod? = null
   ) = createIndex(
-      tableName,
-      columnNameCollection.toTypedArray(),
-      unique,
-      method
+    tableName,
+    columnNameCollection.toTypedArray(),
+    unique,
+    method
   )
-
-//    fun createIndex(
-//        tableName: String, vararg columnNameArray: String,
-//        unique: Boolean = false, method: IndexMethod? = null, a :Int
-//    ) {
-//        createIndex(tableName, columnNameArray as Array<String>, unique, method)
-//    }
 
   /**
    * Drop Index
@@ -883,7 +967,9 @@ abstract class AbstractMigration {
    * @param newColumnName New column name
    */
   fun renameColumn(
-      tableName: String, oldColumnName: String, newColumnName: String
+    tableName: String,
+    oldColumnName: String,
+    newColumnName: String
   ) {
     println("Rename Column: $tableName.$oldColumnName => $newColumnName")
     adapter.renameColumn(tableName, oldColumnName, newColumnName)
@@ -897,7 +983,9 @@ abstract class AbstractMigration {
    * @param newIndexName New index name
    */
   fun renameIndex(
-      tableName: String, oldIndexName: String, newIndexName: String
+    tableName: String,
+    oldIndexName: String,
+    newIndexName: String
   ) {
     println("Rename Index: $oldIndexName => $newIndexName")
     adapter.renameIndex(tableName, oldIndexName, newIndexName)
@@ -912,15 +1000,15 @@ abstract class AbstractMigration {
    * @param referencedColumnName
    */
   fun addForeignKey(
-      tableName: String,
-      columnName: String,
-      referencedTableName: String,
-      referencedColumnName: String = "id"
+    tableName: String,
+    columnName: String,
+    referencedTableName: String,
+    referencedColumnName: String = "id"
   ) {
     println("Add foreign key: $tableName.$columnName - $referencedTableName.$referencedColumnName")
     adapter.addForeignKey(
-        tableName, columnName,
-        referencedTableName, referencedColumnName
+      tableName, columnName,
+      referencedTableName, referencedColumnName
     )
   }
 
@@ -932,13 +1020,13 @@ abstract class AbstractMigration {
    * @param keyConstraintName Foreign key constraint name.
    */
   fun dropForeignKey(
-      tableName: String,
-      columnName: String,
-      keyConstraintName: String
+    tableName: String,
+    columnName: String,
+    keyConstraintName: String
   ) {
     println("Drop foreign key: $tableName.$columnName ($keyConstraintName)")
     adapter.dropForeignKey(
-        tableName, columnName, keyConstraintName
+      tableName, columnName, keyConstraintName
     )
   }
 

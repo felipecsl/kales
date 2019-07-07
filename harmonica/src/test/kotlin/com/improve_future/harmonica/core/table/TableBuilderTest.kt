@@ -56,8 +56,8 @@ class TableBuilderTest {
 
     tb = TableBuilder()
     tb.decimal(
-        "name", 10, 5,
-        false, 1.1
+      "name", 10, 5,
+      false, 1.1
     )
     decimalColumn = tb.columnList.first() as DecimalColumn
     assertEquals("name", decimalColumn.name)
@@ -154,8 +154,8 @@ class TableBuilderTest {
     tb = TableBuilder()
     defaultLocalDateTime = LocalDateTime.now()
     tb.timestamp(
-        "name", false, defaultLocalDateTime,
-        true
+      "name", false, defaultLocalDateTime,
+      true
     )
     timestampColumn = tb.columnList.first() as TimestampColumn
     assertEquals("name", timestampColumn.name)
