@@ -54,7 +54,7 @@ class NewApplicationTask(
     }
     println("""
 
-      New Kales project successfully initialized at '${appRootDir.absoluteFile.absolutePath}'.
+      New Kales (v${kalesVersion()}) project successfully initialized at '${appRootDir.absoluteFile.absolutePath}'.
       Happy coding!
       """.trimIndent())
   }
@@ -68,7 +68,8 @@ class NewApplicationTask(
   private fun copyResource(resourceName: String, destination: File) {
     val inputStream = javaClass.classLoader.getResourceAsStream(resourceName)
     // If the file is zero bytes we'll just consider it non-existing
-    inputStream.copyToWithLogging(destination)
+    inputStream?.copyToWithLogging(destination)
+        ?: throw RuntimeException("Failed to find resource $resourceName")
   }
 
   private fun Path.makeExecutable() {
@@ -142,7 +143,7 @@ class NewApplicationTask(
 
     dependencies {
       implementation "com.felipecsl.kales:kales:${kalesVersion()}"
-      implementation "io.ktor:ktor-server-netty:1.1.2"
+      implementation "io.ktor:ktor-server-netty:1.2.2"
     }
   """.trimIndent()
 

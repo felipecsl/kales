@@ -16,7 +16,7 @@ class KalesVersionTask : KalesTask {
       return if (!classPath.startsWith("jar")) {
         // This will be used during unit tests
         // TODO: This fallback is needed when running unit tests from IntelliJ, get rid of it
-        System.getProperty("KALES_VERSION") ?: "0.0.1-SNAPSHOT"
+        System.getProperty("KALES_VERSION") ?: "0.0.5-SNAPSHOT"
       } else {
         val manifestPath =
             classPath.substring(0, classPath.lastIndexOf("!") + 1) + "/META-INF/MANIFEST.MF"
