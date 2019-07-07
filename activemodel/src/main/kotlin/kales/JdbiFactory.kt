@@ -2,9 +2,6 @@ package kales
 
 import kales.internal.MaybeRecordIdArgumentFactory
 import org.jdbi.v3.core.Jdbi
-import org.jdbi.v3.core.h2.H2DatabasePlugin
-import org.jdbi.v3.core.kotlin.KotlinPlugin
-import org.jdbi.v3.postgres.PostgresPlugin
 
 object JdbiFactory {
   fun fromConnectionString(connString: String): Jdbi {
@@ -13,8 +10,6 @@ object JdbiFactory {
         .registerColumnMapper(BelongsToAssociationColumnMapperFactory())
         .registerColumnMapper(MaybeRecordIdColumnMapper())
         .registerArgument(MaybeRecordIdArgumentFactory())
-        .installPlugin(PostgresPlugin())
-        .installPlugin(H2DatabasePlugin())
-        .installPlugin(KotlinPlugin())
+        .installPlugins()
   }
 }

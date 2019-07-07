@@ -17,7 +17,12 @@ dependencies {
   implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
   api "org.jdbi:jdbi3-core:$jdbiVersion"
   api "org.jdbi:jdbi3-kotlin:$jdbiVersion"
-  api "org.jdbi:jdbi3-postgres:$jdbiVersion"
+  // TODO: We should document that fact that if you want to use postgres (or any other database
+  //       adapter, you'd have to add these extra dependencies when using Kales. Unfortunately it looks like
+  //       JDBI after v3.8 won't let us just include them all by default as they seem to conflict with H2
+  //       when running tests. We should find a way to streamline this
+  //       implementation "org.jdbi:jdbi3-postgres:$jdbiVersion"
+  //       implementation "org.postgresql:postgresql:42.2.6.jre7"
   testImplementation "com.google.truth:truth:$truthVersion"
   testRuntime "com.h2database:h2:$h2DBVersion"
   testImplementation 'org.slf4j:slf4j-simple:1.8.0-beta4'
