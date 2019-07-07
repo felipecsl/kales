@@ -1,8 +1,10 @@
 package kales
 
 import com.google.common.truth.Truth.assertThat
+import kales.activemodel.RecordId
 import org.junit.Ignore
 import org.junit.Test
+import java.lang.IllegalStateException
 
 class ApplicationRecordTest {
   @Test fun `test no records`() {
@@ -18,8 +20,8 @@ class ApplicationRecordTest {
     withTestDb {
       TestModel.create("Hello World")
       TestModel.create("Ping Pong")
-      val expectedModel1 = TestModel(1, "Hello World")
-      val expectedModel2 = TestModel(2, "Ping Pong")
+      val expectedModel1 = TestModel(RecordId(1), "Hello World")
+      val expectedModel2 = TestModel(RecordId(2), "Ping Pong")
       assertThat(TestModel.all()).containsExactly(expectedModel1, expectedModel2)
     }
   }
@@ -29,7 +31,7 @@ class ApplicationRecordTest {
       val helloWorld = TestModel.create("Hello World")
       val updated = helloWorld.copy(name = "H3ll0 W0r1d")
       updated.save()
-      assertThat(TestModel.find(helloWorld.id)!!).isEqualTo(updated)
+      assertThat(TestModel.find(helloWorld.id as RecordId)!!).isEqualTo(updated)
     }
   }
 
@@ -37,8 +39,8 @@ class ApplicationRecordTest {
     withTestDb {
       TestModel.create("Hello World")
       TestModel.create("Ping Pong")
-      val expectedModel1 = TestModel(1, "Hello World")
-      val expectedModel2 = TestModel(2, "Ping Pong")
+      val expectedModel1 = TestModel(RecordId(1), "Hello World")
+      val expectedModel2 = TestModel(RecordId(2), "Ping Pong")
       assertThat(TestModel.where(name = "Hello World")).containsExactly(expectedModel1)
       assertThat(TestModel.where(id = 1, name = "Hello World")).containsExactly(expectedModel1)
       assertThat(TestModel.where(id = 1)).containsExactly(expectedModel1)
@@ -50,7 +52,7 @@ class ApplicationRecordTest {
   @Test fun `test create return value`() {
     withTestDb {
       val obj = TestModel.create("Hello World")
-      assertThat(obj).isEqualTo(TestModel(1, "Hello World"))
+      assertThat(obj).isEqualTo(TestModel(RecordId(1), "Hello World"))
     }
   }
 
@@ -58,8 +60,8 @@ class ApplicationRecordTest {
     withTestDb {
       TestModel.create("Hello World")
       TestModel.create("Ping Pong")
-      assertThat(TestModel.find(1)).isEqualTo(TestModel(1, "Hello World"))
-      assertThat(TestModel.find(2)).isEqualTo(TestModel(2, "Ping Pong"))
+      assertThat(TestModel.find(1)).isEqualTo(TestModel(RecordId(1), "Hello World"))
+      assertThat(TestModel.find(2)).isEqualTo(TestModel(RecordId(2), "Ping Pong"))
       assertThat(TestModel.find(3)).isNull()
     }
   }
@@ -71,23 +73,23 @@ class ApplicationRecordTest {
       TestModel.create("Kit Kat")
       val blah = Foo.create("blah", pingPong)
       val bluh = Foo.create("bluh", pingPong)
-      assertThat(TestModel.find(pingPong.id)!!.foos).containsExactly(blah, bluh)
+      assertThat(TestModel.find(pingPong.id as RecordId)!!.foos).containsExactly(blah, bluh)
     }
   }
 
   @Test fun `test destroy record`() {
     withTestDb {
       val pingPong = TestModel.create("Ping Pong")
-      assertThat(TestModel.find(1)).isEqualTo(TestModel(1, "Ping Pong"))
+      assertThat(TestModel.find(1)).isEqualTo(TestModel(RecordId(1), "Ping Pong"))
       pingPong.destroy()
       assertThat(TestModel.find(1)).isNull()
     }
   }
 
-  @Ignore("This test currently fails")
-  @Test fun `test destroy unsaved record`() {
+  @Test(expected = IllegalStateException::class)
+  fun `test destroy unsaved record`() {
     withTestDb {
-      val pingPong = TestModel(1, "Ping Pong")
+      val pingPong = TestModel(name = "Ping Pong")
       pingPong.destroy()
     }
   }
@@ -96,7 +98,7 @@ class ApplicationRecordTest {
     withTestDb {
       val pingPong = TestModel.create("Ping Pong")
       val blah = Foo.create("blah", pingPong)
-      assertThat(Foo.find(blah.id)!!.testModel.value).isEqualTo(pingPong)
+      assertThat(Foo.find(blah.id as RecordId)!!.testModel.value).isEqualTo(pingPong)
     }
   }
 
@@ -106,9 +108,9 @@ class ApplicationRecordTest {
       val blah = Foo.create("blah")
       pingPong.foos.add(blah)
       pingPong.save()
-      val updatedBlah = Foo.find(blah.id)!!
+      val updatedBlah = Foo.find(blah.id as RecordId)!!
       assertThat(updatedBlah.testModel.value).isEqualTo(pingPong)
-      assertThat(TestModel.find(pingPong.id)!!.foos).containsExactly(updatedBlah)
+      assertThat(TestModel.find(pingPong.id as RecordId)!!.foos).containsExactly(updatedBlah)
     }
   }
 
@@ -118,8 +120,8 @@ class ApplicationRecordTest {
       val blah = Foo.create("blah")
       blah.testModel.value = pingPong
       blah.save()
-      assertThat(Foo.find(blah.id)!!.testModel.value).isEqualTo(pingPong)
-      assertThat(TestModel.find(pingPong.id)!!.foos).containsExactly(blah)
+      assertThat(Foo.find(blah.id as RecordId)!!.testModel.value).isEqualTo(pingPong)
+      assertThat(TestModel.find(pingPong.id as RecordId)!!.foos).containsExactly(blah)
     }
   }
 

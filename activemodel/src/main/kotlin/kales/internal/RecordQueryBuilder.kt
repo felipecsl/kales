@@ -4,10 +4,12 @@ import kales.ApplicationRecord
 import kales.HasManyAssociationColumnMapper
 import kales.activemodel.BelongsToAssociation
 import kales.activemodel.HasManyAssociation
+import kales.activemodel.NoneId
 import org.jdbi.v3.core.Handle
 import org.jdbi.v3.core.mapper.reflect.ColumnName
 import org.jdbi.v3.core.statement.Query
 import org.jdbi.v3.core.statement.Update
+import java.lang.IllegalStateException
 import kotlin.reflect.KClass
 import kotlin.reflect.KParameter
 import kotlin.reflect.full.findAnnotation
@@ -63,7 +65,15 @@ class RecordQueryBuilder(
     recordUpdater.update(record)
   }
 
+  /**
+   * Destroys (deletes) a record from the database. If the record's ID is missing (none/unsaved),
+   * this will throw `IllegalStateException` instead.
+   */
   fun destroy(record: ApplicationRecord) {
+    if (record.id is NoneId) {
+      throw IllegalStateException(
+          "Record does not have an ID, has it been previously saved in the DB?")
+    }
     recordUpdater.destroy(record)
   }
 

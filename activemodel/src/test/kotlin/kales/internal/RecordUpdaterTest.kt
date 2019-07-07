@@ -11,7 +11,7 @@ class RecordUpdaterTest {
   fun `update record with mismatching klass should throw exception`() {
     JDBI.use {
       val updater = RecordUpdater(it, KApplicationRecordClass(TestModel::class))
-      updater.update(Foo(0, ""))
+      updater.update(Foo(foo = ""))
     }
   }
 }

@@ -44,7 +44,7 @@ and it will automatically rebuild as you make new changes.
 ## Download
 
 ```
-implementation 'com.felipecsl.kales:kales:0.0.3-SNAPSHOT'
+implementation 'com.felipecsl.kales:kales:0.0.5-SNAPSHOT'
 ```
 
 Snapshots of the development version are available in
@@ -52,7 +52,7 @@ Snapshots of the development version are available in
 
 ## Usage
 
-Check the `sampleapp` directory for an application that uses
-some of the features exposed by Kales.
+Check the [`sampleapp`](https://github.com/felipecsl/kales/tree/master/sampleapp/src/main/kotlin/kales/sample) 
+directory for an application that uses some of the features exposed by Kales.
 
 For more information, please check the [Kales website](https://kales.dev/).

@@ -1,8 +1,7 @@
 package kales.internal
 
 import kales.ApplicationRecord
-import kales.activemodel.BelongsToAssociation
-import kales.activemodel.HasManyAssociation
+import kales.activemodel.*
 import org.jdbi.v3.core.Handle
 import java.lang.reflect.ParameterizedType
 import java.sql.SQLException
@@ -28,9 +27,6 @@ class RecordUpdater(
     handle.createUpdate(updateStatement)
         .bind("id", record.id)
         .also { update ->
-          // TODO: This throws if the record hasn't been previously saved. Need a way to check
-          //  whether this record exists in the database before trying to delete it
-          // https://github.com/felipecsl/kales/issues/53
           if (update.execute() != 1) {
             throw SQLException("Failed to update record $this")
           }
@@ -75,8 +71,16 @@ class RecordUpdater(
       assocValue: BelongsToAssociation<*>
   ) {
     if (assocValue.value != null) {
-      updateRecordSingleColumn(fromRecordClass.tableName, toRecordClass.foreignKeyColumnName,
-          assocValue.value!!.id, record.id)
+      if (assocValue.value!!.id is RecordId) {
+        updateRecordSingleColumn(
+            fromRecordClass.tableName,
+            toRecordClass.foreignKeyColumnName,
+            assocValue.value!!.id,
+            record.id
+        )
+      } else {
+        TODO("Not yet implemented. We need to first save the 'belongs to' record.")
+      }
     }
   }
 
@@ -89,8 +93,16 @@ class RecordUpdater(
     assocValue.forEach { assoc ->
       // set the foreign key column of each element of the has many association to point to the
       // "fromRecord" ID. These updates are executed immediately
-      updateRecordSingleColumn(toRecordClass.tableName, fromRecordClass.foreignKeyColumnName,
-          fromRecord.id, assoc.id)
+      if (assoc.id is RecordId) {
+        updateRecordSingleColumn(
+            toRecordClass.tableName,
+            fromRecordClass.foreignKeyColumnName,
+            fromRecord.id,
+            assoc.id
+        )
+      } else {
+        TODO("Not yet implemented. We need to first save the 'has many' records.")
+      }
     }
   }
 
@@ -125,8 +137,8 @@ class RecordUpdater(
   private fun updateRecordSingleColumn(
       tableName: String,
       columnName: String,
-      columnValue: Int,
-      recordId: Int
+      columnValue: Any,
+      recordId: MaybeRecordId
   ) {
     val updateStatement = "update $tableName set $columnName = :$columnName where id = :id"
     handle.createUpdate(updateStatement)

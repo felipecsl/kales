@@ -1,5 +1,6 @@
 package kales
 
+import kales.internal.MaybeRecordIdArgumentFactory
 import org.jdbi.v3.core.Jdbi
 import org.jdbi.v3.core.h2.H2DatabasePlugin
 import org.jdbi.v3.core.kotlin.KotlinPlugin
@@ -10,6 +11,8 @@ object JdbiFactory {
     return Jdbi.create(connString)
         .registerColumnMapper(HasManyAssociationColumnMapperFactory())
         .registerColumnMapper(BelongsToAssociationColumnMapperFactory())
+        .registerColumnMapper(MaybeRecordIdColumnMapper())
+        .registerArgument(MaybeRecordIdArgumentFactory())
         .installPlugin(PostgresPlugin())
         .installPlugin(H2DatabasePlugin())
         .installPlugin(KotlinPlugin())

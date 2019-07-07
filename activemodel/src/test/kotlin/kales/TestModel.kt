@@ -6,11 +6,10 @@ import kales.ApplicationRecord.Companion.findRecord
 import kales.ApplicationRecord.Companion.saveRecord
 import kales.ApplicationRecord.Companion.whereRecords
 import kales.ApplicationRecord.Companion.destroyRecord
-import kales.activemodel.HasManyAssociation
-import kales.activemodel.BelongsToAssociation
+import kales.activemodel.*
 
 data class Foo(
-    override val id: Int,
+    override val id: MaybeRecordId = NoneId,
     val foo: String,
     val testModel: BelongsToAssociation<TestModel> = BelongsToAssociation.empty()
 ) : ApplicationRecord {
@@ -26,11 +25,12 @@ data class Foo(
         createRecord<Foo>(mapOf("foo" to foo, "testmodel_id" to testModel?.id))
 
     fun find(id: Int) = findRecord<Foo>(id)
+    fun find(id: RecordId) = findRecord<Foo>(id)
   }
 }
 
 data class TestModel(
-    override val id: Int,
+    override val id: MaybeRecordId = NoneId,
     val name: String,
     val foos: HasManyAssociation<TestModel, Foo> = HasManyAssociation.empty()
 ) : ApplicationRecord {
@@ -47,5 +47,6 @@ data class TestModel(
     fun create(name: String) = createRecord<TestModel>(mapOf("name" to name))
 
     fun find(id: Int) = findRecord<TestModel>(id)
+    fun find(id: RecordId) = findRecord<TestModel>(id)
   }
 }
