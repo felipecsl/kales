@@ -39,7 +39,7 @@ class CliTest {
            create com.example/gradle/wrapper/gradle-wrapper.jar
            create com.example/gradlew
 
-        New Kales (v0.0.5-SNAPSHOT) project successfully initialized at '${workingDir.absolutePath}/com.example'.
+        New Kales (v0.0.6-SNAPSHOT) project successfully initialized at '${workingDir.absolutePath}/com.example'.
         Happy coding!
 
       """.trimIndent())
@@ -64,7 +64,7 @@ class CliTest {
            create com.example/gradle/wrapper/gradle-wrapper.jar
            create com.example/gradlew
 
-        New Kales (v0.0.5-SNAPSHOT) project successfully initialized at '${workingDir.absolutePath}/com.example'.
+        New Kales (v0.0.6-SNAPSHOT) project successfully initialized at '${workingDir.absolutePath}/com.example'.
         Happy coding!
            identical com.example/build.gradle
            identical com.example/src/main/kotlin/com/example/Main.kt
@@ -75,7 +75,7 @@ class CliTest {
            skip com.example/gradle/wrapper/gradle-wrapper.jar
            skip com.example/gradlew
 
-        New Kales (v0.0.5-SNAPSHOT) project successfully initialized at '${workingDir.absolutePath}/com.example'.
+        New Kales (v0.0.6-SNAPSHOT) project successfully initialized at '${workingDir.absolutePath}/com.example'.
         Happy coding!
 
       """.trimIndent())

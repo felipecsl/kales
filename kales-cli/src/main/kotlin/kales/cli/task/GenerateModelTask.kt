@@ -2,6 +2,7 @@ package kales.cli.task
 
 import com.squareup.kotlinpoet.*
 import kales.ApplicationRecord
+import kales.activemodel.MaybeRecordId
 import java.io.File
 import java.util.*
 
@@ -42,17 +43,19 @@ class GenerateModelTask(
         .build()
     val modelTypeSpec = TypeSpec.classBuilder(modelName)
         .primaryConstructor(FunSpec.constructorBuilder()
-            .addParameter("id", Int::class)
+            .addParameter("id", MaybeRecordId::class)
             .build())
-        .addProperty(PropertySpec.builder("id", Int::class)
+        .addProperty(PropertySpec.builder("id", MaybeRecordId::class)
             .initializer("id")
+            .addModifiers(KModifier.OVERRIDE)
             .build())
-        .superclass(ApplicationRecord::class)
+        .addSuperinterface(ApplicationRecord::class)
         .addModifiers(KModifier.DATA)
         .addType(companion)
         .build()
     return FileSpec.builder("$appPackageName.app.models", modelName)
         .addType(modelTypeSpec)
+        .addImport(ApplicationRecord.Companion::class, "findRecord", "allRecords")
         .build()
   }
 }
