@@ -106,6 +106,7 @@ afterEvaluate {
     publications {
       maven(MavenPublication) {
         customizePom(pom)
+        from components.java
         artifactId = project.artifact
 
         artifact(sourceJar) {
