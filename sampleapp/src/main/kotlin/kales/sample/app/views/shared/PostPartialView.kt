@@ -6,7 +6,7 @@ import kales.sample.app.views.posts.textArea
 import kotlinx.html.*
 
 class PostPartialView(
-    bindings: PostViewModel? = PostViewModel()
+  bindings: PostViewModel? = PostViewModel()
 ) : ActionPartialView<PostViewModel>(bindings) {
   override fun FlowContent.render() {
     div("container") {
@@ -54,7 +54,7 @@ class PostPartialView(
       }
       div("row") {
         div("col-sm-6 offset-sm-3") {
-          h4 { +"Comments "}
+          h4 { +"Comments " }
         }
       }
       bindings?.post?.comments?.forEach { comment ->

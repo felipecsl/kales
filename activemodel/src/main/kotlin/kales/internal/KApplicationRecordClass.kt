@@ -22,7 +22,7 @@ class KApplicationRecordClass(val klass: KClass<out ApplicationRecord>) {
   val foreignKeyColumnName = "${asSymbol}_id"
 
   val constructor = klass.primaryConstructor
-      ?: throw IllegalArgumentException("Please define a primary constructor for $this")
+    ?: throw IllegalArgumentException("Please define a primary constructor for $this")
 
   /** Returns a [List] of all [KParameter] directly defined on this class (except associations) */
   val directParameters = constructor.parameters.filterNot { it.isAssociation() }
@@ -40,8 +40,8 @@ class KApplicationRecordClass(val klass: KClass<out ApplicationRecord>) {
 
   private fun KParameter.isAssociation(): Boolean {
     val javaType = type.javaType
-    return javaType is ParameterizedType
-        && (javaType.rawType == HasManyAssociation::class.java
-        || javaType.rawType == BelongsToAssociation::class.java)
+    return javaType is ParameterizedType &&
+      (javaType.rawType == HasManyAssociation::class.java ||
+        javaType.rawType == BelongsToAssociation::class.java)
   }
 }

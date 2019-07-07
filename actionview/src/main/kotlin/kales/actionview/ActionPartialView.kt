@@ -4,7 +4,7 @@ import io.ktor.html.Placeholder
 import kotlinx.html.FlowContent
 
 abstract class ActionPartialView<T : ViewModel>(
-    val bindings: T? = null
+  val bindings: T? = null
 ) : Placeholder<FlowContent>() {
   abstract fun FlowContent.render()
 

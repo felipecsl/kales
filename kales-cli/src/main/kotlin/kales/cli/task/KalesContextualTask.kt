@@ -23,28 +23,28 @@ abstract class KalesContextualTask(protected val applicationRootDir: File) : Kal
 
   /** returns the directory where the code for package "com.example.foo.app" is found */
   protected val appDirectory = findAppDirectory()
-      ?: throw UsageError("Unable to find the `app` sources directory")
+    ?: throw UsageError("Unable to find the `app` sources directory")
 
   /** Returns the path to the migrations directory */
   protected val dbMigrateDir = File(appDirectory.parentFile, relativePathFor("db", "migrate"))
 
   /** returns "com.example.foo" */
   protected val appPackageName =
-      recursivelyDetermineAppPackageName(appDirectory, appDirectory)
-          ?.split("/")
-          ?.joinToString(".")
+    recursivelyDetermineAppPackageName(appDirectory, appDirectory)
+      ?.split("/")
+      ?.joinToString(".")
 
   /** Returns a File pointing to the application app/`type` directory or null if none found */
   private fun findAppDirectory(): File? {
     return kotlinDir.childDirectories()
-        .mapNotNull(this::recursivelyFindAppDirectory)
-        .firstOrNull()
+      .mapNotNull(this::recursivelyFindAppDirectory)
+      .firstOrNull()
   }
 
   private fun recursivelyFindAppDirectory(currentDir: File): File? {
     val childDirs = currentDir.childDirectories()
-    return if (currentDir.name == "app"
-        && childDirs.map { it.name }.containsAll(setOf("controllers", "views", "models"))) {
+    return if (currentDir.name == "app" &&
+      childDirs.map { it.name }.containsAll(setOf("controllers", "views", "models"))) {
       currentDir
     } else {
       childDirs.mapNotNull(this::recursivelyFindAppDirectory).firstOrNull()
@@ -67,7 +67,7 @@ abstract class KalesContextualTask(protected val applicationRootDir: File) : Kal
     val databaseYml = File(resourcesDir, "database.yml")
     if (!databaseYml.exists()) {
       throw UsageError("database.yml file not found.\n" +
-          "Plase make sure it exists under src/main/resources and try again")
+        "Plase make sure it exists under src/main/resources and try again")
     }
     return KalesDatabaseConfig.fromDatabaseYml(databaseYml.inputStream())
   }
@@ -83,5 +83,5 @@ abstract class KalesContextualTask(protected val applicationRootDir: File) : Kal
   }
 
   private fun File.childDirectories() =
-      safeListFiles().filter { it.isDirectory }
+    safeListFiles().filter { it.isDirectory }
 }

@@ -24,7 +24,7 @@ import com.improve_future.harmonica.core.table.TableBuilder
 import com.improve_future.harmonica.core.table.column.*
 
 internal class MySqlAdapter(connection: ConnectionInterface) :
-    DbAdapter(connection) {
+  DbAdapter(connection) {
   override fun createTable(tableName: String, tableBuilder: TableBuilder) {
     var sql = "CREATE TABLE $tableName (\n"
     if (tableBuilder.id) {
@@ -44,14 +44,14 @@ internal class MySqlAdapter(connection: ConnectionInterface) :
 
   internal companion object : DbAdapter.CompanionInterface() {
     private fun buildColumnDeclarationForCreateTableSql(
-        column: AbstractColumn
+      column: AbstractColumn
     ): String {
       var sql = column.name + " " + sqlType(column)
       when (column) {
         is VarcharColumn -> {
           sql +=
-              if (column.size == null) "(255)"
-              else "(" + column.size + ")"
+            if (column.size == null) "(255)"
+            else "(" + column.size + ")"
         }
         is DecimalColumn -> {
           if (column.precision != null) {
@@ -94,8 +94,10 @@ internal class MySqlAdapter(connection: ConnectionInterface) :
   }
 
   override fun createIndex(
-      tableName: String, columnNameArray: Array<String>, unique: Boolean,
-      method: IndexMethod?
+    tableName: String,
+    columnNameArray: Array<String>,
+    unique: Boolean,
+    method: IndexMethod?
   ) {
     var sql = "CREATE"
     if (unique) sql += " UNIQUE"
@@ -109,11 +111,10 @@ internal class MySqlAdapter(connection: ConnectionInterface) :
     connection.execute("DROP INDEX $indexName ON $tableName;")
   }
 
-
   override fun addColumn(
-      tableName: String,
-      column: AbstractColumn,
-      option: AddingColumnOption
+    tableName: String,
+    column: AbstractColumn,
+    option: AddingColumnOption
   ) {
     var sql = "ALTER TABLE $tableName ADD COLUMN "
     sql += buildColumnDeclarationForCreateTableSql(column)
@@ -126,33 +127,36 @@ internal class MySqlAdapter(connection: ConnectionInterface) :
     connection.execute(sql)
   }
 
-
   override fun renameIndex(
-      tableName: String, oldIndexName: String, newIndexName: String
+    tableName: String,
+    oldIndexName: String,
+    newIndexName: String
   ) {
     val sql = "ALTER TABLE $tableName" +
-        " RENAME INDEX $oldIndexName TO $newIndexName"
+      " RENAME INDEX $oldIndexName TO $newIndexName"
     connection.execute(sql)
   }
 
   override fun addForeignKey(
-      tableName: String, columnName: String,
-      referencedTableName: String, referencedColumnName: String
+    tableName: String,
+    columnName: String,
+    referencedTableName: String,
+    referencedColumnName: String
   ) {
     val sql = "ALTER TABLE $tableName" +
-        " ADD CONSTRAINT ${tableName}_${columnName}_fkey" +
-        " FOREIGN KEY ($columnName) REFERENCES" +
-        " $referencedTableName ($referencedColumnName);"
+      " ADD CONSTRAINT ${tableName}_${columnName}_fkey" +
+      " FOREIGN KEY ($columnName) REFERENCES" +
+      " $referencedTableName ($referencedColumnName);"
     connection.execute(sql)
   }
 
   override fun dropForeignKey(
-      tableName: String,
-      columnName: String,
-      keyName: String
+    tableName: String,
+    columnName: String,
+    keyName: String
   ) {
     val sql = "ALTER TABLE $tableName" +
-        " DROP FOREIGN KEY $keyName;"
+      " DROP FOREIGN KEY $keyName;"
     connection.execute(sql)
   }
 }

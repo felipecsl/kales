@@ -1,7 +1,10 @@
 package kales.internal
 
 import kales.ApplicationRecord
-import kales.activemodel.*
+import kales.activemodel.BelongsToAssociation
+import kales.activemodel.HasManyAssociation
+import kales.activemodel.MaybeRecordId
+import kales.activemodel.RecordId
 import org.jdbi.v3.core.Handle
 import java.lang.reflect.ParameterizedType
 import java.sql.SQLException
@@ -9,8 +12,8 @@ import kotlin.reflect.full.declaredMemberProperties
 import kotlin.reflect.jvm.javaType
 
 class RecordUpdater(
-    private val handle: Handle,
-    private val recordClass: KApplicationRecordClass
+  private val handle: Handle,
+  private val recordClass: KApplicationRecordClass
 ) {
   private val tableName = recordClass.tableName
   private val constructor = recordClass.constructor
@@ -25,18 +28,18 @@ class RecordUpdater(
     checkRecordClass(record)
     val updateStatement = "delete from $tableName where id = :id"
     handle.createUpdate(updateStatement)
-        .bind("id", record.id)
-        .also { update ->
-          if (update.execute() != 1) {
-            throw SQLException("Failed to update record $this")
-          }
+      .bind("id", record.id)
+      .also { update ->
+        if (update.execute() != 1) {
+          throw SQLException("Failed to update record $this")
         }
+      }
   }
 
   private fun checkRecordClass(record: ApplicationRecord) {
     if (record.javaClass.kotlin != recordClass.klass) {
       throw IllegalArgumentException(
-          "Record class ${record.javaClass.kotlin} does not match $recordClass")
+        "Record class ${record.javaClass.kotlin} does not match $recordClass")
     }
   }
 
@@ -50,7 +53,7 @@ class RecordUpdater(
       val toRecordClass = KApplicationRecordClass(toType.kotlin)
       val fromRecordClass = KApplicationRecordClass(fromType.kotlin)
       val assocValue = properties.first { it.name == assocParam.name }
-          .get(record) as HasManyAssociation<*, *>
+        .get(record) as HasManyAssociation<*, *>
       updateHasManyAssociation(record, fromRecordClass, toRecordClass, assocValue)
     }
     recordClass.belongsToAssociations.forEach { assocParam ->
@@ -59,24 +62,24 @@ class RecordUpdater(
       val fromRecordClass = KApplicationRecordClass(record.javaClass.kotlin)
       val toRecordClass = KApplicationRecordClass(toType.kotlin)
       val assocValue = properties.first { it.name == assocParam.name }
-          .get(record) as BelongsToAssociation<*>
+        .get(record) as BelongsToAssociation<*>
       updateBelongsToAssociation(record, fromRecordClass, toRecordClass, assocValue)
     }
   }
 
   private fun updateBelongsToAssociation(
-      record: ApplicationRecord,
-      fromRecordClass: KApplicationRecordClass,
-      toRecordClass: KApplicationRecordClass,
-      assocValue: BelongsToAssociation<*>
+    record: ApplicationRecord,
+    fromRecordClass: KApplicationRecordClass,
+    toRecordClass: KApplicationRecordClass,
+    assocValue: BelongsToAssociation<*>
   ) {
     if (assocValue.value != null) {
       if (assocValue.value!!.id is RecordId) {
         updateRecordSingleColumn(
-            fromRecordClass.tableName,
-            toRecordClass.foreignKeyColumnName,
-            assocValue.value!!.id,
-            record.id
+          fromRecordClass.tableName,
+          toRecordClass.foreignKeyColumnName,
+          assocValue.value!!.id,
+          record.id
         )
       } else {
         TODO("Not yet implemented. We need to first save the 'belongs to' record.")
@@ -85,20 +88,20 @@ class RecordUpdater(
   }
 
   private fun updateHasManyAssociation(
-      fromRecord: ApplicationRecord,
-      fromRecordClass: KApplicationRecordClass,
-      toRecordClass: KApplicationRecordClass,
-      assocValue: HasManyAssociation<*, *>
+    fromRecord: ApplicationRecord,
+    fromRecordClass: KApplicationRecordClass,
+    toRecordClass: KApplicationRecordClass,
+    assocValue: HasManyAssociation<*, *>
   ) {
     assocValue.forEach { assoc ->
       // set the foreign key column of each element of the has many association to point to the
       // "fromRecord" ID. These updates are executed immediately
       if (assoc.id is RecordId) {
         updateRecordSingleColumn(
-            toRecordClass.tableName,
-            fromRecordClass.foreignKeyColumnName,
-            fromRecord.id,
-            assoc.id
+          toRecordClass.tableName,
+          fromRecordClass.foreignKeyColumnName,
+          fromRecord.id,
+          assoc.id
         )
       } else {
         TODO("Not yet implemented. We need to first save the 'has many' records.")
@@ -115,9 +118,9 @@ class RecordUpdater(
     // - We need filter out the "id" column since it cannot be updated (it's set to autoincrement by
     //   default)
     val validParameterNames = recordClass.directParameters
-        .mapNotNull { it.name }
+      .mapNotNull { it.name }
     val colsToUpdate = validParameterNames.filter { it != "id" }
-        .joinToString(", ") { k -> "$k = :$k" }
+      .joinToString(", ") { k -> "$k = :$k" }
     val updateStatement = "update $tableName set $colsToUpdate where id = :id"
     val update = handle.createUpdate(updateStatement).also { update ->
       val colunmNamesAndValues = validParameterNames.associateWith { param ->
@@ -135,19 +138,19 @@ class RecordUpdater(
    * table [tableName]
    */
   private fun updateRecordSingleColumn(
-      tableName: String,
-      columnName: String,
-      columnValue: Any,
-      recordId: MaybeRecordId
+    tableName: String,
+    columnName: String,
+    columnValue: Any,
+    recordId: MaybeRecordId
   ) {
     val updateStatement = "update $tableName set $columnName = :$columnName where id = :id"
     handle.createUpdate(updateStatement)
-        .bind(columnName, columnValue)
-        .bind("id", recordId)
-        .also { update ->
-          if (update.execute() != 1) {
-            throw SQLException("Failed to update record $this")
-          }
+      .bind(columnName, columnValue)
+      .bind("id", recordId)
+      .also { update ->
+        if (update.execute() != 1) {
+          throw SQLException("Failed to update record $this")
         }
+      }
   }
 }

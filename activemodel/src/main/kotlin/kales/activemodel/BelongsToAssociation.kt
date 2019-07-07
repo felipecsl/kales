@@ -11,19 +11,19 @@ interface BelongsToAssociation<T : ApplicationRecord> : Association {
 
   companion object {
     inline fun <reified T : ApplicationRecord> empty() =
-        object : BelongsToAssociationImpl<T>() {
-          override var value: T? = null
-        }
+      object : BelongsToAssociationImpl<T>() {
+        override var value: T? = null
+      }
   }
 }
 
 abstract class BelongsToAssociationImpl<T : ApplicationRecord> : BelongsToAssociation<T> {
   override fun equals(other: Any?) =
-      if (other is BelongsToAssociation<*>) {
-        value?.id == other.value?.id
-      } else {
-        false
-      }
+    if (other is BelongsToAssociation<*>) {
+      value?.id == other.value?.id
+    } else {
+      false
+    }
 
   override fun hashCode() = value?.id.hashCode()
 

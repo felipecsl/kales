@@ -27,37 +27,37 @@ import kotlin.test.assertEquals
 
 class PostgreSqlAdapterTest {
   private val buildColumnDeclarationFunctionForTest =
-      PostgreSqlAdapter.Companion::class.java.getDeclaredMethod(
-          "buildColumnDeclarationForCreateTableSql",
-          AbstractColumn::class.java
-      ).also { it.isAccessible = true }
+    PostgreSqlAdapter.Companion::class.java.getDeclaredMethod(
+      "buildColumnDeclarationForCreateTableSql",
+      AbstractColumn::class.java
+    ).also { it.isAccessible = true }
 
   @Test
   fun testBuildColumnDeclarationForInteger() {
     val integerColumn = IntegerColumn("int")
 
     fun buildIntegerDeclaration() =
-        buildColumnDeclarationFunctionForTest.invoke(
-            PostgreSqlAdapter, integerColumn
-        ) as String
+      buildColumnDeclarationFunctionForTest.invoke(
+        PostgreSqlAdapter, integerColumn
+      ) as String
     assertEquals(
-        "int INTEGER",
-        buildIntegerDeclaration()
+      "int INTEGER",
+      buildIntegerDeclaration()
     )
     integerColumn.nullable = false
     assertEquals(
-        "int INTEGER NOT NULL",
-        buildIntegerDeclaration()
+      "int INTEGER NOT NULL",
+      buildIntegerDeclaration()
     )
     integerColumn.default = 1
     assertEquals(
-        "int INTEGER NOT NULL DEFAULT 1",
-        buildIntegerDeclaration()
+      "int INTEGER NOT NULL DEFAULT 1",
+      buildIntegerDeclaration()
     )
     integerColumn.nullable = true
     assertEquals(
-        "int INTEGER DEFAULT 1",
-        buildIntegerDeclaration()
+      "int INTEGER DEFAULT 1",
+      buildIntegerDeclaration()
     )
   }
 
@@ -66,37 +66,37 @@ class PostgreSqlAdapterTest {
     val decimalColumn = DecimalColumn("decimal")
 
     fun buildDecimalDeclaration() =
-        buildColumnDeclarationFunctionForTest.invoke(
-            PostgreSqlAdapter, decimalColumn
-        ) as String
+      buildColumnDeclarationFunctionForTest.invoke(
+        PostgreSqlAdapter, decimalColumn
+      ) as String
     assertEquals(
-        "decimal DECIMAL",
-        buildDecimalDeclaration()
+      "decimal DECIMAL",
+      buildDecimalDeclaration()
     )
     decimalColumn.precision = 5
     assertEquals(
-        "decimal DECIMAL(5)",
-        buildDecimalDeclaration()
+      "decimal DECIMAL(5)",
+      buildDecimalDeclaration()
     )
     decimalColumn.scale = 3
     assertEquals(
-        "decimal DECIMAL(5, 3)",
-        buildDecimalDeclaration()
+      "decimal DECIMAL(5, 3)",
+      buildDecimalDeclaration()
     )
     decimalColumn.nullable = false
     assertEquals(
-        "decimal DECIMAL(5, 3) NOT NULL",
-        buildDecimalDeclaration()
+      "decimal DECIMAL(5, 3) NOT NULL",
+      buildDecimalDeclaration()
     )
     decimalColumn.default = 1.0
     assertEquals(
-        "decimal DECIMAL(5, 3) NOT NULL DEFAULT 1.0",
-        buildDecimalDeclaration()
+      "decimal DECIMAL(5, 3) NOT NULL DEFAULT 1.0",
+      buildDecimalDeclaration()
     )
     decimalColumn.nullable = true
     assertEquals(
-        "decimal DECIMAL(5, 3) DEFAULT 1.0",
-        buildDecimalDeclaration()
+      "decimal DECIMAL(5, 3) DEFAULT 1.0",
+      buildDecimalDeclaration()
     )
   }
 
@@ -104,32 +104,32 @@ class PostgreSqlAdapterTest {
   fun testBuildColumnDeclarationForVarchar() {
     val varcharColumn = VarcharColumn("varchar")
     fun buildVarcharDeclaration() =
-        buildColumnDeclarationFunctionForTest.invoke(
-            PostgreSqlAdapter, varcharColumn
-        ) as String
+      buildColumnDeclarationFunctionForTest.invoke(
+        PostgreSqlAdapter, varcharColumn
+      ) as String
     assertEquals(
-        "varchar VARCHAR",
-        buildVarcharDeclaration()
+      "varchar VARCHAR",
+      buildVarcharDeclaration()
     )
     varcharColumn.nullable = false
     assertEquals(
-        "varchar VARCHAR NOT NULL",
-        buildVarcharDeclaration()
+      "varchar VARCHAR NOT NULL",
+      buildVarcharDeclaration()
     )
     varcharColumn.default = "varchar"
     assertEquals(
-        "varchar VARCHAR NOT NULL DEFAULT 'varchar'",
-        buildVarcharDeclaration()
+      "varchar VARCHAR NOT NULL DEFAULT 'varchar'",
+      buildVarcharDeclaration()
     )
     varcharColumn.nullable = true
     assertEquals(
-        "varchar VARCHAR DEFAULT 'varchar'",
-        buildVarcharDeclaration()
+      "varchar VARCHAR DEFAULT 'varchar'",
+      buildVarcharDeclaration()
     )
     varcharColumn.size = 10
     assertEquals(
-        "varchar VARCHAR(10) DEFAULT 'varchar'",
-        buildVarcharDeclaration()
+      "varchar VARCHAR(10) DEFAULT 'varchar'",
+      buildVarcharDeclaration()
     )
   }
 
@@ -137,28 +137,28 @@ class PostgreSqlAdapterTest {
   fun testBuildColumnDeclarationForBoolean() {
     val booleanColumn = BooleanColumn("boolean")
     fun buildBooleanDeclaration() =
-        buildColumnDeclarationFunctionForTest.invoke(
-            PostgreSqlAdapter, booleanColumn
-        ) as String
+      buildColumnDeclarationFunctionForTest.invoke(
+        PostgreSqlAdapter, booleanColumn
+      ) as String
     assertEquals(
-        "boolean BOOL",
-        buildBooleanDeclaration()
+      "boolean BOOL",
+      buildBooleanDeclaration()
     )
     booleanColumn.nullable = false
     assertEquals(
-        "boolean BOOL NOT NULL",
-        buildBooleanDeclaration()
+      "boolean BOOL NOT NULL",
+      buildBooleanDeclaration()
     )
     booleanColumn.default = true
     assertEquals(
-        "boolean BOOL NOT NULL DEFAULT TRUE",
-        buildBooleanDeclaration()
+      "boolean BOOL NOT NULL DEFAULT TRUE",
+      buildBooleanDeclaration()
     )
     booleanColumn.default = false
     booleanColumn.nullable = true
     assertEquals(
-        "boolean BOOL DEFAULT FALSE",
-        buildBooleanDeclaration()
+      "boolean BOOL DEFAULT FALSE",
+      buildBooleanDeclaration()
     )
   }
 
@@ -166,27 +166,27 @@ class PostgreSqlAdapterTest {
   fun testBuildColumnDeclarationForText() {
     val textColumn = TextColumn("text")
     fun buildTextDeclaration() =
-        buildColumnDeclarationFunctionForTest.invoke(
-            PostgreSqlAdapter, textColumn
-        ) as String
+      buildColumnDeclarationFunctionForTest.invoke(
+        PostgreSqlAdapter, textColumn
+      ) as String
     assertEquals(
-        "text TEXT",
-        buildTextDeclaration()
+      "text TEXT",
+      buildTextDeclaration()
     )
     textColumn.nullable = false
     assertEquals(
-        "text TEXT NOT NULL",
-        buildTextDeclaration()
+      "text TEXT NOT NULL",
+      buildTextDeclaration()
     )
     textColumn.default = "text text"
     assertEquals(
-        "text TEXT NOT NULL DEFAULT 'text text'",
-        buildTextDeclaration()
+      "text TEXT NOT NULL DEFAULT 'text text'",
+      buildTextDeclaration()
     )
     textColumn.nullable = true
     assertEquals(
-        "text TEXT DEFAULT 'text text'",
-        buildTextDeclaration()
+      "text TEXT DEFAULT 'text text'",
+      buildTextDeclaration()
     )
   }
 
@@ -194,30 +194,30 @@ class PostgreSqlAdapterTest {
   fun testBuildColumnDeclarationForDate() {
     val dateColumn = DateColumn("date")
     fun buildDateDeclaration() =
-        buildColumnDeclarationFunctionForTest.invoke(
-            PostgreSqlAdapter, dateColumn
-        ) as String
+      buildColumnDeclarationFunctionForTest.invoke(
+        PostgreSqlAdapter, dateColumn
+      ) as String
     assertEquals(
-        "date DATE",
-        buildDateDeclaration()
+      "date DATE",
+      buildDateDeclaration()
     )
     dateColumn.nullable = false
     assertEquals(
-        "date DATE NOT NULL",
-        buildDateDeclaration()
+      "date DATE NOT NULL",
+      buildDateDeclaration()
     )
     val defaultDate = Date()
     dateColumn.defaultDate = defaultDate
     val dateSql =
-        SimpleDateFormat("yyyy-MM-dd").format(defaultDate)
+      SimpleDateFormat("yyyy-MM-dd").format(defaultDate)
     assertEquals(
-        "date DATE NOT NULL DEFAULT '$dateSql'",
-        buildDateDeclaration()
+      "date DATE NOT NULL DEFAULT '$dateSql'",
+      buildDateDeclaration()
     )
     dateColumn.nullable = true
     assertEquals(
-        "date DATE DEFAULT '$dateSql'",
-        buildDateDeclaration()
+      "date DATE DEFAULT '$dateSql'",
+      buildDateDeclaration()
     )
   }
 
@@ -225,35 +225,35 @@ class PostgreSqlAdapterTest {
   fun testBuildColumnDeclarationForTime() {
     val timeColumn = TimeColumn("time")
     fun buildTimeDeclaration() =
-        buildColumnDeclarationFunctionForTest.invoke(
-            PostgreSqlAdapter, timeColumn
-        ) as String
+      buildColumnDeclarationFunctionForTest.invoke(
+        PostgreSqlAdapter, timeColumn
+      ) as String
     assertEquals(
-        "time TIME",
-        buildTimeDeclaration()
+      "time TIME",
+      buildTimeDeclaration()
     )
     timeColumn.nullable = false
     assertEquals(
-        "time TIME NOT NULL",
-        buildTimeDeclaration()
+      "time TIME NOT NULL",
+      buildTimeDeclaration()
     )
     val defaultTime = Date()
     timeColumn.defaultDate = defaultTime
     val timeSql =
-        SimpleDateFormat("HH:mm:ss.SSS").format(defaultTime)
+      SimpleDateFormat("HH:mm:ss.SSS").format(defaultTime)
     assertEquals(
-        "time TIME NOT NULL DEFAULT '$timeSql'",
-        buildTimeDeclaration()
+      "time TIME NOT NULL DEFAULT '$timeSql'",
+      buildTimeDeclaration()
     )
     timeColumn.nullable = true
     assertEquals(
-        "time TIME DEFAULT '$timeSql'",
-        buildTimeDeclaration()
+      "time TIME DEFAULT '$timeSql'",
+      buildTimeDeclaration()
     )
     timeColumn.withTimeZone = true
     assertEquals(
-        "time TIME WITH TIME ZONE DEFAULT '$timeSql'",
-        buildTimeDeclaration()
+      "time TIME WITH TIME ZONE DEFAULT '$timeSql'",
+      buildTimeDeclaration()
     )
   }
 
@@ -265,12 +265,12 @@ class PostgreSqlAdapterTest {
     val integerColumn = IntegerColumn("integer")
 
     adapter.addColumn(
-        "table_name", integerColumn,
-        AddingColumnOption()
+      "table_name", integerColumn,
+      AddingColumnOption()
     )
     assertEquals(
-        "ALTER TABLE table_name ADD COLUMN integer INTEGER;",
-        connection.executedSqlList.first()
+      "ALTER TABLE table_name ADD COLUMN integer INTEGER;",
+      connection.executedSqlList.first()
     )
   }
 
@@ -282,12 +282,12 @@ class PostgreSqlAdapterTest {
     val blobColumn = BlobColumn("blob")
 
     adapter.addColumn(
-        "table_name", blobColumn,
-        AddingColumnOption()
+      "table_name", blobColumn,
+      AddingColumnOption()
     )
     assertEquals(
-        "ALTER TABLE table_name ADD COLUMN blob BYTEA;",
-        connection.executedSqlList.first()
+      "ALTER TABLE table_name ADD COLUMN blob BYTEA;",
+      connection.executedSqlList.first()
     )
   }
 
@@ -298,8 +298,8 @@ class PostgreSqlAdapterTest {
 
     adapter.dropIndex("table_name", "index_name")
     assertEquals(
-        "DROP INDEX index_name;",
-        connection.executedSqlList.first()
+      "DROP INDEX index_name;",
+      connection.executedSqlList.first()
     )
   }
 
@@ -309,13 +309,13 @@ class PostgreSqlAdapterTest {
     val adapter: DbAdapter = PostgreSqlAdapter(connection)
 
     adapter.renameColumn(
-        "table_name",
-        "old_column_name",
-        "new_column_name"
+      "table_name",
+      "old_column_name",
+      "new_column_name"
     )
     assertEquals(
-        "ALTER TABLE table_name RENAME COLUMN old_column_name TO new_column_name;",
-        connection.executedSqlList.first()
+      "ALTER TABLE table_name RENAME COLUMN old_column_name TO new_column_name;",
+      connection.executedSqlList.first()
     )
   }
 
@@ -325,17 +325,17 @@ class PostgreSqlAdapterTest {
     val adapter: DbAdapter = PostgreSqlAdapter(connection)
 
     adapter.addForeignKey(
-        "table_name",
-        "column_name",
-        "referenced_table_name",
-        "referenced_column_name"
+      "table_name",
+      "column_name",
+      "referenced_table_name",
+      "referenced_column_name"
     )
     assertEquals(
-        "ALTER TABLE table_name" +
-            " ADD CONSTRAINT table_name_column_name_fkey" +
-            " FOREIGN KEY (column_name)" +
-            " REFERENCES referenced_table_name (referenced_column_name);",
-        connection.executedSqlList.first()
+      "ALTER TABLE table_name" +
+        " ADD CONSTRAINT table_name_column_name_fkey" +
+        " FOREIGN KEY (column_name)" +
+        " REFERENCES referenced_table_name (referenced_column_name);",
+      connection.executedSqlList.first()
     )
   }
 

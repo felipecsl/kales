@@ -178,7 +178,6 @@ class AbstractMigrationTest {
     addingOption = dateAddingColumn.option
     assertEquals(false, addingOption.first)
     assertEquals(null, addingOption.justBeforeColumn)
-
   }
 
   @Test
@@ -282,7 +281,7 @@ class AbstractMigrationTest {
     assertEquals(
         "previous_column",
         addingOption.justBeforeColumn
-    )    // ToDo
+    ) // ToDo
   }
 
   @Test

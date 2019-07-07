@@ -40,16 +40,16 @@ internal class TimeColumn(name: String) : AbstractColumn(name), TimeZoneInterfac
     set(value) {
       defaultLocalTime = value?.let {
         LocalDateTime.ofInstant(
-            it.toInstant(), ZoneId.systemDefault()
+          it.toInstant(), ZoneId.systemDefault()
         ).toLocalTime()
       }
     }
     get() {
       return defaultLocalTime?.let {
         Date.from(
-            it
-                .atDate(LocalDate.now())
-                .atZone(ZoneId.systemDefault()).toInstant())
+          it
+            .atDate(LocalDate.now())
+            .atZone(ZoneId.systemDefault()).toInstant())
       }
     }
   var defaultLocalTime: LocalTime? = null

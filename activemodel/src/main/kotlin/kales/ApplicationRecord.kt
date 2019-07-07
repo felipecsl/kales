@@ -27,8 +27,8 @@ interface ApplicationRecord {
 
     private fun dbConnectionString(): String {
       val stream = ApplicationRecord::class.java.classLoader.getResourceAsStream("database.yml")
-          ?: throw RuntimeException("Failed to load 'database.yml' file. " +
-              "Please make sure it's in your 'resources' directory")
+        ?: throw RuntimeException("Failed to load 'database.yml' file. " +
+          "Please make sure it's in your 'resources' directory")
       return KalesDatabaseConfig.fromDatabaseYml(stream).toConnectionString()
     }
 
@@ -37,8 +37,8 @@ interface ApplicationRecord {
       useJdbi {
         val queryBuilder = RecordQueryBuilder(it, KApplicationRecordClass(T::class))
         return queryBuilder.allRecords()
-            .mapTo<T>()
-            .list()
+          .mapTo<T>()
+          .list()
       }
     }
 
@@ -57,10 +57,10 @@ interface ApplicationRecord {
         val queryBuilder = RecordQueryBuilder(it, KApplicationRecordClass(T::class))
         queryBuilder.create(values).let { create ->
           return create.execute(returningGeneratedKeys())
-              .mapTo<Int>()
-              .findFirst()
-              .map { id -> findRecord<T>(id) }
-              .orElseThrow { RuntimeException("Failed to create record.") }!!
+            .mapTo<Int>()
+            .findFirst()
+            .map { id -> findRecord<T>(id) }
+            .orElseThrow { RuntimeException("Failed to create record.") }!!
         }
       }
     }
@@ -89,9 +89,9 @@ interface ApplicationRecord {
       useJdbi {
         val queryBuilder = RecordQueryBuilder(it, KApplicationRecordClass(T::class))
         return queryBuilder.findRecord(id)
-            .mapTo<T>()
-            .findFirst()
-            .orElse(null)
+          .mapTo<T>()
+          .findFirst()
+          .orElse(null)
       }
     }
 

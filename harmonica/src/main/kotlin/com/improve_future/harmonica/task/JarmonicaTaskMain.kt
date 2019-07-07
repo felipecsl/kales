@@ -35,7 +35,8 @@ abstract class JarmonicaTaskMain {
   }
 
   protected fun createConnection(
-      packageName: String, env: String
+    packageName: String,
+    env: String
   ): Connection {
     return Connection(loadDbConfig(packageName, env))
   }
@@ -47,7 +48,8 @@ abstract class JarmonicaTaskMain {
   }
 
   private fun loadDbConfig(
-      packageName: String, env: String = "Default"
+    packageName: String,
+    env: String = "Default"
   ): DbConfig {
     val reflections = Reflections(packageName)
     val classList = reflections.getSubTypesOf(DbConfig::class.java)

@@ -25,10 +25,10 @@ import java.time.format.DateTimeFormatter
 import java.util.*
 
 internal abstract class AbstractDateTimeColumn(
-    name: String
+  name: String
 ) : AbstractColumn(name) {
   private val formatter = DateTimeFormatter.ofPattern(
-      "yyyy-M[M]-d[d][ H[H]:m[m][:s[s]][.SSS][ zzz]]"
+    "yyyy-M[M]-d[d][ H[H]:m[m][:s[s]][.SSS][ zzz]]"
   )
   var default: String?
     get() {
@@ -43,16 +43,16 @@ internal abstract class AbstractDateTimeColumn(
     set(value) {
       field = value
       sqlDefault =
-          value?.let { "'" + defaultLocalDateTime.toString() + "'" }
+        value?.let { "'" + defaultLocalDateTime.toString() + "'" }
     }
   var defaultDate: Date?
     get() {
       return defaultLocalDateTime?.let {
         Date.from(
-            ZonedDateTime.of(
-                it,
-                ZoneId.systemDefault()
-            ).toInstant()
+          ZonedDateTime.of(
+            it,
+            ZoneId.systemDefault()
+          ).toInstant()
         )
       }
     }

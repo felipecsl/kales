@@ -52,8 +52,8 @@ class TimeColumnTest {
     assertEquals(51, actualDate.get(Calendar.SECOND))
     assertEquals(123, actualDate.get(Calendar.MILLISECOND))
     assertEquals(
-        LocalTime.of(21, 43, 51, 123000000),
-        timeColumn.defaultLocalTime
+      LocalTime.of(21, 43, 51, 123000000),
+      timeColumn.defaultLocalTime
     )
 
     val calendar = Calendar.getInstance()
@@ -69,8 +69,8 @@ class TimeColumnTest {
     assertEquals("12:34:56.789", timeColumn.default)
     assertEquals(date, timeColumn.defaultDate)
     assertEquals(
-        LocalTime.of(12, 34, 56, 789000000),
-        timeColumn.defaultLocalTime
+      LocalTime.of(12, 34, 56, 789000000),
+      timeColumn.defaultLocalTime
     )
 
     val localTime = LocalTime.of(1, 2, 3, 100000004)

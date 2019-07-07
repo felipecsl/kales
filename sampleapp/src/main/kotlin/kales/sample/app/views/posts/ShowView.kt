@@ -7,7 +7,7 @@ import kotlinx.html.div
 import kotlinx.html.h2
 
 class ShowView(
-    bindings: PostViewModel? = PostViewModel()
+  bindings: PostViewModel? = PostViewModel()
 ) : ActionView<PostViewModel>(bindings) {
   override fun FlowContent.render() {
     div("container") {

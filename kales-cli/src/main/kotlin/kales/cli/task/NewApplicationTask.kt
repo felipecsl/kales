@@ -13,8 +13,8 @@ import java.nio.file.attribute.PosixFilePermissions
 
 /** "kales new" command: Creates a new Kales application */
 class NewApplicationTask(
-    currentDir: File,
-    private val appName: String
+  currentDir: File,
+  private val appName: String
 ) : KalesTask {
   private val appRootDir = File(currentDir, appName)
 

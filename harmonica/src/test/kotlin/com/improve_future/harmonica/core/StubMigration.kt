@@ -24,9 +24,9 @@ import java.lang.reflect.Modifier
 
 internal class StubMigration : AbstractMigration() {
   private val delegateAdapterField = AbstractMigration::class.java
-      .getDeclaredField("adapter\$delegate").also {
-        it.isAccessible = true
-      }
+    .getDeclaredField("adapter\$delegate").also {
+      it.isAccessible = true
+    }
   val adapter = StubDbAdapter()
 
   init {
@@ -39,5 +39,4 @@ internal class StubMigration : AbstractMigration() {
       field.set(this as AbstractMigration, lazyOf(adapter))
     }
   }
-
 }

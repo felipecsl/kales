@@ -7,17 +7,13 @@ import com.squareup.kotlinpoet.TypeSpec
 import com.squareup.kotlinpoet.asTypeName
 import io.ktor.application.ApplicationCall
 import kales.actionpack.ApplicationController
-import kales.cli.writeTextWithLogging
-import java.io.ByteArrayOutputStream
 import java.io.File
-import java.io.OutputStreamWriter
-import java.nio.charset.StandardCharsets
 
 /** Generates a controller class */
 class GenerateControllerTask(
-    workingDirectory: File,
-    private val name: String,
-    private val actions: Set<String> = setOf()
+  workingDirectory: File,
+  private val name: String,
+  private val actions: Set<String> = setOf()
 ) : KalesContextualTask(workingDirectory) {
   override fun run() {
     val controllerName = when {
@@ -37,8 +33,8 @@ class GenerateControllerTask(
   }
 
   private fun writeControllerClassFile(
-      controllersDir: File,
-      controllerName: String
+    controllersDir: File,
+    controllerName: String
   ) {
     val file = buildFileSpec(controllerName)
     val outputPath = controllersDir.toPath().resolve("$controllerName.kt")
@@ -47,16 +43,16 @@ class GenerateControllerTask(
 
   private fun buildFileSpec(controllerName: String): FileSpec {
     val controllerTypeSpec = TypeSpec.classBuilder(controllerName)
-        .primaryConstructor(FunSpec.constructorBuilder()
-            .addParameter("call", ApplicationCall::class)
-            .build())
-        .superclass(ApplicationController::class)
-        .addSuperclassConstructorParameter("call")
-        .addControllerActions()
-        .build()
+      .primaryConstructor(FunSpec.constructorBuilder()
+        .addParameter("call", ApplicationCall::class)
+        .build())
+      .superclass(ApplicationController::class)
+      .addSuperclassConstructorParameter("call")
+      .addControllerActions()
+      .build()
     return FileSpec.builder("$appPackageName.app.controllers", controllerName)
-        .addType(controllerTypeSpec)
-        .build()
+      .addType(controllerTypeSpec)
+      .build()
   }
 
   private fun TypeSpec.Builder.addControllerActions(): TypeSpec.Builder {
@@ -66,9 +62,9 @@ class GenerateControllerTask(
 
   private fun TypeSpec.Builder.addControllerAction(actionName: String): TypeSpec.Builder {
     return addFunction(
-        FunSpec.builder(actionName)
-            .returns(Any::class.asTypeName().copy(nullable = true))
-            .addStatement("return null")
-            .build())
+      FunSpec.builder(actionName)
+        .returns(Any::class.asTypeName().copy(nullable = true))
+        .addStatement("return null")
+        .build())
   }
 }

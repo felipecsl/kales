@@ -8,7 +8,7 @@ import kotlinx.html.InputType.text
 import kotlinx.html.attributes.enumEncode
 
 class NewView(
-    bindings: ViewModel? = null
+  bindings: ViewModel? = null
 ) : ActionView<ViewModel>(bindings) {
   override fun FlowContent.render() {
     div("container") {
@@ -44,12 +44,13 @@ class NewView(
 
 @HtmlTagMarker
 fun FlowOrInteractiveOrPhrasingContent.textArea(
-    rows: String? = null,
-    cols: String? = null,
-    wrap: TextAreaWrap? = null,
-    classes: String? = null,
-    name: String? = null,
-    block : TEXTAREA.() -> Unit = {}): Unit =
+  rows: String? = null,
+  cols: String? = null,
+  wrap: TextAreaWrap? = null,
+  classes: String? = null,
+  name: String? = null,
+  block: TEXTAREA.() -> Unit = {}
+): Unit =
     TEXTAREA(attributesMapOf(
         "rows", rows,
         "name", name,

@@ -1,7 +1,5 @@
 package kales.sample
 
-import io.ktor.http.content.files
-import io.ktor.http.content.static
 import kales.KalesApplication
 import kales.actionview.ApplicationLayout
 import kales.sample.app.controllers.PostsController
