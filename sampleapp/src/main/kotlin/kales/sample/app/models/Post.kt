@@ -8,9 +8,10 @@ import kales.ApplicationRecord.Companion.whereRecords
 import kales.ApplicationRecord.Companion.destroyRecord
 import kales.activemodel.HasManyAssociation
 import kales.activemodel.HasManyAssociation.Companion.empty
+import kales.activemodel.MaybeRecordId
 
 data class Post(
-    override val id: Int,
+    override val id: MaybeRecordId,
     val title: String,
     val content: String,
     val comments: HasManyAssociation<Post, Comment> = empty()

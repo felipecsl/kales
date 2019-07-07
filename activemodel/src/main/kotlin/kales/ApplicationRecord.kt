@@ -1,5 +1,7 @@
 package kales
 
+import kales.activemodel.MaybeRecordId
+import kales.activemodel.RecordId
 import kales.activemodel.use
 import kales.internal.KApplicationRecordClass
 import kales.internal.RecordQueryBuilder
@@ -8,7 +10,6 @@ import org.jdbi.v3.core.Handle
 import org.jdbi.v3.core.Jdbi
 import org.jdbi.v3.core.kotlin.mapTo
 import org.jdbi.v3.core.result.ResultProducers.returningGeneratedKeys
-import java.sql.SQLException
 
 /**
  * Maps model classes to database records. Kales follows some conventions when dealing with models:
@@ -19,7 +20,7 @@ import java.sql.SQLException
  *   for `Hero` would be `heros`, awkwardly.
  */
 interface ApplicationRecord {
-  val id: Int
+  val id: MaybeRecordId
 
   companion object {
     val JDBI: Jdbi = JdbiFactory.fromConnectionString(dbConnectionString())
@@ -78,6 +79,10 @@ interface ApplicationRecord {
         queryBuilder.destroy(this)
         return this
       }
+    }
+
+    inline fun <reified T : ApplicationRecord> findRecord(id: RecordId): T? {
+      return findRecord(id.value)
     }
 
     inline fun <reified T : ApplicationRecord> findRecord(id: Int): T? {

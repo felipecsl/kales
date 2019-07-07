@@ -21,5 +21,7 @@ mainClassName = 'kales.sample.AppKt'
 
 dependencies {
   implementation project(":kales")
+  implementation "org.jdbi:jdbi3-postgres:$jdbiVersion"
+  implementation "org.postgresql:postgresql:42.2.6.jre7"
   implementation "io.ktor:ktor-server-netty:$ktorVersion"
 }
