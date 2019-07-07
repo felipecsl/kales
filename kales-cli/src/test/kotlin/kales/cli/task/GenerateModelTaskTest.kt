@@ -3,6 +3,8 @@ package kales.cli.task
 import org.junit.Test
 
 import com.google.common.truth.Truth.assertThat
+import org.gradle.testkit.runner.GradleRunner
+import org.gradle.testkit.runner.TaskOutcome
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import java.io.File
@@ -45,9 +47,12 @@ class GenerateModelTaskTest {
       package com.example.testapp.app.models
 
       import kales.ApplicationRecord
+      import kales.ApplicationRecord.Companion.allRecords
+      import kales.ApplicationRecord.Companion.findRecord
+      import kales.activemodel.MaybeRecordId
       import kotlin.Int
 
-      data class Bar(val id: Int) : ApplicationRecord() {
+      data class Bar(override val id: MaybeRecordId) : ApplicationRecord {
           companion object {
               fun all() = allRecords<Bar>()
 
@@ -56,5 +61,19 @@ class GenerateModelTaskTest {
       }
 
     """.trimIndent())
+  }
+
+  @Test fun `project with new model builds correctly`() {
+    val root = tempDir.root
+    val appName = "com.example.testapp2"
+    val date = Date()
+    NewApplicationTask(root, appName).run()
+    val appDir = File(root, appName)
+    GenerateModelTask(appDir, "Bar") { date }.run()
+    val result = GradleRunner.create()
+        .withProjectDir(appDir)
+        .withArguments("jar")
+        .build()
+    assertThat(result.task(":jar")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
   }
 }

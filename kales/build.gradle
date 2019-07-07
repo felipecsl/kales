@@ -3,11 +3,6 @@ plugins {
   id "org.jetbrains.kotlin.jvm"
 }
 
-sourceSets {
-  main.java.srcDirs += 'src/main/kotlin'
-  test.java.srcDirs += 'src/test/kotlin'
-}
-
 project.ext.artifact = 'kales'
 
 dependencies {

@@ -44,7 +44,7 @@ and it will automatically rebuild as you make new changes.
 ## Download
 
 ```
-implementation 'com.felipecsl.kales:kales:0.0.5-SNAPSHOT'
+implementation 'com.felipecsl.kales:kales:0.0.6-SNAPSHOT'
 ```
 
 Snapshots of the development version are available in

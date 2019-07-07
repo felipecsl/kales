@@ -10,6 +10,7 @@
 include(":actionmailer")
 include(":actionview")
 include(":actionpack")
+include(":harmonica")
 include(":activejob")
 include(":activemodel")
 include(":activerecord")
