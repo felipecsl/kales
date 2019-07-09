@@ -42,22 +42,12 @@ link_kales_in_path() {
 
 try_curl() {
   command -v curl > /dev/null &&
-  if [[ $1 =~ tgz$ ]]; then
-    curl -fL $1 | tar -xzf -
-  else
-    local temp=${TMPDIR:-/tmp}/kales.zip
-    curl -fLo "$temp" $1 && unzip -o "$temp" && rm -f "$temp"
-  fi
+  curl -fL $1 | tar -xzf - --strip 1
 }
 
 try_wget() {
   command -v wget > /dev/null &&
-  if [[ $1 =~ tgz$ ]]; then
-    wget -O - $1 | tar -xzf -
-  else
-    local temp=${TMPDIR:-/tmp}/kales.zip
-    wget -O "$temp" $1 && unzip -o "$temp" && rm -f "$temp"
-  fi
+  wget -O - $1 | tar -xzf - --strip 1
 }
 
 download() {
@@ -67,9 +57,9 @@ download() {
     check_binary && return
   fi
   link_kales_in_path && return
-  mkdir -p "$kales_base"/bin && cd "$kales_base"/bin
+  mkdir -p "$kales_base" && cd "$kales_base"
   if [ $? -ne 0 ]; then
-    binary_error="Failed to create bin directory"
+    binary_error="Failed to create base directory"
     return
   fi
 
