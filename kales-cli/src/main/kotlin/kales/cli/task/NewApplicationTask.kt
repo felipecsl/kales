@@ -74,9 +74,9 @@ class NewApplicationTask(
 
   private fun Path.makeExecutable() {
     if (!exists(this)) {
-      if(System.getProperty("os.name","").toLowerCase().indexOf("win") >= 0){
-        Files.createFile(this)  
-      }else{
+      if (System.getProperty("os.name", "").toLowerCase().indexOf("win") >= 0) {
+        Files.createFile(this)
+      } else {
         val ownerWritable = PosixFilePermissions.fromString("rwxr--r--")
         val permissions = PosixFilePermissions.asFileAttribute(ownerWritable)
         Files.createFile(this, permissions)
