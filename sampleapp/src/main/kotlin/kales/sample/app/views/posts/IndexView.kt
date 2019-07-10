@@ -1,8 +1,10 @@
 package kales.sample.app.views.posts
 
 import kales.actionview.ActionView
+import kales.actionview.formFor
 import kotlinx.html.*
-import kotlinx.html.FormMethod.*
+import kales.actionview.KalesFormMethod.delete
+import kotlinx.html.InputType.*
 
 class IndexView(
   bindings: IndexViewModel? = IndexViewModel("Unknown", listOf())
@@ -31,8 +33,8 @@ class IndexView(
               bindings.posts.forEach { p ->
                 li(classes = "list-group-item") {
                   a(href = "/posts/${p.id}") { +p.title }
-                  form(action = "/posts/${p.id}", method = post, classes = "float-right") {
-                    input(type = InputType.submit, classes = "btn btn-outline-danger btn-sm") {
+                  formFor(p, method = delete, classes = "float-right") {
+                    input(type = submit, classes = "btn btn-outline-danger btn-sm") {
                       value = "Delete"
                     }
                   }
