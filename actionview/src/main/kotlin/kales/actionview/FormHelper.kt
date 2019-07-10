@@ -31,7 +31,7 @@ fun FlowContent.formFor(
 ) {
   val recordClasss = KApplicationRecordClass(record.javaClass.kotlin)
   val routeUrl = "/${recordClasss.tableName}/${record.id}"
-  val finalBlock: FORM.() -> Unit = if (proxiedFormMethods.contains(method)) {
+  val finalBlock = if (proxiedFormMethods.contains(method)) {
     {
       input(type = InputType.hidden, name = "_method") { value = method.name }
       block()
