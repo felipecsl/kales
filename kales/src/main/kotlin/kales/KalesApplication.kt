@@ -69,11 +69,14 @@ class KalesApplication<T : ApplicationLayout>(
   inline fun <reified T : ApplicationController> put(
     path: String,
     actionName: String
-  ): Route = routing.put(path) {
-    val view = callControllerAction<T>(actionName, call)
-    call.respondHtmlTemplate(layout.createInstance()) {
-      body {
-        view.renderContent(this)
+  ): Route {
+    // TODO: This should actually use `routing.post` and handle the _method hidden form param instead
+    return routing.put(path) {
+      val view = callControllerAction<T>(actionName, call)
+      call.respondHtmlTemplate(layout.createInstance()) {
+        body {
+          view.renderContent(this)
+        }
       }
     }
   }
@@ -81,11 +84,29 @@ class KalesApplication<T : ApplicationLayout>(
   inline fun <reified T : ApplicationController> delete(
     path: String,
     actionName: String
-  ): Route = routing.delete(path) {
-    val view = callControllerAction<T>(actionName, call)
-    call.respondHtmlTemplate(layout.createInstance()) {
-      body {
-        view.renderContent(this)
+  ): Route {
+    // TODO: This should actually use `routing.post` and handle the _method hidden form param instead
+    return routing.delete(path) {
+      val view = callControllerAction<T>(actionName, call)
+      call.respondHtmlTemplate(layout.createInstance()) {
+        body {
+          view.renderContent(this)
+        }
+      }
+    }
+  }
+
+  inline fun <reified T : ApplicationController> patch(
+    path: String,
+    actionName: String
+  ): Route {
+    // TODO: This should actually use `routing.post` and handle the _method hidden form param instead
+    return routing.patch(path) {
+      val view = callControllerAction<T>(actionName, call)
+      call.respondHtmlTemplate(layout.createInstance()) {
+        body {
+          view.renderContent(this)
+        }
       }
     }
   }
