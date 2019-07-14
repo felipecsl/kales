@@ -4,16 +4,17 @@ import io.ktor.application.*
 import io.ktor.features.CallLogging
 import io.ktor.features.DefaultHeaders
 import io.ktor.html.respondHtmlTemplate
+import io.ktor.http.HttpMethod
 import io.ktor.http.content.files
 import io.ktor.http.content.static
 import io.ktor.http.content.staticRootFolder
-import io.ktor.routing.Route
-import io.ktor.routing.Routing
-import io.ktor.routing.get
-import io.ktor.routing.post
+import io.ktor.request.receiveParameters
+import io.ktor.routing.*
+import io.ktor.util.pipeline.PipelineContext
 import kales.actionpack.ApplicationController
 import kales.actionview.ActionView
 import kales.actionview.ApplicationLayout
+import kotlinx.coroutines.runBlocking
 import java.io.File
 import java.util.logging.Logger
 import kotlin.reflect.KClass
@@ -24,8 +25,7 @@ import kotlin.reflect.full.primaryConstructor
 
 class KalesApplication<T : ApplicationLayout>(
   private val application: Application,
-  val layout: KClass<T>,
-  val routes: MutableSet<RequestRoute<*>> = mutableSetOf()
+  val layout: KClass<T>
 ) {
   lateinit var routing: Routing
 
@@ -42,7 +42,45 @@ class KalesApplication<T : ApplicationLayout>(
         files("stylesheets")
         files("images")
       }
-      installCustomRoutes()
+    }
+  }
+
+  inline fun <reified T : ApplicationController> get(
+    path: String,
+    actionName: String
+  ): Route = routing.get(path, defaultRequestHandler<T>(actionName))
+
+  inline fun <reified T : ApplicationController> post(
+    path: String,
+    actionName: String
+  ): Route = routing.post(path, defaultRequestHandler<T>(actionName))
+
+  inline fun <reified T : ApplicationController> put(
+    path: String,
+    actionName: String
+  ) = createCustomRequestMethodViaFormParamHandler<T>(path, actionName, "put")
+
+  inline fun <reified T : ApplicationController> delete(
+    path: String,
+    actionName: String
+  ) = createCustomRequestMethodViaFormParamHandler<T>(path, actionName, "delete")
+
+  inline fun <reified T : ApplicationController> patch(
+    path: String,
+    actionName: String
+  ) = createCustomRequestMethodViaFormParamHandler<T>(path, actionName, "patch")
+
+
+  inline fun <reified T : ApplicationController> defaultRequestHandler(
+    actionName: String
+  ): suspend PipelineContext<Unit, ApplicationCall>.(Unit) -> Unit {
+    return {
+      val view = callControllerAction(T::class, actionName, call)
+      call.respondHtmlTemplate(layout.createInstance()) {
+        body {
+          view.renderContent(this)
+        }
+      }
     }
   }
 
@@ -52,65 +90,39 @@ class KalesApplication<T : ApplicationLayout>(
    * and rout to that handler instead. This is to work around a limitation where browsers don't
    * support those verbs (only GET and POST) and it's the same workaround that Rails uses.
    */
-  private fun installCustomRoutes() {
-    routing.post("/{path...}") {
-      val path = context.parameters["path"]
-      val kalesMethod = context.request.call.parameters["_method"]
-      if (kalesMethod != null) {
-        logger.info("Looking up handler for request ${kalesMethod.toUpperCase()} $path")
-        val handler = routes.firstOrNull { it.method == kalesMethod && it.path == path }
-        if (handler != null) {
-          val view = callControllerAction(handler.controllerClass, handler.action, call)
-          call.respondHtmlTemplate(layout.createInstance()) {
-            body {
-              view.renderContent(this)
-            }
-          }
+  inline fun <reified T : ApplicationController> createCustomRequestMethodViaFormParamHandler(
+    path: String,
+    actionName: String,
+    method: String
+  ) {
+    routing.createRouteFromPath(path)
+      .createChild(HttpMethodRouteSelector(HttpMethod.Post))
+      .createChild(DynamicParameterRouteSelector("_method", method))
+      .apply {
+        handle(defaultRequestHandler<T>(actionName))
+      }
+  }
+
+  data class DynamicParameterRouteSelector(
+    val name: String,
+    val value: String
+  ) : RouteSelector(RouteSelectorEvaluation.qualityConstant) {
+    override fun evaluate(
+      context: RoutingResolveContext,
+      segmentIndex: Int
+    ): RouteSelectorEvaluation {
+      return runBlocking {
+        val parameters = context.call.receiveParameters()
+        if (parameters.contains(name, value)) {
+          RouteSelectorEvaluation.Constant
         } else {
-          logger.info("No route handler found for ${kalesMethod.toUpperCase()} $path")
+          RouteSelectorEvaluation.Failed
         }
       }
     }
+
+    override fun toString(): String = "[$name = $value]"
   }
-
-  inline fun <reified T : ApplicationController> get(
-    path: String,
-    actionName: String
-  ): Route = routing.get(path) {
-    val view = callControllerAction(T::class, actionName, call)
-    call.respondHtmlTemplate(layout.createInstance()) {
-      body {
-        view.renderContent(this)
-      }
-    }
-  }
-
-  inline fun <reified T : ApplicationController> post(
-    path: String,
-    actionName: String
-  ): Route = routing.post(path) {
-    val view = callControllerAction(T::class, actionName, call)
-    call.respondHtmlTemplate(layout.createInstance()) {
-      body {
-        view.renderContent(this)
-      }
-    }
-  }
-
-  inline fun <reified T : ApplicationController> put(
-    path: String,
-    actionName: String
-  ) = routes.add(RequestRoute(T::class, "put", path, actionName))
-
-  inline fun <reified T : ApplicationController> delete(
-    path: String,
-    actionName: String
-  ) = routes.add(RequestRoute(T::class, "delete", path, actionName))
-
-  inline fun <reified T : ApplicationController> patch(
-    path: String,
-    actionName: String
-  ) = routes.add(RequestRoute(T::class, "patch", path, actionName))
 
   suspend inline fun <T : ApplicationController> callControllerAction(
     controllerClass: KClass<T>,
@@ -185,7 +197,7 @@ class KalesApplication<T : ApplicationLayout>(
       ?: throw RuntimeException("Cannot determine the full class name for Controller"))
 
   companion object {
-    val logger = Logger.getLogger(KalesApplication::class.simpleName)
+    val logger: Logger = Logger.getLogger(KalesApplication::class.simpleName)
   }
 }
 
