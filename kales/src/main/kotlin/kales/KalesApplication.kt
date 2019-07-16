@@ -8,7 +8,6 @@ import io.ktor.http.HttpMethod
 import io.ktor.http.content.files
 import io.ktor.http.content.static
 import io.ktor.http.content.staticRootFolder
-import io.ktor.request.receiveParameters
 import io.ktor.routing.*
 import io.ktor.util.pipeline.PipelineContext
 import kales.actionpack.ApplicationController
@@ -32,7 +31,7 @@ class KalesApplication<T : ApplicationLayout>(
   fun initRoutes(routes: KalesApplication<T>.() -> Unit) {
     application.install(DefaultHeaders)
     application.install(CallLogging)
-    application.install(Routing) {
+    application.install(KalesRoutingFeature) {
       trace { application.log.trace(it.buildText()) }
       routing = this
       routes.invoke(this@KalesApplication)
@@ -70,7 +69,6 @@ class KalesApplication<T : ApplicationLayout>(
     actionName: String
   ) = createCustomRequestMethodViaFormParamHandler<T>(path, actionName, "patch")
 
-
   inline fun <reified T : ApplicationController> defaultRequestHandler(
     actionName: String
   ): suspend PipelineContext<Unit, ApplicationCall>.(Unit) -> Unit {
@@ -96,32 +94,11 @@ class KalesApplication<T : ApplicationLayout>(
     method: String
   ) {
     routing.createRouteFromPath(path)
-      .createChild(HttpMethodRouteSelector(HttpMethod.Post))
       .createChild(DynamicParameterRouteSelector("_method", method))
+      .createChild(HttpMethodRouteSelector(HttpMethod.Post))
       .apply {
         handle(defaultRequestHandler<T>(actionName))
       }
-  }
-
-  data class DynamicParameterRouteSelector(
-    val name: String,
-    val value: String
-  ) : RouteSelector(RouteSelectorEvaluation.qualityConstant) {
-    override fun evaluate(
-      context: RoutingResolveContext,
-      segmentIndex: Int
-    ): RouteSelectorEvaluation {
-      return runBlocking {
-        val parameters = context.call.receiveParameters()
-        if (parameters.contains(name, value)) {
-          RouteSelectorEvaluation.Constant
-        } else {
-          RouteSelectorEvaluation.Failed
-        }
-      }
-    }
-
-    override fun toString(): String = "[$name = $value]"
   }
 
   suspend inline fun <T : ApplicationController> callControllerAction(
