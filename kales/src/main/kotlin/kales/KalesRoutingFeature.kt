@@ -3,12 +3,16 @@ package kales
 import io.ktor.application.Application
 import io.ktor.application.ApplicationCallPipeline
 import io.ktor.application.ApplicationFeature
+import io.ktor.util.pipeline.PipelineContext
 import io.ktor.routing.Routing
 import io.ktor.util.AttributeKey
 import kotlin.reflect.full.callSuspend
 import kotlin.reflect.full.declaredFunctions
 import kotlin.reflect.jvm.isAccessible
 
+/**
+ * Kales' [ApplicationFeature] which allows us to inject a custom [PipelineContext] into [Routing]
+ */
 internal object KalesRoutingFeature : ApplicationFeature<Application, Routing, Routing> {
   override val key: AttributeKey<Routing> = AttributeKey("KalesRouting")
 
