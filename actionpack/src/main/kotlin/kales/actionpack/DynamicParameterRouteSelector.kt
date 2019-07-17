@@ -3,7 +3,6 @@ package kales.actionpack
 import io.ktor.routing.RouteSelector
 import io.ktor.routing.RouteSelectorEvaluation
 import io.ktor.routing.RoutingResolveContext
-import kales.actionpack.KalesApplicationCall
 import kotlinx.coroutines.runBlocking
 
 data class DynamicParameterRouteSelector(
