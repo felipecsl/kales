@@ -178,6 +178,7 @@ class KalesApplication<T : ApplicationLayout>(
   }
 }
 
+/** TODO document public API */
 fun <T : ApplicationLayout> Application.kalesApp(
   layout: KClass<T>,
   routes: KalesApplication<T>.() -> Unit

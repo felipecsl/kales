@@ -20,7 +20,7 @@ val proxiedFormMethods = setOf(
   KalesFormMethod.delete,
   KalesFormMethod.patch
 )
-
+/** TODO document public API */
 @HtmlTagMarker
 fun FlowContent.formFor(
   record: ApplicationRecord,
