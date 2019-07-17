@@ -53,24 +53,34 @@ class KalesApplicationIntegrationTest {
     }
   }
 
-  @Test fun `test PATCH with _method parameter`() {
+  @Test fun `test PATCH with _method parameter and extra params`() {
     withTestApplication(Application::testModule) {
       with(handleRequest(HttpMethod.Post, "/postes") {
         addHeader(HttpHeaders.ContentType, ContentType.Application.FormUrlEncoded.toString())
-        setBody(listOf("_method" to "patch").formUrlEncode())
+        setBody(listOf(
+          "_method" to "patch",
+          "foo" to "bar"
+        ).formUrlEncode())
       }) {
-        assertSuccessfulResponseWithBody(response, "<h1>Hello patchin'</h1>")
+        assertSuccessfulResponseWithBody(response, "<h1>Hello patchin' bar</h1>")
       }
     }
   }
 
-  @Test fun `test PATCH with _method parameter and repeating URL`() {
+  @Test fun `test PATCH with _method parameter, repeating URL and extra params`() {
+    // This makes sure that we can call receiveParameters() from ApplicationCall multiple times for
+    // the lifetime of a request. This is important because need to call that from the class
+    // DynamicParameterRouteSelector when selecting a route and then later again when the controller
+    // action is triggered.
     withTestApplication(Application::testModule) {
       with(handleRequest(HttpMethod.Post, "/posts") {
         addHeader(HttpHeaders.ContentType, ContentType.Application.FormUrlEncoded.toString())
-        setBody(listOf("_method" to "patch").formUrlEncode())
+        setBody(listOf(
+          "_method" to "patch",
+          "foo" to "baz"
+        ).formUrlEncode())
       }) {
-        assertSuccessfulResponseWithBody(response, "<h1>Hello patchin'</h1>")
+        assertSuccessfulResponseWithBody(response, "<h1>Hello patchin' baz</h1>")
       }
     }
   }

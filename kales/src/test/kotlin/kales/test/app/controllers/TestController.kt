@@ -1,7 +1,6 @@
 package kales.test.app.controllers
 
 import io.ktor.application.ApplicationCall
-import io.ktor.request.receiveParameters
 import kales.actionpack.ApplicationController
 import kales.test.app.views.test.CreateViewModel
 import kales.test.app.views.test.IndexView
@@ -14,7 +13,7 @@ class TestController(call: ApplicationCall) : ApplicationController(call) {
   }
 
   suspend fun create() {
-    val params = call.receiveParameters()
+    val params = receiveParameters()
     bindings = CreateViewModel(params["message"]!!)
   }
 
@@ -28,8 +27,9 @@ class TestController(call: ApplicationCall) : ApplicationController(call) {
     return IndexView(bindings as IndexViewModel)
   }
 
-  fun patch(): IndexView {
-    bindings = IndexViewModel("patchin'")
+  suspend fun patch(): IndexView {
+    val params = receiveParameters()
+    bindings = IndexViewModel("patchin' ${params["foo"]}")
     return IndexView(bindings as IndexViewModel)
   }
 }

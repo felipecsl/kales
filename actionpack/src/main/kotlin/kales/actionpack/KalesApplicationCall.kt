@@ -1,11 +1,11 @@
-package kales
+package kales.actionpack
 
 import io.ktor.application.ApplicationCall
 import io.ktor.http.Parameters
 import io.ktor.request.receive
 import kotlin.reflect.KClass
 
-internal class KalesApplicationCall(private val delegate: ApplicationCall) : ApplicationCall {
+class KalesApplicationCall(private val delegate: ApplicationCall) : ApplicationCall {
   private var requestBody: Any? = null
 
   override val application

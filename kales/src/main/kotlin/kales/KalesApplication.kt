@@ -11,9 +11,9 @@ import io.ktor.http.content.staticRootFolder
 import io.ktor.routing.*
 import io.ktor.util.pipeline.PipelineContext
 import kales.actionpack.ApplicationController
+import kales.actionpack.DynamicParameterRouteSelector
 import kales.actionview.ActionView
 import kales.actionview.ApplicationLayout
-import kotlinx.coroutines.runBlocking
 import java.io.File
 import java.util.logging.Logger
 import kotlin.reflect.KClass
@@ -144,7 +144,7 @@ class KalesApplication<T : ApplicationLayout>(
    * "FooController" controller, "index" action, the searched class is
    * "com.example.app.views.foo.IndexView"
    */
-  inline fun <T : ApplicationController> findViewClass(
+  fun <T : ApplicationController> findViewClass(
     controllerClass: KClass<T>,
     actionName: String,
     controllerClassName: String
@@ -164,7 +164,7 @@ class KalesApplication<T : ApplicationLayout>(
    * Takes a controller class name, eg: "com.example.app.controllers.FooController".
    * Returns "com.example.app"
    * */
-  inline fun <T : ApplicationController> extractAppPackageNameFromControllerClass(
+  fun <T : ApplicationController> extractAppPackageNameFromControllerClass(
     controllerClass: KClass<T>
   ) =
     (controllerClass.qualifiedName
