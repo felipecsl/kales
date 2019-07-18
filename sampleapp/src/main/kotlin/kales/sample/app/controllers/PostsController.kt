@@ -23,18 +23,27 @@ class PostsController(call: ApplicationCall) : ApplicationController(call) {
   }
 
   suspend fun create() {
-    val params = call.receiveParameters()
+    val params = receiveParameters()
     bindings = PostViewModel(Post.create(params["title"]!!, params["content"]!!))
   }
 
-  suspend fun destroy() {
-    val params = call.receiveParameters()
+  fun destroy() {
+    // TODO: it's confusing that URL parameters are received differently than form params
+    //  They should be consolidated into the same Parameters object by the superclass method
+    //  receiveParameters()
+    //
+    // TODO: DestroyView not found returns HTTP 500
+    //  RuntimeException: Unable to find view class kales.sample.app.views.posts.DestroyView
+    //  That should probably return 404 instead
+    //
+    // TODO: We should be able to redirectTo another action at this point
+    val params = call.parameters
     val post = Post.find(params["id"]!!.toInt())!!
     post.destroy()
   }
 
   suspend fun writeComment() {
-    val params = call.receiveParameters()
+    val params = receiveParameters()
     val commentText = params["comment_text"]
         ?: throw IllegalArgumentException("Missing param `comment_text`")
     val id = params["id"]?.toInt()

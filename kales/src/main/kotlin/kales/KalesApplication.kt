@@ -109,8 +109,7 @@ class KalesApplication<T : ApplicationLayout>(
     val controllerClassName = controllerClass.simpleName?.replace("Controller", "")?.toLowerCase()
       ?: throw RuntimeException("Cannot determine the class name for Controller")
     @Suppress("UNCHECKED_CAST")
-    val controllerCtor = controllerClass.primaryConstructor ?: throw RuntimeException(
-      "Primary constructor not found for Controller class $controllerClassName")
+    val controllerCtor = controllerClass.primaryConstructor()
     val controller = try {
       controllerCtor.call(call)
     } catch (e: RuntimeException) {
@@ -131,20 +130,23 @@ class KalesApplication<T : ApplicationLayout>(
       // Otherwise, search for the inferred view class
       val viewClass = findViewClass(controllerClass, actionName, controllerClassName)
       try {
-        viewClass.kotlin.primaryConstructor?.call(controller.bindings)
-          ?: throw RuntimeException("Unable to find primary constructor for $viewClass")
+        val viewConstructor = viewClass.kotlin.primaryConstructor()
+        viewConstructor.call(controller.bindings)
       } catch (e: RuntimeException) {
         throw RuntimeException("Failed to instantiate view $viewClass", e)
       }
     }
   }
 
+  fun <T : Any> KClass<T>.primaryConstructor() =
+    primaryConstructor ?: throw RuntimeException("Primary constructor not found for $this")
+
   /**
    * Seearches for a view class matching this controller action, for example:
    * "FooController" controller, "index" action, the searched class is
    * "com.example.app.views.foo.IndexView"
    */
-  fun <T : ApplicationController> findViewClass(
+  inline fun <T : ApplicationController> findViewClass(
     controllerClass: KClass<T>,
     actionName: String,
     controllerClassName: String
@@ -164,7 +166,7 @@ class KalesApplication<T : ApplicationLayout>(
    * Takes a controller class name, eg: "com.example.app.controllers.FooController".
    * Returns "com.example.app"
    * */
-  fun <T : ApplicationController> extractAppPackageNameFromControllerClass(
+  inline fun <T : ApplicationController> extractAppPackageNameFromControllerClass(
     controllerClass: KClass<T>
   ) =
     (controllerClass.qualifiedName
