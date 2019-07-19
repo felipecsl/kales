@@ -3,6 +3,7 @@ package kales.actionpack
 import io.ktor.application.ApplicationCall
 import io.ktor.request.ApplicationRequest
 import io.ktor.http.Parameters
+import io.ktor.http.plus
 import io.ktor.request.receiveParameters
 import io.ktor.routing.RoutingApplicationCall
 import kales.actionview.ViewModel
@@ -25,7 +26,7 @@ abstract class ApplicationController(val call: ApplicationCall) {
    * [DynamicParameterRouteSelector]).
    */
   suspend fun receiveParameters(): Parameters {
-    return if (call is RoutingApplicationCall) {
+    val parameters = if (call is RoutingApplicationCall) {
       (call.javaClass.kotlin.declaredMemberProperties
         .find { it.name == "call" }!!
         .also { it.isAccessible = true }
@@ -34,5 +35,6 @@ abstract class ApplicationController(val call: ApplicationCall) {
     } else {
       call.receiveParameters()
     }
+    return parameters + call.parameters
   }
 }

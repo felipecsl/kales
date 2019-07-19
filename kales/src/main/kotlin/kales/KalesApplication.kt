@@ -76,7 +76,9 @@ class KalesApplication<T : ApplicationLayout>(
       val view = callControllerAction(T::class, actionName, call)
       call.respondHtmlTemplate(layout.createInstance()) {
         body {
-          view.renderContent(this)
+          // TODO if view is null (maybe it doesnt exist) we should probably render a 404 error
+          //  instead of an empty page
+          view?.renderContent(this)
         }
       }
     }
@@ -105,7 +107,7 @@ class KalesApplication<T : ApplicationLayout>(
     controllerClass: KClass<T>,
     actionName: String,
     call: ApplicationCall
-  ): ActionView<*> {
+  ): ActionView<*>? {
     val controllerClassName = controllerClass.simpleName?.replace("Controller", "")?.toLowerCase()
       ?: throw RuntimeException("Cannot determine the class name for Controller")
     @Suppress("UNCHECKED_CAST")
@@ -129,11 +131,15 @@ class KalesApplication<T : ApplicationLayout>(
     } else {
       // Otherwise, search for the inferred view class
       val viewClass = findViewClass(controllerClass, actionName, controllerClassName)
-      try {
-        val viewConstructor = viewClass.kotlin.primaryConstructor()
-        viewConstructor.call(controller.bindings)
-      } catch (e: RuntimeException) {
-        throw RuntimeException("Failed to instantiate view $viewClass", e)
+      if (viewClass != null) {
+        try {
+          viewClass.kotlin.primaryConstructor().call(controller.bindings)
+        } catch (e: RuntimeException) {
+          throw RuntimeException("Failed to instantiate view $viewClass", e)
+        }
+      } else {
+        // View not found
+        null
       }
     }
   }
@@ -146,11 +152,12 @@ class KalesApplication<T : ApplicationLayout>(
    * "FooController" controller, "index" action, the searched class is
    * "com.example.app.views.foo.IndexView"
    */
+  @Suppress("NOTHING_TO_INLINE")
   inline fun <T : ApplicationController> findViewClass(
     controllerClass: KClass<T>,
     actionName: String,
     controllerClassName: String
-  ): Class<ActionView<*>> {
+  ): Class<ActionView<*>>? {
     val applicationPackage = extractAppPackageNameFromControllerClass(controllerClass)
     val viewClassName = "${actionName.capitalize()}View"
     val viewFullyQualifiedName = "$applicationPackage.views.$controllerClassName.$viewClassName"
@@ -158,14 +165,16 @@ class KalesApplication<T : ApplicationLayout>(
       @Suppress("UNCHECKED_CAST")
       Class.forName(viewFullyQualifiedName) as Class<ActionView<*>>
     } catch (e: ClassNotFoundException) {
-      throw RuntimeException("Unable to find view class $viewFullyQualifiedName")
+      logger.warning("Unable to find view class $viewFullyQualifiedName")
+      null
     }
   }
 
   /**
    * Takes a controller class name, eg: "com.example.app.controllers.FooController".
    * Returns "com.example.app"
-   * */
+   */
+  @Suppress("NOTHING_TO_INLINE")
   inline fun <T : ApplicationController> extractAppPackageNameFromControllerClass(
     controllerClass: KClass<T>
   ) =

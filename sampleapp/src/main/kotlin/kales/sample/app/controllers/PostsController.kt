@@ -27,17 +27,13 @@ class PostsController(call: ApplicationCall) : ApplicationController(call) {
     bindings = PostViewModel(Post.create(params["title"]!!, params["content"]!!))
   }
 
-  fun destroy() {
-    // TODO: it's confusing that URL parameters are received differently than form params
-    //  They should be consolidated into the same Parameters object by the superclass method
-    //  receiveParameters()
-    //
+  suspend fun destroy() {
     // TODO: DestroyView not found returns HTTP 500
     //  RuntimeException: Unable to find view class kales.sample.app.views.posts.DestroyView
     //  That should probably return 404 instead
     //
     // TODO: We should be able to redirectTo another action at this point
-    val params = call.parameters
+    val params = receiveParameters()
     val post = Post.find(params["id"]!!.toInt())!!
     post.destroy()
   }
