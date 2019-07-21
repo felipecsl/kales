@@ -1,0 +1,56 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>KalesTask - kales-cli</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">kales-cli</a>&nbsp;/&nbsp;<a href="../index.html">kales.cli.task</a>&nbsp;/&nbsp;<a href="./index.html">KalesTask</a><br/>
+<br/>
+<h1>KalesTask</h1>
+<code><span class="keyword">interface </span><span class="identifier">KalesTask</span></code>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="run.html">run</a></p>
+</td>
+<td>
+<code><span class="keyword">abstract</span> <span class="keyword">fun </span><span class="identifier">run</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Inheritors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="../-kales-contextual-task/index.html">KalesContextualTask</a></p>
+</td>
+<td>
+<code><span class="keyword">abstract</span> <span class="keyword">class </span><span class="identifier">KalesContextualTask</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">KalesTask</span></a></code>
+<p>Defines a Kales task that is supposed to run from an existing Kales application root directory,
+defined by <a href="../-kales-contextual-task/application-root-dir.html">applicationRootDir</a>, eg.: "~/projects/foo"</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="../-kales-version-task/index.html">KalesVersionTask</a></p>
+</td>
+<td>
+<code><span class="keyword">class </span><span class="identifier">KalesVersionTask</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">KalesTask</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="../-new-application-task/index.html">NewApplicationTask</a></p>
+</td>
+<td>
+<code><span class="keyword">class </span><span class="identifier">NewApplicationTask</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">KalesTask</span></a></code>
+<p>"kales new" command: Creates a new Kales application</p>
+</td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

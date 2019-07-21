@@ -1,0 +1,8 @@
+$dokka.format:html
+$dokka.linkExtension:html
+$dokka.location:kales.activemodel$use(org.jdbi.v3.core.Jdbi, kotlin.Function1((org.jdbi.v3.core.Handle, kales.activemodel.use.T)))kales.activemodel/org.jdbi.v3.core.-jdbi/use.html
+$dokka.location:kales.internal$pluralize(kotlin.String)kales.internal/kotlin.-string/pluralize.html
+$dokka.location:kales.internal$singularize(kotlin.String)kales.internal/kotlin.-string/singularize.html
+kales
+kales.activemodel
+kales.internal

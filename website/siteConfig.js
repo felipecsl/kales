@@ -39,6 +39,7 @@ const siteConfig = {
   // For no header links in the top nav bar -> headerLinks: [],
   headerLinks: [
     {doc: 'getting-started', label: 'Docs'},
+    {doc: 'api', label: 'API reference'},
     // {doc: 'api', label: 'API'},
     // {page: 'help', label: 'Help'},
     // {blog: true, label: 'Blog'},
@@ -91,6 +92,8 @@ const siteConfig = {
 
   // Open Graph and Twitter card images.
   ogImage: 'img/docusaurus.png',
+  // Dokka's custom CSS
+  separateCss: ['style.css'],
   twitterImage: 'img/docusaurus.png',
 
   // Show documentation's last contributor's name.

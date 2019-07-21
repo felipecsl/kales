@@ -1,0 +1,37 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>Association - activemodel</title>
+<link rel="stylesheet" href="../../style.css">
+</HEAD>
+<BODY>
+<a href="../index.html">activemodel</a>&nbsp;/&nbsp;<a href="index.html">kales.activemodel</a>&nbsp;/&nbsp;<a href="./-association.html">Association</a><br/>
+<br/>
+<h1>Association</h1>
+<code><span class="keyword">interface </span><span class="identifier">Association</span></code>
+<h3>Inheritors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="-belongs-to-association/index.html">BelongsToAssociation</a></p>
+</td>
+<td>
+<code><span class="keyword">interface </span><span class="identifier">BelongsToAssociation</span><span class="symbol">&lt;</span><span class="identifier">T</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../kales/-application-record/index.html"><span class="identifier">ApplicationRecord</span></a><span class="symbol">&gt;</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./-association.html"><span class="identifier">Association</span></a></code>
+<p>Represents an association where a model A's table contains a foreign key to another model B's
+<a href="../kales/-application-record/index.html">ApplicationRecord</a> object, in a "A belongs to B" fashion.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="-has-many-association/index.html">HasManyAssociation</a></p>
+</td>
+<td>
+<code><span class="keyword">interface </span><span class="identifier">HasManyAssociation</span><span class="symbol">&lt;</span><span class="identifier">F</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../kales/-application-record/index.html"><span class="identifier">ApplicationRecord</span></a><span class="symbol">, </span><span class="identifier">T</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../kales/-application-record/index.html"><span class="identifier">ApplicationRecord</span></a><span class="symbol">&gt;</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-mutable-collection/index.html"><span class="identifier">MutableCollection</span></a><span class="symbol">&lt;</span><a href="-has-many-association/index.html#T"><span class="identifier">T</span></a><span class="symbol">&gt;</span><span class="symbol">, </span><a href="./-association.html"><span class="identifier">Association</span></a></code>
+<p>Represents a one-to-many association between models <a href="-has-many-association/index.html#F">F</a> and <a href="-has-many-association/index.html#T">T</a> respectively</p>
+</td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>
