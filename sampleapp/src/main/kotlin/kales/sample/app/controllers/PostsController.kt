@@ -28,11 +28,7 @@ class PostsController(call: ApplicationCall) : ApplicationController(call) {
   }
 
   suspend fun destroy() {
-    // TODO: DestroyView not found returns HTTP 500
-    //  RuntimeException: Unable to find view class kales.sample.app.views.posts.DestroyView
-    //  That should probably return 404 instead
-    //
-    // TODO: We should be able to redirectTo another action at this point
+    // TODO: We should be able to redirectTo another action at this point #71
     val params = receiveParameters()
     val post = Post.find(params["id"]!!.toInt())!!
     post.destroy()

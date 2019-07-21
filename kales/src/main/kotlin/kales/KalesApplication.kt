@@ -3,6 +3,7 @@ package kales
 import io.ktor.application.*
 import io.ktor.features.CallLogging
 import io.ktor.features.DefaultHeaders
+import io.ktor.features.HttpsRedirect
 import io.ktor.html.respondHtmlTemplate
 import io.ktor.http.HttpMethod
 import io.ktor.http.content.files
@@ -76,8 +77,7 @@ class KalesApplication<T : ApplicationLayout>(
       val view = callControllerAction(T::class, actionName, call)
       call.respondHtmlTemplate(layout.createInstance()) {
         body {
-          // TODO if view is null (maybe it doesnt exist) we should probably render a 404 error
-          //  instead of an empty page
+          // TODO: #70 Respond with 404 when a view was not found
           view?.renderContent(this)
         }
       }
