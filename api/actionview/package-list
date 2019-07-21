@@ -1,0 +1,4 @@
+$dokka.format:html
+$dokka.linkExtension:html
+$dokka.location:kales.actionview$formFor(kotlinx.html.FlowContent, kales.ApplicationRecord, kales.actionview.KalesFormMethod, kotlinx.html.FormEncType, kotlin.String, kotlin.Function1((kotlinx.html.FORM, kotlin.Unit)))kales.actionview/kotlinx.html.-flow-content/form-for.html
+kales.actionview

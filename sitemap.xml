@@ -9,6 +9,8 @@
 <url> <loc>https://kales.dev/blog/2017/04/10/blog-post-two</loc> <changefreq>weekly</changefreq> <priority>0.3</priority> </url>
 <url> <loc>https://kales.dev/blog/2016/03/11/blog-post</loc> <changefreq>weekly</changefreq> <priority>0.3</priority> </url>
 <url> <loc>https://kales.dev/docs/active-record</loc> <changefreq>hourly</changefreq> <priority>1.0</priority> <xhtml:link rel="alternate" hreflang="en" href="https://kales.dev/docs/active-record" /> </url>
+<url> <loc>https://kales.dev/docs/api</loc> <changefreq>hourly</changefreq> <priority>1.0</priority> <xhtml:link rel="alternate" hreflang="en" href="https://kales.dev/docs/api" /> </url>
+<url> <loc>https://kales.dev/docs/controllers-overview</loc> <changefreq>hourly</changefreq> <priority>1.0</priority> <xhtml:link rel="alternate" hreflang="en" href="https://kales.dev/docs/controllers-overview" /> </url>
 <url> <loc>https://kales.dev/docs/foreword</loc> <changefreq>hourly</changefreq> <priority>1.0</priority> <xhtml:link rel="alternate" hreflang="en" href="https://kales.dev/docs/foreword" /> </url>
 <url> <loc>https://kales.dev/docs/getting-started</loc> <changefreq>hourly</changefreq> <priority>1.0</priority> <xhtml:link rel="alternate" hreflang="en" href="https://kales.dev/docs/getting-started" /> </url>
 <url> <loc>https://kales.dev/docs/hot-reloading</loc> <changefreq>hourly</changefreq> <priority>1.0</priority> <xhtml:link rel="alternate" hreflang="en" href="https://kales.dev/docs/hot-reloading" /> </url>

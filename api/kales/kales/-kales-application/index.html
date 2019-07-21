@@ -1,0 +1,171 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>KalesApplication - kales</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">kales</a>&nbsp;/&nbsp;<a href="../index.html">kales</a>&nbsp;/&nbsp;<a href="./index.html">KalesApplication</a><br/>
+<br/>
+<h1>KalesApplication</h1>
+<code><span class="keyword">class </span><span class="identifier">KalesApplication</span><span class="symbol">&lt;</span><span class="identifier">T</span>&nbsp;<span class="symbol">:</span>&nbsp;<span class="identifier">ApplicationLayout</span><span class="symbol">&gt;</span></code>
+<h3>Constructors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="-init-.html">&lt;init&gt;</a></p>
+</td>
+<td>
+<code><span class="identifier">KalesApplication</span><span class="symbol">(</span><span class="identifier" id="kales.KalesApplication$<init>(io.ktor.application.Application, kotlin.reflect.KClass((kales.KalesApplication.T)))/application">application</span><span class="symbol">:</span>&nbsp;<span class="identifier">Application</span><span class="symbol">, </span><span class="identifier" id="kales.KalesApplication$<init>(io.ktor.application.Application, kotlin.reflect.KClass((kales.KalesApplication.T)))/layout">layout</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.reflect/-k-class/index.html"><span class="identifier">KClass</span></a><span class="symbol">&lt;</span><a href="index.html#T"><span class="identifier">T</span></a><span class="symbol">&gt;</span><span class="symbol">)</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="layout.html">layout</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">layout</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.reflect/-k-class/index.html"><span class="identifier">KClass</span></a><span class="symbol">&lt;</span><a href="index.html#T"><span class="identifier">T</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="routing.html">routing</a></p>
+</td>
+<td>
+<code><span class="keyword">lateinit</span> <span class="keyword">var </span><span class="identifier">routing</span><span class="symbol">: </span><span class="identifier">Routing</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="call-controller-action.html">callControllerAction</a></p>
+</td>
+<td>
+<code><span class="keyword">suspend</span> <span class="keyword">fun </span><span class="symbol">&lt;</span><span class="identifier">T</span>&nbsp;<span class="symbol">:</span>&nbsp;<span class="identifier">ApplicationController</span><span class="symbol">&gt;</span> <span class="identifier">callControllerAction</span><span class="symbol">(</span><span class="identifier" id="kales.KalesApplication$callControllerAction(kotlin.reflect.KClass((kales.KalesApplication.callControllerAction.T)), kotlin.String, io.ktor.application.ApplicationCall)/controllerClass">controllerClass</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.reflect/-k-class/index.html"><span class="identifier">KClass</span></a><span class="symbol">&lt;</span><a href="call-controller-action.html#T"><span class="identifier">T</span></a><span class="symbol">&gt;</span><span class="symbol">, </span><span class="identifier" id="kales.KalesApplication$callControllerAction(kotlin.reflect.KClass((kales.KalesApplication.callControllerAction.T)), kotlin.String, io.ktor.application.ApplicationCall)/actionName">actionName</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="kales.KalesApplication$callControllerAction(kotlin.reflect.KClass((kales.KalesApplication.callControllerAction.T)), kotlin.String, io.ktor.application.ApplicationCall)/call">call</span><span class="symbol">:</span>&nbsp;<span class="identifier">ApplicationCall</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">ActionView</span><span class="symbol">&lt;</span><span class="identifier">*</span><span class="symbol">&gt;</span><span class="symbol">?</span></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="create-custom-request-method-via-form-param-handler.html">createCustomRequestMethodViaFormParamHandler</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="symbol">&lt;</span><span class="identifier">T</span>&nbsp;<span class="symbol">:</span>&nbsp;<span class="identifier">ApplicationController</span><span class="symbol">&gt;</span> <span class="identifier">createCustomRequestMethodViaFormParamHandler</span><span class="symbol">(</span><span class="identifier" id="kales.KalesApplication$createCustomRequestMethodViaFormParamHandler(kotlin.String, kotlin.String, kotlin.String)/path">path</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="kales.KalesApplication$createCustomRequestMethodViaFormParamHandler(kotlin.String, kotlin.String, kotlin.String)/actionName">actionName</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="kales.KalesApplication$createCustomRequestMethodViaFormParamHandler(kotlin.String, kotlin.String, kotlin.String)/method">method</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Install a catch-all route that captures POST requests to any path and looks for a <code>_method</code>
+form parameter. If one is found, we then look for a DELETE/PATCH/PUT handler that matches that
+and rout to that handler instead. This is to work around a limitation where browsers don't
+support those verbs (only GET and POST) and it's the same workaround that Rails uses.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="default-request-handler.html">defaultRequestHandler</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="symbol">&lt;</span><span class="identifier">T</span>&nbsp;<span class="symbol">:</span>&nbsp;<span class="identifier">ApplicationController</span><span class="symbol">&gt;</span> <span class="identifier">defaultRequestHandler</span><span class="symbol">(</span><span class="identifier" id="kales.KalesApplication$defaultRequestHandler(kotlin.String)/actionName">actionName</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><span class="keyword">suspend </span><span class="identifier">PipelineContext</span><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">,</span>&nbsp;<span class="identifier">ApplicationCall</span><span class="symbol">&gt;</span><span class="symbol">.</span><span class="symbol">(</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="delete.html">delete</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="symbol">&lt;</span><span class="identifier">T</span>&nbsp;<span class="symbol">:</span>&nbsp;<span class="identifier">ApplicationController</span><span class="symbol">&gt;</span> <span class="identifier">delete</span><span class="symbol">(</span><span class="identifier" id="kales.KalesApplication$delete(kotlin.String, kotlin.String)/path">path</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="kales.KalesApplication$delete(kotlin.String, kotlin.String)/actionName">actionName</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="extract-app-package-name-from-controller-class.html">extractAppPackageNameFromControllerClass</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="symbol">&lt;</span><span class="identifier">T</span>&nbsp;<span class="symbol">:</span>&nbsp;<span class="identifier">ApplicationController</span><span class="symbol">&gt;</span> <span class="identifier">extractAppPackageNameFromControllerClass</span><span class="symbol">(</span><span class="identifier" id="kales.KalesApplication$extractAppPackageNameFromControllerClass(kotlin.reflect.KClass((kales.KalesApplication.extractAppPackageNameFromControllerClass.T)))/controllerClass">controllerClass</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.reflect/-k-class/index.html"><span class="identifier">KClass</span></a><span class="symbol">&lt;</span><a href="extract-app-package-name-from-controller-class.html#T"><span class="identifier">T</span></a><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code>
+<p>Takes a controller class name, eg: "com.example.app.controllers.FooController".
+Returns "com.example.app"</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="find-view-class.html">findViewClass</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="symbol">&lt;</span><span class="identifier">T</span>&nbsp;<span class="symbol">:</span>&nbsp;<span class="identifier">ApplicationController</span><span class="symbol">&gt;</span> <span class="identifier">findViewClass</span><span class="symbol">(</span><span class="identifier" id="kales.KalesApplication$findViewClass(kotlin.reflect.KClass((kales.KalesApplication.findViewClass.T)), kotlin.String, kotlin.String)/controllerClass">controllerClass</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.reflect/-k-class/index.html"><span class="identifier">KClass</span></a><span class="symbol">&lt;</span><a href="find-view-class.html#T"><span class="identifier">T</span></a><span class="symbol">&gt;</span><span class="symbol">, </span><span class="identifier" id="kales.KalesApplication$findViewClass(kotlin.reflect.KClass((kales.KalesApplication.findViewClass.T)), kotlin.String, kotlin.String)/actionName">actionName</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="kales.KalesApplication$findViewClass(kotlin.reflect.KClass((kales.KalesApplication.findViewClass.T)), kotlin.String, kotlin.String)/controllerClassName">controllerClassName</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://docs.oracle.com/javase/6/docs/api/java/lang/Class.html"><span class="identifier">Class</span></a><span class="symbol">&lt;</span><span class="identifier">ActionView</span><span class="symbol">&lt;</span><span class="identifier">*</span><span class="symbol">&gt;</span><span class="symbol">&gt;</span><span class="symbol">?</span></code>
+<p>Seearches for a view class matching this controller action, for example:
+"FooController" controller, "index" action, the searched class is
+"com.example.app.views.foo.IndexView"</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="get.html">get</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="symbol">&lt;</span><span class="identifier">T</span>&nbsp;<span class="symbol">:</span>&nbsp;<span class="identifier">ApplicationController</span><span class="symbol">&gt;</span> <span class="identifier">get</span><span class="symbol">(</span><span class="identifier" id="kales.KalesApplication$get(kotlin.String, kotlin.String)/path">path</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="kales.KalesApplication$get(kotlin.String, kotlin.String)/actionName">actionName</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Route</span></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="init-routes.html">initRoutes</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">initRoutes</span><span class="symbol">(</span><span class="identifier" id="kales.KalesApplication$initRoutes(kotlin.Function1((kales.KalesApplication((kales.KalesApplication.T)), kotlin.Unit)))/routes">routes</span><span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">KalesApplication</span></a><span class="symbol">&lt;</span><a href="index.html#T"><span class="identifier">T</span></a><span class="symbol">&gt;</span><span class="symbol">.</span><span class="symbol">(</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="patch.html">patch</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="symbol">&lt;</span><span class="identifier">T</span>&nbsp;<span class="symbol">:</span>&nbsp;<span class="identifier">ApplicationController</span><span class="symbol">&gt;</span> <span class="identifier">patch</span><span class="symbol">(</span><span class="identifier" id="kales.KalesApplication$patch(kotlin.String, kotlin.String)/path">path</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="kales.KalesApplication$patch(kotlin.String, kotlin.String)/actionName">actionName</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="post.html">post</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="symbol">&lt;</span><span class="identifier">T</span>&nbsp;<span class="symbol">:</span>&nbsp;<span class="identifier">ApplicationController</span><span class="symbol">&gt;</span> <span class="identifier">post</span><span class="symbol">(</span><span class="identifier" id="kales.KalesApplication$post(kotlin.String, kotlin.String)/path">path</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="kales.KalesApplication$post(kotlin.String, kotlin.String)/actionName">actionName</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Route</span></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="primary-constructor.html">primaryConstructor</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="symbol">&lt;</span><span class="identifier">T</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html"><span class="identifier">Any</span></a><span class="symbol">&gt;</span> <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.reflect/-k-class/index.html"><span class="identifier">KClass</span></a><span class="symbol">&lt;</span><a href="primary-constructor.html#T"><span class="identifier">T</span></a><span class="symbol">&gt;</span><span class="symbol">.</span><span class="identifier">primaryConstructor</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.reflect/-k-function/index.html"><span class="identifier">KFunction</span></a><span class="symbol">&lt;</span><a href="primary-constructor.html#T"><span class="identifier">T</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="put.html">put</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="symbol">&lt;</span><span class="identifier">T</span>&nbsp;<span class="symbol">:</span>&nbsp;<span class="identifier">ApplicationController</span><span class="symbol">&gt;</span> <span class="identifier">put</span><span class="symbol">(</span><span class="identifier" id="kales.KalesApplication$put(kotlin.String, kotlin.String)/path">path</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="kales.KalesApplication$put(kotlin.String, kotlin.String)/actionName">actionName</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Companion Object Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="logger.html">logger</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">logger</span><span class="symbol">: </span><a href="https://docs.oracle.com/javase/6/docs/api/java/util/logging/Logger.html"><span class="identifier">Logger</span></a></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Extension Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="../kotlin.-any/call-suspend-method.html">callSuspendMethod</a></p>
+</td>
+<td>
+<code><span class="keyword">suspend</span> <span class="keyword">fun </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html"><span class="identifier">Any</span></a><span class="symbol">.</span><span class="identifier">callSuspendMethod</span><span class="symbol">(</span><span class="identifier" id="kales$callSuspendMethod(kotlin.Any, kotlin.String, kotlin.Array((kotlin.Any)))/methodName">methodName</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="keyword">vararg</span> <span class="identifier" id="kales$callSuspendMethod(kotlin.Any, kotlin.String, kotlin.Array((kotlin.Any)))/args">args</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html"><span class="identifier">Any</span></a><span class="symbol">?</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Reflectively calls the provided suspend method with args</p>
+</td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

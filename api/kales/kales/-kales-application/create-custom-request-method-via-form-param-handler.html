@@ -1,0 +1,18 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>KalesApplication.createCustomRequestMethodViaFormParamHandler - kales</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">kales</a>&nbsp;/&nbsp;<a href="../index.html">kales</a>&nbsp;/&nbsp;<a href="index.html">KalesApplication</a>&nbsp;/&nbsp;<a href="./create-custom-request-method-via-form-param-handler.html">createCustomRequestMethodViaFormParamHandler</a><br/>
+<br/>
+<h1>createCustomRequestMethodViaFormParamHandler</h1>
+<a name="kales.KalesApplication$createCustomRequestMethodViaFormParamHandler(kotlin.String, kotlin.String, kotlin.String)"></a>
+<code><span class="keyword">inline</span> <span class="keyword">fun </span><span class="symbol">&lt;</span><span class="keyword">reified</span>&nbsp;<span class="identifier">T</span>&nbsp;<span class="symbol">:</span>&nbsp;<span class="identifier">ApplicationController</span><span class="symbol">&gt;</span> <span class="identifier">createCustomRequestMethodViaFormParamHandler</span><span class="symbol">(</span><span class="identifier" id="kales.KalesApplication$createCustomRequestMethodViaFormParamHandler(kotlin.String, kotlin.String, kotlin.String)/path">path</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="kales.KalesApplication$createCustomRequestMethodViaFormParamHandler(kotlin.String, kotlin.String, kotlin.String)/actionName">actionName</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="kales.KalesApplication$createCustomRequestMethodViaFormParamHandler(kotlin.String, kotlin.String, kotlin.String)/method">method</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Install a catch-all route that captures POST requests to any path and looks for a <code>_method</code>
+form parameter. If one is found, we then look for a DELETE/PATCH/PUT handler that matches that
+and rout to that handler instead. This is to work around a limitation where browsers don't
+support those verbs (only GET and POST) and it's the same workaround that Rails uses.</p>
+</BODY>
+</HTML>
