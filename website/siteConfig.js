@@ -91,6 +91,8 @@ const siteConfig = {
 
   // Open Graph and Twitter card images.
   ogImage: 'img/docusaurus.png',
+  // Dokka's custom CSS
+  separateCss: ['style.css'],
   twitterImage: 'img/docusaurus.png',
 
   // Show documentation's last contributor's name.

@@ -33,7 +33,8 @@
       "Docs": "Docs"
     },
     "categories": {
-      "Introduction": "Introduction"
+      "Introduction": "Introduction",
+      "API": "API"
     }
   },
   "pages-strings": {

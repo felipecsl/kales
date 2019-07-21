@@ -1,0 +1,13 @@
+$dokka.format:html
+$dokka.linkExtension:html
+$dokka.location:kales.cli$copyToWithLogging(java.io.InputStream, java.io.File)kales.cli/java.io.-input-stream/copy-to-with-logging.html
+$dokka.location:kales.cli$printConflict(java.io.File)kales.cli/java.io.-file/print-conflict.html
+$dokka.location:kales.cli$printCreated(java.io.File)kales.cli/java.io.-file/print-created.html
+$dokka.location:kales.cli$printIdentical(java.io.File)kales.cli/java.io.-file/print-identical.html
+$dokka.location:kales.cli$printSkipped(java.io.File)kales.cli/java.io.-file/print-skipped.html
+$dokka.location:kales.cli$printStatus(java.io.File, kotlin.String)kales.cli/java.io.-file/print-status.html
+$dokka.location:kales.cli$relativePathToWorkingDir(java.io.File)kales.cli/java.io.-file/relative-path-to-working-dir.html
+$dokka.location:kales.cli$safeListFiles(java.io.File)kales.cli/java.io.-file/safe-list-files.html
+$dokka.location:kales.cli$writeTextWithLogging(java.io.File, kotlin.String, java.nio.charset.Charset)kales.cli/java.io.-file/write-text-with-logging.html
+kales.cli
+kales.cli.task

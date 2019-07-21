@@ -1,0 +1,103 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>ApplicationRecord - activemodel</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">activemodel</a>&nbsp;/&nbsp;<a href="../index.html">kales</a>&nbsp;/&nbsp;<a href="./index.html">ApplicationRecord</a><br/>
+<br/>
+<h1>ApplicationRecord</h1>
+<code><span class="keyword">interface </span><span class="identifier">ApplicationRecord</span></code>
+<p>Maps model classes to database records. Kales follows some conventions when dealing with models:</p>
+<ul><li>All models are expected to have an <code>id</code> autoincrement primary key column</li>
+<li>Foreign key columns are mapped using <code>&lt;model_name&gt;_id</code> column naming format</li>
+<li>The table name is a pluralized lowercase model name, eg: <code>User</code> -&gt; table is <code>users</code>. We don't
+do any fancy pluralization for now, just naively append <code>s</code> at the end, which means the table
+for <code>Hero</code> would be <code>heros</code>, awkwardly.</li>
+</ul>
+<h3>Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="id.html">id</a></p>
+</td>
+<td>
+<code><span class="keyword">abstract</span> <span class="keyword">val </span><span class="identifier">id</span><span class="symbol">: </span><a href="../../kales.activemodel/-maybe-record-id.html"><span class="identifier">MaybeRecordId</span></a></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Companion Object Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="-j-d-b-i.html">JDBI</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">JDBI</span><span class="symbol">: </span><span class="identifier">Jdbi</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Companion Object Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="all-records.html">allRecords</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="symbol">&lt;</span><span class="identifier">T</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">ApplicationRecord</span></a><span class="symbol">&gt;</span> <span class="identifier">allRecords</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html"><span class="identifier">List</span></a><span class="symbol">&lt;</span><a href="all-records.html#T"><span class="identifier">T</span></a><span class="symbol">&gt;</span></code>
+<p>Returns a list with all records in the table (potentially dangerous for big tables!)</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="create-record.html">createRecord</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="symbol">&lt;</span><span class="identifier">T</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">ApplicationRecord</span></a><span class="symbol">&gt;</span> <span class="identifier">createRecord</span><span class="symbol">(</span><span class="identifier" id="kales.ApplicationRecord.Companion$createRecord(kotlin.collections.Map((kotlin.String, kotlin.Any)))/values">values</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-map/index.html"><span class="identifier">Map</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">,</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html"><span class="identifier">Any</span></a><span class="symbol">?</span><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><a href="create-record.html#T"><span class="identifier">T</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="destroy-record.html">destroyRecord</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="symbol">&lt;</span><span class="identifier">T</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">ApplicationRecord</span></a><span class="symbol">&gt;</span> <a href="destroy-record.html#T"><span class="identifier">T</span></a><span class="symbol">.</span><span class="identifier">destroyRecord</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="destroy-record.html#T"><span class="identifier">T</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="find-record.html">findRecord</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="symbol">&lt;</span><span class="identifier">T</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">ApplicationRecord</span></a><span class="symbol">&gt;</span> <span class="identifier">findRecord</span><span class="symbol">(</span><span class="identifier" id="kales.ApplicationRecord.Companion$findRecord(kales.activemodel.RecordId)/id">id</span><span class="symbol">:</span>&nbsp;<a href="../../kales.activemodel/-record-id/index.html"><span class="identifier">RecordId</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="find-record.html#T"><span class="identifier">T</span></a><span class="symbol">?</span></code><br/>
+<code><span class="keyword">fun </span><span class="symbol">&lt;</span><span class="identifier">T</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">ApplicationRecord</span></a><span class="symbol">&gt;</span> <span class="identifier">findRecord</span><span class="symbol">(</span><span class="identifier" id="kales.ApplicationRecord.Companion$findRecord(kotlin.Int)/id">id</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="find-record.html#T"><span class="identifier">T</span></a><span class="symbol">?</span></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="save-record.html">saveRecord</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="symbol">&lt;</span><span class="identifier">T</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">ApplicationRecord</span></a><span class="symbol">&gt;</span> <a href="save-record.html#T"><span class="identifier">T</span></a><span class="symbol">.</span><span class="identifier">saveRecord</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="save-record.html#T"><span class="identifier">T</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="use-jdbi.html">useJdbi</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span> <span class="identifier">useJdbi</span><span class="symbol">(</span><span class="identifier" id="kales.ApplicationRecord.Companion$useJdbi(kotlin.Function1((org.jdbi.v3.core.Handle, kales.ApplicationRecord.Companion.useJdbi.T)))/block">block</span><span class="symbol">:</span>&nbsp;<span class="symbol">(</span><span class="identifier">Handle</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="use-jdbi.html#T"><span class="identifier">T</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="use-jdbi.html#T"><span class="identifier">T</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="where-records.html">whereRecords</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="symbol">&lt;</span><span class="identifier">T</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">ApplicationRecord</span></a><span class="symbol">&gt;</span> <span class="identifier">whereRecords</span><span class="symbol">(</span><span class="identifier" id="kales.ApplicationRecord.Companion$whereRecords(kotlin.collections.Map((kotlin.String, kotlin.Any)))/clause">clause</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-map/index.html"><span class="identifier">Map</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">,</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html"><span class="identifier">Any</span></a><span class="symbol">?</span><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html"><span class="identifier">List</span></a><span class="symbol">&lt;</span><a href="where-records.html#T"><span class="identifier">T</span></a><span class="symbol">&gt;</span></code>
+<p>Returns only the records matching the provided selection criteria</p>
+</td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

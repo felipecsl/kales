@@ -1,0 +1,103 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>KApplicationRecordClass - activemodel</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">activemodel</a>&nbsp;/&nbsp;<a href="../index.html">kales.internal</a>&nbsp;/&nbsp;<a href="./index.html">KApplicationRecordClass</a><br/>
+<br/>
+<h1>KApplicationRecordClass</h1>
+<code><span class="keyword">class </span><span class="identifier">KApplicationRecordClass</span></code>
+<h3>Constructors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="-init-.html">&lt;init&gt;</a></p>
+</td>
+<td>
+<code><span class="identifier">KApplicationRecordClass</span><span class="symbol">(</span><span class="identifier" id="kales.internal.KApplicationRecordClass$<init>(kotlin.reflect.KClass((kales.ApplicationRecord)))/klass">klass</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.reflect/-k-class/index.html"><span class="identifier">KClass</span></a><span class="symbol">&lt;</span><span class="keyword">out</span>&nbsp;<a href="../../kales/-application-record/index.html"><span class="identifier">ApplicationRecord</span></a><span class="symbol">&gt;</span><span class="symbol">)</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="associations.html">associations</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">associations</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html"><span class="identifier">List</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.reflect/-k-parameter/index.html"><span class="identifier">KParameter</span></a><span class="symbol">&gt;</span></code>
+<p>Returns a <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a> of all <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.reflect/-k-parameter/index.html">KParameter</a> associations for this <a href="../../kales/-application-record/index.html">ApplicationRecord</a></p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="as-symbol.html">asSymbol</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">asSymbol</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="belongs-to-associations.html">belongsToAssociations</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">belongsToAssociations</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html"><span class="identifier">List</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.reflect/-k-parameter/index.html"><span class="identifier">KParameter</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="constructor.html">constructor</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">constructor</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.reflect/-k-function/index.html"><span class="identifier">KFunction</span></a><span class="symbol">&lt;</span><a href="../../kales/-application-record/index.html"><span class="identifier">ApplicationRecord</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="direct-parameters.html">directParameters</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">directParameters</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html"><span class="identifier">List</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.reflect/-k-parameter/index.html"><span class="identifier">KParameter</span></a><span class="symbol">&gt;</span></code>
+<p>Returns a <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html">List</a> of all <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.reflect/-k-parameter/index.html">KParameter</a> directly defined on this class (except associations)</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="foreign-key-column-name.html">foreignKeyColumnName</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">foreignKeyColumnName</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code>
+<p>eg: Video class -&gt; video_id, Post class -&gt; post_id</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="has-many-associations.html">hasManyAssociations</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">hasManyAssociations</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html"><span class="identifier">List</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.reflect/-k-parameter/index.html"><span class="identifier">KParameter</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="klass.html">klass</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">klass</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.reflect/-k-class/index.html"><span class="identifier">KClass</span></a><span class="symbol">&lt;</span><span class="keyword">out</span>&nbsp;<a href="../../kales/-application-record/index.html"><span class="identifier">ApplicationRecord</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="table-name.html">tableName</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">tableName</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code>
+<p>Video class -&gt; video
+TODO Pluralize irregular words (#49)
+TODO Camelize it (#50)</p>
+</td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

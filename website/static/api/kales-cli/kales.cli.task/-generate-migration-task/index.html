@@ -1,0 +1,106 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>GenerateMigrationTask - kales-cli</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">kales-cli</a>&nbsp;/&nbsp;<a href="../index.html">kales.cli.task</a>&nbsp;/&nbsp;<a href="./index.html">GenerateMigrationTask</a><br/>
+<br/>
+<h1>GenerateMigrationTask</h1>
+<code><span class="keyword">class </span><span class="identifier">GenerateMigrationTask</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../-kales-contextual-task/index.html"><span class="identifier">KalesContextualTask</span></a></code>
+<h3>Constructors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="-init-.html">&lt;init&gt;</a></p>
+</td>
+<td>
+<code><span class="identifier">GenerateMigrationTask</span><span class="symbol">(</span><span class="identifier" id="kales.cli.task.GenerateMigrationTask$<init>(java.io.File, kotlin.String, kotlin.String, kotlin.Function0((java.util.Date)))/workingDir">workingDir</span><span class="symbol">:</span>&nbsp;<a href="https://docs.oracle.com/javase/6/docs/api/java/io/File.html"><span class="identifier">File</span></a><span class="symbol">, </span><span class="identifier" id="kales.cli.task.GenerateMigrationTask$<init>(java.io.File, kotlin.String, kotlin.String, kotlin.Function0((java.util.Date)))/migrationClassName">migrationClassName</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="kales.cli.task.GenerateMigrationTask$<init>(java.io.File, kotlin.String, kotlin.String, kotlin.Function0((java.util.Date)))/tableToCreate">tableToCreate</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">?</span>&nbsp;<span class="symbol">=</span>&nbsp;null<span class="symbol">, </span><span class="identifier" id="kales.cli.task.GenerateMigrationTask$<init>(java.io.File, kotlin.String, kotlin.String, kotlin.Function0((java.util.Date)))/dateProvider">dateProvider</span><span class="symbol">:</span>&nbsp;<span class="symbol">(</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://docs.oracle.com/javase/6/docs/api/java/util/Date.html"><span class="identifier">Date</span></a>&nbsp;<span class="symbol">=</span>&nbsp;{ Date() }<span class="symbol">)</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Inherited Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="../-kales-contextual-task/app-directory.html">appDirectory</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">appDirectory</span><span class="symbol">: </span><a href="https://docs.oracle.com/javase/6/docs/api/java/io/File.html"><span class="identifier">File</span></a></code>
+<p>returns the directory where the code for package "com.example.foo.app" is found</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="../-kales-contextual-task/application-root-dir.html">applicationRootDir</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">applicationRootDir</span><span class="symbol">: </span><a href="https://docs.oracle.com/javase/6/docs/api/java/io/File.html"><span class="identifier">File</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="../-kales-contextual-task/app-package-name.html">appPackageName</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">appPackageName</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">?</span></code>
+<p>returns "com.example.foo"</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="../-kales-contextual-task/db-migrate-dir.html">dbMigrateDir</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">dbMigrateDir</span><span class="symbol">: </span><a href="https://docs.oracle.com/javase/6/docs/api/java/io/File.html"><span class="identifier">File</span></a></code>
+<p>Returns the path to the migrations directory</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="../-kales-contextual-task/resources-dir.html">resourcesDir</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">resourcesDir</span><span class="symbol">: </span><a href="https://docs.oracle.com/javase/6/docs/api/java/io/File.html"><span class="identifier">File</span></a></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="run.html">run</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">run</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Inherited Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="../-kales-contextual-task/raw-write-to.html">rawWriteTo</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">FileSpec</span><span class="symbol">.</span><span class="identifier">rawWriteTo</span><span class="symbol">(</span><span class="identifier" id="kales.cli.task.KalesContextualTask$rawWriteTo(com.squareup.kotlinpoet.FileSpec, java.nio.file.Path)/destination">destination</span><span class="symbol">:</span>&nbsp;<span class="identifier">Path</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Writes this <a href="#">FileSpec</a> to the provided file <a href="#">Path</a></p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="../-kales-contextual-task/read-database-config.html">readDatabaseConfig</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">readDatabaseConfig</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">KalesDatabaseConfig</span></code>
+<p>Returns a <a href="#">KalesDatabaseConfig</a> representing the current project's <code>database.yml</code> file</p>
+</td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

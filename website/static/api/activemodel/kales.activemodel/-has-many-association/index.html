@@ -1,0 +1,57 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>HasManyAssociation - activemodel</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">activemodel</a>&nbsp;/&nbsp;<a href="../index.html">kales.activemodel</a>&nbsp;/&nbsp;<a href="./index.html">HasManyAssociation</a><br/>
+<br/>
+<h1>HasManyAssociation</h1>
+<code><span class="keyword">interface </span><span class="identifier">HasManyAssociation</span><span class="symbol">&lt;</span><span class="identifier">F</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../../kales/-application-record/index.html"><span class="identifier">ApplicationRecord</span></a><span class="symbol">, </span><span class="identifier">T</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../../kales/-application-record/index.html"><span class="identifier">ApplicationRecord</span></a><span class="symbol">&gt;</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-mutable-collection/index.html"><span class="identifier">MutableCollection</span></a><span class="symbol">&lt;</span><a href="index.html#T"><span class="identifier">T</span></a><span class="symbol">&gt;</span><span class="symbol">, </span><a href="../-association.html"><span class="identifier">Association</span></a></code>
+<p>Represents a one-to-many association between models <a href="index.html#F">F</a> and <a href="index.html#T">T</a> respectively</p>
+<h3>Properties</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="collection.html">collection</a></p>
+</td>
+<td>
+<code><span class="keyword">abstract</span> <span class="keyword">val </span><span class="identifier">collection</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-mutable-list/index.html"><span class="identifier">MutableList</span></a><span class="symbol">&lt;</span><a href="index.html#T"><span class="identifier">T</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="from-klass.html">fromKlass</a></p>
+</td>
+<td>
+<code><span class="keyword">abstract</span> <span class="keyword">val </span><span class="identifier">fromKlass</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.reflect/-k-class/index.html"><span class="identifier">KClass</span></a><span class="symbol">&lt;</span><a href="index.html#F"><span class="identifier">F</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Companion Object Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="empty.html">empty</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="symbol">&lt;</span><span class="identifier">F</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../../kales/-application-record/index.html"><span class="identifier">ApplicationRecord</span></a><span class="symbol">, </span><span class="identifier">T</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../../kales/-application-record/index.html"><span class="identifier">ApplicationRecord</span></a><span class="symbol">&gt;</span> <span class="identifier">empty</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="../-has-many-association-impl/index.html"><span class="identifier">HasManyAssociationImpl</span></a><span class="symbol">&lt;</span><a href="empty.html#F"><span class="identifier">F</span></a><span class="symbol">,</span>&nbsp;<a href="empty.html#T"><span class="identifier">T</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+</tbody>
+</table>
+<h3>Inheritors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="../-has-many-association-impl/index.html">HasManyAssociationImpl</a></p>
+</td>
+<td>
+<code><span class="keyword">abstract</span> <span class="keyword">class </span><span class="identifier">HasManyAssociationImpl</span><span class="symbol">&lt;</span><span class="identifier">F</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../../kales/-application-record/index.html"><span class="identifier">ApplicationRecord</span></a><span class="symbol">, </span><span class="identifier">T</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../../kales/-application-record/index.html"><span class="identifier">ApplicationRecord</span></a><span class="symbol">&gt;</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">HasManyAssociation</span></a><span class="symbol">&lt;</span><a href="../-has-many-association-impl/index.html#F"><span class="identifier">F</span></a><span class="symbol">,</span>&nbsp;<a href="../-has-many-association-impl/index.html#T"><span class="identifier">T</span></a><span class="symbol">&gt;</span></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

@@ -1,0 +1,11 @@
+$dokka.format:html
+$dokka.linkExtension:html
+$dokka.location:kales.sample$module(io.ktor.application.Application)kales.sample/io.ktor.application.-application/module.html
+$dokka.location:kales.sample.app.views.posts$textArea(kotlinx.html.FlowOrInteractiveOrPhrasingContent, kotlin.String, kotlin.String, kotlinx.html.TextAreaWrap, kotlin.String, kotlin.String, kotlin.Function1((kotlinx.html.TEXTAREA, kotlin.Unit)))kales.sample.app.views.posts/kotlinx.html.-flow-or-interactive-or-phrasing-content/text-area.html
+kales.sample
+kales.sample.app.controllers
+kales.sample.app.models
+kales.sample.app.views.layouts
+kales.sample.app.views.posts
+kales.sample.app.views.shared
+kales.sample.db.migrate

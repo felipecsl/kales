@@ -1,0 +1,5 @@
+$dokka.format:html
+$dokka.linkExtension:html
+$dokka.location:kales$callSuspendMethod(kotlin.Any, kotlin.String, kotlin.Array((kotlin.Any)))kales/kotlin.-any/call-suspend-method.html
+$dokka.location:kales$kalesApp(io.ktor.application.Application, kotlin.reflect.KClass((kales.kalesApp.T)), kotlin.Function1((kales.KalesApplication((kales.kalesApp.T)), kotlin.Unit)))kales/io.ktor.application.-application/kales-app.html
+kales
