@@ -8,6 +8,10 @@
       "active-record": {
         "title": "Active Record Basics"
       },
+      "controllers-overview": {
+        "title": "Controllers Overview",
+        "sidebar_label": "Controllers Overview"
+      },
       "foreword": {
         "title": "Foreword"
       },

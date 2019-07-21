@@ -23,18 +23,19 @@ class PostsController(call: ApplicationCall) : ApplicationController(call) {
   }
 
   suspend fun create() {
-    val params = call.receiveParameters()
+    val params = receiveParameters()
     bindings = PostViewModel(Post.create(params["title"]!!, params["content"]!!))
   }
 
   suspend fun destroy() {
-    val params = call.receiveParameters()
+    // TODO: We should be able to redirectTo another action at this point #71
+    val params = receiveParameters()
     val post = Post.find(params["id"]!!.toInt())!!
     post.destroy()
   }
 
   suspend fun writeComment() {
-    val params = call.receiveParameters()
+    val params = receiveParameters()
     val commentText = params["comment_text"]
         ?: throw IllegalArgumentException("Missing param `comment_text`")
     val id = params["id"]?.toInt()

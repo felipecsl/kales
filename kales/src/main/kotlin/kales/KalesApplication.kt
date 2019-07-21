@@ -76,7 +76,8 @@ class KalesApplication<T : ApplicationLayout>(
       val view = callControllerAction(T::class, actionName, call)
       call.respondHtmlTemplate(layout.createInstance()) {
         body {
-          view.renderContent(this)
+          // TODO: #70 Respond with 404 when a view was not found
+          view?.renderContent(this)
         }
       }
     }
@@ -105,12 +106,11 @@ class KalesApplication<T : ApplicationLayout>(
     controllerClass: KClass<T>,
     actionName: String,
     call: ApplicationCall
-  ): ActionView<*> {
+  ): ActionView<*>? {
     val controllerClassName = controllerClass.simpleName?.replace("Controller", "")?.toLowerCase()
       ?: throw RuntimeException("Cannot determine the class name for Controller")
     @Suppress("UNCHECKED_CAST")
-    val controllerCtor = controllerClass.primaryConstructor ?: throw RuntimeException(
-      "Primary constructor not found for Controller class $controllerClassName")
+    val controllerCtor = controllerClass.primaryConstructor()
     val controller = try {
       controllerCtor.call(call)
     } catch (e: RuntimeException) {
@@ -130,25 +130,33 @@ class KalesApplication<T : ApplicationLayout>(
     } else {
       // Otherwise, search for the inferred view class
       val viewClass = findViewClass(controllerClass, actionName, controllerClassName)
-      try {
-        viewClass.kotlin.primaryConstructor?.call(controller.bindings)
-          ?: throw RuntimeException("Unable to find primary constructor for $viewClass")
-      } catch (e: RuntimeException) {
-        throw RuntimeException("Failed to instantiate view $viewClass", e)
+      if (viewClass != null) {
+        try {
+          viewClass.kotlin.primaryConstructor().call(controller.bindings)
+        } catch (e: RuntimeException) {
+          throw RuntimeException("Failed to instantiate view $viewClass", e)
+        }
+      } else {
+        // View not found
+        null
       }
     }
   }
+
+  fun <T : Any> KClass<T>.primaryConstructor() =
+    primaryConstructor ?: throw RuntimeException("Primary constructor not found for $this")
 
   /**
    * Seearches for a view class matching this controller action, for example:
    * "FooController" controller, "index" action, the searched class is
    * "com.example.app.views.foo.IndexView"
    */
-  fun <T : ApplicationController> findViewClass(
+  @Suppress("NOTHING_TO_INLINE")
+  inline fun <T : ApplicationController> findViewClass(
     controllerClass: KClass<T>,
     actionName: String,
     controllerClassName: String
-  ): Class<ActionView<*>> {
+  ): Class<ActionView<*>>? {
     val applicationPackage = extractAppPackageNameFromControllerClass(controllerClass)
     val viewClassName = "${actionName.capitalize()}View"
     val viewFullyQualifiedName = "$applicationPackage.views.$controllerClassName.$viewClassName"
@@ -156,15 +164,17 @@ class KalesApplication<T : ApplicationLayout>(
       @Suppress("UNCHECKED_CAST")
       Class.forName(viewFullyQualifiedName) as Class<ActionView<*>>
     } catch (e: ClassNotFoundException) {
-      throw RuntimeException("Unable to find view class $viewFullyQualifiedName")
+      logger.warning("Unable to find view class $viewFullyQualifiedName")
+      null
     }
   }
 
   /**
    * Takes a controller class name, eg: "com.example.app.controllers.FooController".
    * Returns "com.example.app"
-   * */
-  fun <T : ApplicationController> extractAppPackageNameFromControllerClass(
+   */
+  @Suppress("NOTHING_TO_INLINE")
+  inline fun <T : ApplicationController> extractAppPackageNameFromControllerClass(
     controllerClass: KClass<T>
   ) =
     (controllerClass.qualifiedName

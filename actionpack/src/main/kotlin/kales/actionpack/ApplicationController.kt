@@ -3,6 +3,7 @@ package kales.actionpack
 import io.ktor.application.ApplicationCall
 import io.ktor.request.ApplicationRequest
 import io.ktor.http.Parameters
+import io.ktor.http.plus
 import io.ktor.request.receiveParameters
 import io.ktor.routing.RoutingApplicationCall
 import kales.actionview.ViewModel
@@ -25,7 +26,7 @@ abstract class ApplicationController(val call: ApplicationCall) {
    * [DynamicParameterRouteSelector]).
    */
   suspend fun receiveParameters(): Parameters {
-    return if (call is RoutingApplicationCall) {
+    val parameters = if (call is RoutingApplicationCall) {
       (call.javaClass.kotlin.declaredMemberProperties
         .find { it.name == "call" }!!
         .also { it.isAccessible = true }
@@ -34,5 +35,13 @@ abstract class ApplicationController(val call: ApplicationCall) {
     } else {
       call.receiveParameters()
     }
+    // URL parameters are fetched with call.parameters instead, it's a bit weird, but we'll
+    // concatenate both Paramters together so we conveniently return everything together.
+    // TODO: What would happen if we have a form parameter and a URL parameter with the same name
+    //  eg.: "id", I assume in this case only one of the two would be returned, we should instead
+    //  return all parameter matches for a specific key. Sounds like this should be a map from
+    //  String to a List<String>. Apparently `Parameters` already supports this with `getAll()`,
+    //  we should just write a test to validate that scenario.
+    return parameters + call.parameters
   }
 }

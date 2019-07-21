@@ -1,6 +1,14 @@
 {
   "docs": {
-    "Introduction": ["foreword","installation", "getting-started", "hot-reloading", "migrations", "active-record"]
+    "Introduction": [
+      "foreword",
+      "installation",
+      "getting-started",
+      "hot-reloading",
+      "migrations",
+      "active-record",
+      "controllers-overview"
+    ]
   }
 }
 
