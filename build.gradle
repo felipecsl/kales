@@ -1,4 +1,8 @@
 buildscript {
+  dependencies {
+    classpath "org.jetbrains.dokka:dokka-gradle-plugin:0.9.18"
+  }
+
   repositories {
     mavenLocal()
     jcenter()
@@ -23,8 +27,15 @@ subprojects {
     apply from: "$rootDir/gradle/publish.gradle"
   }
 
+  apply plugin: 'org.jetbrains.dokka'
+
   configurations {
     ktlint
+  }
+
+  dokka {
+    outputFormat = 'html'
+    outputDirectory = "$buildDir/javadoc"
   }
 
   dependencies {
