@@ -63,17 +63,13 @@ have a class that looks somewhat like this:
 ```kotlin
 package com.example.app.models
 
-import kales.ApplicationRecord
-import kales.ApplicationRecord.Companion.*
-import kotlin.Int
-
-data class Product(val id: Int, val name: String) : ApplicationRecord() {
+data class Product(val id: MaybeRecordId, val name: String) : ApplicationRecord() {
   fun save() = saveRecord()
   fun destroy() = destroyRecord()
 
   companion object {
       fun all() = allRecords<Product>()
-      fun find(id: Int) = findRecord<Product>(id)
+      fun find(id: MaybeRecordId) = findRecord<Product>(id)
   }
 }
 ``` 
@@ -81,6 +77,10 @@ data class Product(val id: Int, val name: String) : ApplicationRecord() {
 This will create a `Product` model, mapped to a `products` table at the database. By doing this you'll 
 also have the ability to map the columns of each row in that table with the attributes of the 
 instances of your model.
+
+All records have an `id` column with type `MaybeRecordId`. This data type that represents 
+`ApplicationRecord.id` and can be either `NoneId` or `RecordId` to represent the fact that an ID may 
+or may not exist depending on whether the record has been previously persisted to the DB or not.
 
 ## Reading and Wrinting data
 
