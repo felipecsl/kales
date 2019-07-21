@@ -8,8 +8,6 @@
       "migrations",
       "active-record",
       "controllers-overview"
-    ],
-    "API": [
     ]
   }
 }
