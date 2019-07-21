@@ -10,10 +10,6 @@
       "controllers-overview"
     ],
     "API": [
-      "actionmailer",
-      "actionpack",
-      "actionview",
-      "activejob"
     ]
   }
 }
