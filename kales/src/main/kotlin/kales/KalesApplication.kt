@@ -3,7 +3,6 @@ package kales
 import io.ktor.application.*
 import io.ktor.features.CallLogging
 import io.ktor.features.DefaultHeaders
-import io.ktor.features.HttpsRedirect
 import io.ktor.html.respondHtmlTemplate
 import io.ktor.http.HttpMethod
 import io.ktor.http.content.files
