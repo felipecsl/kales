@@ -34,11 +34,10 @@
     },
     "links": {
       "Docs": "Docs",
-      "API": "API"
+      "API reference": "API reference"
     },
     "categories": {
-      "Introduction": "Introduction",
-      "API": "API"
+      "Introduction": "Introduction"
     }
   },
   "pages-strings": {
