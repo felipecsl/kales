@@ -25,7 +25,9 @@ class GenerateControllerTaskTest {
       import io.ktor.application.ApplicationCall
       import kales.actionpack.ApplicationController
 
-      class BarController(call: ApplicationCall) : ApplicationController(call)
+      class BarController(
+        call: ApplicationCall
+      ) : ApplicationController(call)
 
     """.trimIndent())
   }
@@ -46,10 +48,12 @@ class GenerateControllerTaskTest {
       import kales.actionpack.ApplicationController
       import kotlin.Any
 
-      class BarController(call: ApplicationCall) : ApplicationController(call) {
-          fun blah(): Any? = null
+      class BarController(
+        call: ApplicationCall
+      ) : ApplicationController(call) {
+        fun blah(): Any? = null
 
-          fun foo(): Any? = null
+        fun foo(): Any? = null
       }
 
     """.trimIndent())

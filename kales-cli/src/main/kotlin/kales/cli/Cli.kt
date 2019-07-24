@@ -89,6 +89,19 @@ class GenerateModel : CliktCommand(name = "model", help = """
   }
 }
 
+class GenerateView : CliktCommand(name = "view", help = """
+    Stubs out a new view. Pass the CamelCased model name.
+
+    This generates a view class in app/views/<resource>.
+""".trimIndent()) {
+  private val viewName by argument()
+  private val resourceName by argument()
+
+  override fun run() {
+    GenerateViewTask(workingDir(), resourceName, viewName).run()
+  }
+}
+
 class GenerateMigration : CliktCommand(name = "migration", help = """
     Stubs out a new database migration. Pass the migration name CamelCased.
 
