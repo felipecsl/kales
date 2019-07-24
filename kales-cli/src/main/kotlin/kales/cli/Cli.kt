@@ -90,7 +90,7 @@ class GenerateModel : CliktCommand(name = "model", help = """
 }
 
 class GenerateView : CliktCommand(name = "view", help = """
-    Stubs out a new view. Pass the CamelCased model name.
+    Stubs out a new view. Pass the CamelCased view name, eg.: IndexView.
 
     This generates a view class in app/views/<resource>.
 """.trimIndent()) {
@@ -118,6 +118,7 @@ fun main(args: Array<String>) {
   val generateCommand = Generate()
       .subcommands(GenerateController())
       .subcommands(GenerateModel())
+      .subcommands(GenerateView())
       .subcommands(GenerateMigration())
   Cli().subcommands(New(), generateCommand, DbMigrate(), DbCreate(), Version())
       .main(args)

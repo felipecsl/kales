@@ -13,27 +13,25 @@ class GenerateViewTask(
   private val viewName: String,
   private val viewModelName: String = "${viewName}Model"
 ) : KalesContextualTask(workingDir) {
+  private val viewPackageName = "$appPackageName.app.views.$resourceName"
+
   override fun run() {
     val resourceViewsDir = File(File(appDirectory, "views"), resourceName)
+    resourceViewsDir.mkdirs()
     writeViewClassFile(resourceViewsDir)
   }
 
   private fun writeViewClassFile(viewsDir: File) {
-    val files = buildFileSpecs()
-    val outputPath = viewsDir.toPath().resolve("$viewName.kt")
-    files.forEach { it.rawWriteTo(outputPath) }
+    val viewFile = buildViewFileSpec()
+    val viewModelFile = buildViewModelFileSpec()
+    val viewOutputPath = viewsDir.toPath().resolve("$viewName.kt")
+    val viewModelOutputPath = viewsDir.toPath().resolve("${viewName}Model.kt")
+    viewFile.rawWriteTo(viewOutputPath)
+    viewModelFile.rawWriteTo(viewModelOutputPath)
   }
 
-  private fun buildFileSpecs(): Set<FileSpec> {
-    val viewPackageName = "$appPackageName.views.$resourceName"
+  private fun buildViewFileSpec(): FileSpec {
     val viewModelClassName = ClassName(viewPackageName, viewModelName)
-    val viewModelTypeSpec = TypeSpec.classBuilder(viewModelName)
-      .superclass(ViewModel::class)
-      .addModifiers(KModifier.DATA)
-      .build()
-    val viewModelFileSpec = FileSpec.builder(viewPackageName, viewModelName)
-      .addType(viewModelTypeSpec)
-      .build()
     val superclass = ActionView::class.asTypeName()
       .parameterizedBy(viewModelClassName)
     val viewTypeSpec = TypeSpec.classBuilder(viewName)
@@ -47,9 +45,18 @@ class GenerateViewTask(
         .receiver(FlowContent::class)
         .build())
       .build()
-    val viewFileSpec = FileSpec.builder(viewPackageName, viewName)
+    return FileSpec.builder(viewPackageName, viewName)
       .addType(viewTypeSpec)
       .build()
-    return setOf(viewModelFileSpec, viewFileSpec)
+  }
+
+  private fun buildViewModelFileSpec(): FileSpec {
+    val viewModelTypeSpec = TypeSpec.classBuilder(viewModelName)
+      .addSuperinterface(ViewModel::class)
+      .addModifiers(KModifier.DATA)
+      .build()
+    return FileSpec.builder(viewPackageName, viewModelName)
+      .addType(viewModelTypeSpec)
+      .build()
   }
 }
