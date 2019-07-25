@@ -40,7 +40,7 @@ class GenerateViewTaskTest {
 
       import kales.actionview.ViewModel
 
-      data class IndexViewModel : ViewModel
+      class IndexViewModel : ViewModel
 
     """.trimIndent())
   }

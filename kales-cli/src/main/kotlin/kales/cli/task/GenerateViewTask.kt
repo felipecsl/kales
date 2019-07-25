@@ -53,7 +53,6 @@ class GenerateViewTask(
   private fun buildViewModelFileSpec(): FileSpec {
     val viewModelTypeSpec = TypeSpec.classBuilder(viewModelName)
       .addSuperinterface(ViewModel::class)
-      .addModifiers(KModifier.DATA)
       .build()
     return FileSpec.builder(viewPackageName, viewModelName)
       .addType(viewModelTypeSpec)
