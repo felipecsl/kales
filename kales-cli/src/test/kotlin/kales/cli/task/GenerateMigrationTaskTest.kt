@@ -28,11 +28,11 @@ class GenerateMigrationTaskTest {
       import kales.migrations.Migration
 
       class CreateFooBar : Migration() {
-          override fun up() {
-          }
+        override fun up() {
+        }
 
-          override fun down() {
-          }
+        override fun down() {
+        }
       }
 
     """.trimIndent())
@@ -55,13 +55,13 @@ class GenerateMigrationTaskTest {
       import kales.migrations.Migration
 
       class CreateFooBar : Migration() {
-          override fun up() {
-              createTable("haha") {}
-          }
+        override fun up() {
+          createTable("haha") {}
+        }
 
-          override fun down() {
-              dropTable("haha")
-          }
+        override fun down() {
+          dropTable("haha")
+        }
       }
 
     """.trimIndent())

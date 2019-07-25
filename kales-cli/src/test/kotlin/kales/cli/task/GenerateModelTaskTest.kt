@@ -31,13 +31,13 @@ class GenerateModelTaskTest {
       import kales.migrations.Migration
 
       class CreateBar : Migration() {
-          override fun up() {
-              createTable("bars") {}
-          }
+        override fun up() {
+          createTable("bars") {}
+        }
 
-          override fun down() {
-              dropTable("bars")
-          }
+        override fun down() {
+          dropTable("bars")
+        }
       }
 
     """.trimIndent())
@@ -52,12 +52,14 @@ class GenerateModelTaskTest {
       import kales.activemodel.MaybeRecordId
       import kotlin.Int
 
-      data class Bar(override val id: MaybeRecordId) : ApplicationRecord {
-          companion object {
-              fun all() = allRecords<Bar>()
+      data class Bar(
+        override val id: MaybeRecordId
+      ) : ApplicationRecord {
+        companion object {
+          fun all() = allRecords<Bar>()
 
-              fun find(id: Int) = findRecord<Bar>(id)
-          }
+          fun find(id: Int) = findRecord<Bar>(id)
+        }
       }
 
     """.trimIndent())
