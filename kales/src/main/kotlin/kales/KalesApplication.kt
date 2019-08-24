@@ -20,14 +20,12 @@ import kotlin.reflect.full.callSuspend
 import kotlin.reflect.full.createInstance
 import kotlin.reflect.full.declaredFunctions
 import kotlin.reflect.full.primaryConstructor
-import kotlin.reflect.jvm.internal.impl.load.kotlin.KotlinClassFinder
 
 class KalesApplication<T : ApplicationLayout>(
   private val application: Application,
   private val layout: KClass<T>
 ) {
   lateinit var routing: Routing
-  private val viewClassCache: MutableMap<String, KClass<ActionView<*>>?> = mutableMapOf()
 
   fun initRoutes(routes: KalesApplication<T>.() -> Unit) {
     application.install(DefaultHeaders)
@@ -45,13 +43,10 @@ class KalesApplication<T : ApplicationLayout>(
     }
   }
 
-  inline fun <reified T : ApplicationController> get(path: String, actionName: String): Route {
-    // eagerly load view KClass
-    findViewClass(T::class, actionName)
-    return routing.get(path, defaultRequestHandler(T::class, actionName))
-  }
+  inline fun <reified T : ApplicationController> get(path: String, actionName: String) =
+    routing.get(path, defaultRequestHandler(T::class, actionName))
 
-  inline fun <reified T : ApplicationController> post(path: String, actionName: String): Route =
+  inline fun <reified T : ApplicationController> post(path: String, actionName: String) =
     routing.post(path, defaultRequestHandler(T::class, actionName))
 
   inline fun <reified T : ApplicationController> put(path: String, actionName: String) =
@@ -192,24 +187,15 @@ class KalesApplication<T : ApplicationLayout>(
     return maybeLoadCachedViewClass(viewFullyQualifiedName, controllerClass.java.classLoader)
   }
 
-  fun maybeLoadCachedViewClass(
-    viewFullyQualifiedName: String,
-    classLoader: ClassLoader
-  ): KClass<ActionView<*>>? {
-    return viewClassCache.computeIfAbsent(viewFullyQualifiedName) {
-      try {
-        @Suppress("UNCHECKED_CAST")
-        val clazz = Class.forName(viewFullyQualifiedName, true, classLoader) as Class<ActionView<*>>
-        clazz.kotlin.also { viewClass ->
-          viewClassCache[viewFullyQualifiedName] = viewClass
-          logger.info("Cached Class object for view ${viewClass.qualifiedName}")
-        }
-      } catch (e: ClassNotFoundException) {
-        logger.warning("Unable to find view class $viewFullyQualifiedName")
-        null
-      }
+  fun maybeLoadCachedViewClass(viewFullyQualifiedName: String, classLoader: ClassLoader) =
+    try {
+      @Suppress("UNCHECKED_CAST")
+      val clazz = Class.forName(viewFullyQualifiedName, true, classLoader) as Class<ActionView<*>>
+      clazz.kotlin
+    } catch (e: ClassNotFoundException) {
+      logger.warning("Unable to find view class $viewFullyQualifiedName")
+      null
     }
-  }
 
   /**
    * Takes a controller class name, eg: "com.example.app.controllers.FooController".
