@@ -5,7 +5,6 @@ import io.ktor.request.ApplicationRequest
 import io.ktor.http.Parameters
 import io.ktor.http.plus
 import io.ktor.request.receiveParameters
-import io.ktor.response.respondRedirect
 import io.ktor.routing.RoutingApplicationCall
 import kales.actionview.RedirectResult
 import kales.actionview.ViewModel

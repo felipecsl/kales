@@ -23,7 +23,7 @@ val proxiedFormMethods = setOf(
 
 /** TODO document public API */
 @HtmlTagMarker
-inline fun <reified T: ApplicationRecord> FlowContent.formFor(
+inline fun <reified T : ApplicationRecord> FlowContent.formFor(
   record: T?,
   method: KalesFormMethod = KalesFormMethod.post,
   encType: FormEncType? = null,

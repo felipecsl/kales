@@ -2,12 +2,10 @@ package kales.sample.app.controllers
 
 import io.ktor.application.ApplicationCall
 import io.ktor.request.receiveParameters
-import io.ktor.response.respondRedirect
 import kales.actionpack.ApplicationController
 import kales.actionview.RedirectResult
 import kales.sample.app.models.Comment
 import kales.sample.app.models.Post
-import kales.sample.app.views.posts.IndexView
 import kales.sample.app.views.posts.IndexViewModel
 import kales.sample.app.views.posts.PostViewModel
 
