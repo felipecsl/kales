@@ -20,17 +20,18 @@ val proxiedFormMethods = setOf(
   KalesFormMethod.delete,
   KalesFormMethod.patch
 )
+
 /** TODO document public API */
 @HtmlTagMarker
-fun FlowContent.formFor(
-  record: ApplicationRecord,
+inline fun <reified T : ApplicationRecord> FlowContent.formFor(
+  record: T?,
   method: KalesFormMethod = KalesFormMethod.post,
   encType: FormEncType? = null,
   classes: String? = null,
-  block: FORM.() -> Unit = {}
+  noinline block: FORM.() -> Unit = {}
 ) {
-  val recordClasss = KApplicationRecordClass(record.javaClass.kotlin)
-  val routeUrl = "/${recordClasss.tableName}/${record.id}"
+  val recordClasss = KApplicationRecordClass(T::class)
+  val routeUrl = "/${recordClasss.tableName}/${record?.id}"
   val finalBlock = if (proxiedFormMethods.contains(method)) {
     {
       input(type = InputType.hidden, name = "_method") { value = method.name }

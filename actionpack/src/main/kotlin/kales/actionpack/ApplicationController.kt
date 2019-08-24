@@ -6,7 +6,9 @@ import io.ktor.http.Parameters
 import io.ktor.http.plus
 import io.ktor.request.receiveParameters
 import io.ktor.routing.RoutingApplicationCall
+import kales.actionview.RedirectResult
 import kales.actionview.ViewModel
+import kotlin.reflect.KFunction
 import kotlin.reflect.full.declaredMemberProperties
 import kotlin.reflect.jvm.isAccessible
 
@@ -43,5 +45,14 @@ abstract class ApplicationController(val call: ApplicationCall) {
     //  String to a List<String>. Apparently `Parameters` already supports this with `getAll()`,
     //  we should just write a test to validate that scenario.
     return parameters + call.parameters
+  }
+
+  /**
+   * Redirects to the action specified by the `action` function parameter. The redirection is purely
+   * server-side, there is no round-trip to the client browser and it's seen strictly as a single
+   * request from the client's perspective.
+   */
+  fun redirectTo(action: KFunction<*>): RedirectResult {
+    return RedirectResult(action.name)
   }
 }

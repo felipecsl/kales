@@ -12,8 +12,7 @@ import io.ktor.routing.*
 import io.ktor.util.pipeline.PipelineContext
 import kales.actionpack.ApplicationController
 import kales.actionpack.DynamicParameterRouteSelector
-import kales.actionview.ActionView
-import kales.actionview.ApplicationLayout
+import kales.actionview.*
 import java.io.File
 import java.util.logging.Logger
 import kotlin.reflect.KClass
@@ -24,7 +23,7 @@ import kotlin.reflect.full.primaryConstructor
 
 class KalesApplication<T : ApplicationLayout>(
   private val application: Application,
-  val layout: KClass<T>
+  private val layout: KClass<T>
 ) {
   lateinit var routing: Routing
 
@@ -44,36 +43,28 @@ class KalesApplication<T : ApplicationLayout>(
     }
   }
 
-  inline fun <reified T : ApplicationController> get(
-    path: String,
-    actionName: String
-  ): Route = routing.get(path, defaultRequestHandler<T>(actionName))
+  inline fun <reified T : ApplicationController> get(path: String, actionName: String) =
+    routing.get(path, defaultRequestHandler(T::class, actionName))
 
-  inline fun <reified T : ApplicationController> post(
-    path: String,
-    actionName: String
-  ): Route = routing.post(path, defaultRequestHandler<T>(actionName))
+  inline fun <reified T : ApplicationController> post(path: String, actionName: String) =
+    routing.post(path, defaultRequestHandler(T::class, actionName))
 
-  inline fun <reified T : ApplicationController> put(
-    path: String,
-    actionName: String
-  ) = createCustomRequestMethodViaFormParamHandler<T>(path, actionName, "put")
+  inline fun <reified T : ApplicationController> put(path: String, actionName: String) =
+    createCustomRequestMethodViaFormParamHandler(T::class, path, actionName, "put")
 
-  inline fun <reified T : ApplicationController> delete(
-    path: String,
-    actionName: String
-  ) = createCustomRequestMethodViaFormParamHandler<T>(path, actionName, "delete")
+  inline fun <reified T : ApplicationController> delete(path: String, actionName: String) =
+    createCustomRequestMethodViaFormParamHandler(T::class, path, actionName, "delete")
 
-  inline fun <reified T : ApplicationController> patch(
-    path: String,
-    actionName: String
-  ) = createCustomRequestMethodViaFormParamHandler<T>(path, actionName, "patch")
+  inline fun <reified T : ApplicationController> patch(path: String, actionName: String) =
+    createCustomRequestMethodViaFormParamHandler(T::class, path, actionName, "patch")
 
-  inline fun <reified T : ApplicationController> defaultRequestHandler(
+  fun <T : ApplicationController> defaultRequestHandler(
+    controllerClass: KClass<T>,
     actionName: String
-  ): suspend PipelineContext<Unit, ApplicationCall>.(Unit) -> Unit {
+  ):
+    suspend PipelineContext<Unit, ApplicationCall>.(Unit) -> Unit {
     return {
-      val view = callControllerAction(T::class, actionName, call)
+      val view = callControllerAction(controllerClass, actionName, call)
       call.respondHtmlTemplate(layout.createInstance()) {
         body {
           // TODO: #70 Respond with 404 when a view was not found
@@ -89,7 +80,8 @@ class KalesApplication<T : ApplicationLayout>(
    * and rout to that handler instead. This is to work around a limitation where browsers don't
    * support those verbs (only GET and POST) and it's the same workaround that Rails uses.
    */
-  inline fun <reified T : ApplicationController> createCustomRequestMethodViaFormParamHandler(
+  fun <T : ApplicationController> createCustomRequestMethodViaFormParamHandler(
+    controllerClass: KClass<T>,
     path: String,
     actionName: String,
     method: String
@@ -98,17 +90,15 @@ class KalesApplication<T : ApplicationLayout>(
       .createChild(DynamicParameterRouteSelector("_method", method))
       .createChild(HttpMethodRouteSelector(HttpMethod.Post))
       .apply {
-        handle(defaultRequestHandler<T>(actionName))
+        handle(defaultRequestHandler(controllerClass, actionName))
       }
   }
 
-  suspend inline fun <T : ApplicationController> callControllerAction(
+  private suspend fun <T : ApplicationController> callControllerAction(
     controllerClass: KClass<T>,
     actionName: String,
     call: ApplicationCall
   ): ActionView<*>? {
-    val controllerClassName = controllerClass.simpleName?.replace("Controller", "")?.toLowerCase()
-      ?: throw RuntimeException("Cannot determine the class name for Controller")
     @Suppress("UNCHECKED_CAST")
     val controllerCtor = controllerClass.primaryConstructor()
     val controller = try {
@@ -116,34 +106,59 @@ class KalesApplication<T : ApplicationLayout>(
     } catch (e: RuntimeException) {
       throw RuntimeException("Failed to instantiate controller $controllerClass", e)
     }
+    val renderViewResult = recursivelyCallAction(controller, actionName) as RenderViewResult?
+    // If the action returned a non-null View object, we'll use that, otherwise, try to infer the
+    // corresponding view class and reflectively instantiate it
+    return renderViewResult?.view
+  }
+
+  private suspend fun <T : ApplicationController> recursivelyCallAction(
+    controller: T,
+    actionName: String
+  ): ActionResult? {
+    val controllerClass = controller::class
+    val modelName = modelNameFromControllerClass(controllerClass)
     val actionMethod = controller::class.declaredFunctions.firstOrNull { it.name == actionName }
       ?: throw RuntimeException("Cannot find Controller action $actionName")
-    logger.info("Calling $controllerClassName#$actionName")
-    val view = if (actionMethod.isSuspend) {
+    logger.info("Calling route $modelName#$actionName")
+    val result = if (actionMethod.isSuspend) {
       actionMethod.callSuspend(controller)
     } else {
       actionMethod.call(controller)
-    } as? ActionView<*>
-    return if (view != null) {
-      // If the action returned a View object, we'll use that
-      view
-    } else {
-      // Otherwise, search for the inferred view class
-      val viewClass = findViewClass(controllerClass, actionName, controllerClassName)
-      if (viewClass != null) {
-        try {
-          viewClass.kotlin.primaryConstructor().call(controller.bindings)
-        } catch (e: RuntimeException) {
-          throw RuntimeException("Failed to instantiate view $viewClass", e)
-        }
-      } else {
-        // View not found
-        null
-      }
+    }
+    return when (result) {
+      is RenderViewResult -> result
+      is RedirectResult -> recursivelyCallAction(controller, result.newActionName)
+      is ActionView<*> -> RenderViewResult(result, actionName)
+      else -> RenderViewResult(inferView(controller, actionName), actionName)
     }
   }
 
-  fun <T : Any> KClass<T>.primaryConstructor() =
+  private fun <T : ApplicationController> inferView(
+    controller: T,
+    actionName: String
+  ): ActionView<out ViewModel>? {
+    val viewClass = findViewClass(controller::class, actionName)
+    return if (viewClass != null) {
+      try {
+        val viewConstructor = viewClass.primaryConstructor()
+        println("Calling View ctor: '$viewConstructor' with bindings: '${controller.bindings}'")
+        viewConstructor.call(controller.bindings)
+      } catch (e: RuntimeException) {
+        throw RuntimeException("Failed to instantiate view $viewClass", e)
+      }
+    } else {
+      // View not found
+      null
+    }
+  }
+
+  /** Eg.: PostsController -> "posts" */
+  private fun <T : ApplicationController> modelNameFromControllerClass(controllerClass: KClass<T>) =
+    controllerClass.simpleName?.replace("Controller", "")?.toLowerCase()
+      ?: throw RuntimeException("Cannot determine the class name for Controller")
+
+  private fun <T : Any> KClass<T>.primaryConstructor() =
     primaryConstructor ?: throw RuntimeException("Primary constructor not found for $this")
 
   /**
@@ -152,29 +167,33 @@ class KalesApplication<T : ApplicationLayout>(
    * "com.example.app.views.foo.IndexView"
    */
   @Suppress("NOTHING_TO_INLINE")
-  inline fun <T : ApplicationController> findViewClass(
+  private fun <T : ApplicationController> findViewClass(
     controllerClass: KClass<T>,
-    actionName: String,
-    controllerClassName: String
-  ): Class<ActionView<*>>? {
+    actionName: String
+  ): KClass<ActionView<*>>? {
+    val modelName = modelNameFromControllerClass(controllerClass)
     val applicationPackage = extractAppPackageNameFromControllerClass(controllerClass)
     val viewClassName = "${actionName.capitalize()}View"
-    val viewFullyQualifiedName = "$applicationPackage.views.$controllerClassName.$viewClassName"
-    return try {
+    val viewFullyQualifiedName = "$applicationPackage.views.$modelName.$viewClassName"
+    return maybeLoadCachedViewClass(viewFullyQualifiedName, controllerClass.java.classLoader)
+  }
+
+  private fun maybeLoadCachedViewClass(viewFullyQualifiedName: String, classLoader: ClassLoader) =
+    try {
       @Suppress("UNCHECKED_CAST")
-      Class.forName(viewFullyQualifiedName) as Class<ActionView<*>>
+      val clazz = Class.forName(viewFullyQualifiedName, true, classLoader) as Class<ActionView<*>>
+      clazz.kotlin
     } catch (e: ClassNotFoundException) {
       logger.warning("Unable to find view class $viewFullyQualifiedName")
       null
     }
-  }
 
   /**
    * Takes a controller class name, eg: "com.example.app.controllers.FooController".
    * Returns "com.example.app"
    */
   @Suppress("NOTHING_TO_INLINE")
-  inline fun <T : ApplicationController> extractAppPackageNameFromControllerClass(
+  private fun <T : ApplicationController> extractAppPackageNameFromControllerClass(
     controllerClass: KClass<T>
   ) =
     (controllerClass.qualifiedName
