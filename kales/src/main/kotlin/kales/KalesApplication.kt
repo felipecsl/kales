@@ -106,10 +106,7 @@ class KalesApplication<T : ApplicationLayout>(
     } catch (e: RuntimeException) {
       throw RuntimeException("Failed to instantiate controller $controllerClass", e)
     }
-    // TODO: recursivelyCallAction might end up in a new action and we need to be able to keep
-    //  track of which action ran next so we update actionName
-    val renderViewResult = recursivelyCallAction(controller, actionName)
-      as RenderViewResult?
+    val renderViewResult = recursivelyCallAction(controller, actionName) as RenderViewResult?
     // If the action returned a non-null View object, we'll use that, otherwise, try to infer the
     // corresponding view class and reflectively instantiate it
     return renderViewResult?.view
@@ -130,16 +127,10 @@ class KalesApplication<T : ApplicationLayout>(
       actionMethod.call(controller)
     }
     return when (result) {
-      is RenderViewResult ->
-        result
-      is RedirectResult ->
-        recursivelyCallAction(controller, result.newActionName)
-      is ActionView<*> ->
-        RenderViewResult(result, actionName)
-      else -> {
-        val view = inferView(controller, actionName)
-        RenderViewResult(view, actionName)
-      }
+      is RenderViewResult -> result
+      is RedirectResult -> recursivelyCallAction(controller, result.newActionName)
+      is ActionView<*> -> RenderViewResult(result, actionName)
+      else -> RenderViewResult(inferView(controller, actionName), actionName)
     }
   }
 
@@ -163,7 +154,7 @@ class KalesApplication<T : ApplicationLayout>(
   }
 
   /** Eg.: PostsController -> "posts" */
-  fun <T : ApplicationController> modelNameFromControllerClass(controllerClass: KClass<T>) =
+  private fun <T : ApplicationController> modelNameFromControllerClass(controllerClass: KClass<T>) =
     controllerClass.simpleName?.replace("Controller", "")?.toLowerCase()
       ?: throw RuntimeException("Cannot determine the class name for Controller")
 
@@ -176,7 +167,7 @@ class KalesApplication<T : ApplicationLayout>(
    * "com.example.app.views.foo.IndexView"
    */
   @Suppress("NOTHING_TO_INLINE")
-  inline fun <T : ApplicationController> findViewClass(
+  private fun <T : ApplicationController> findViewClass(
     controllerClass: KClass<T>,
     actionName: String
   ): KClass<ActionView<*>>? {
@@ -187,7 +178,7 @@ class KalesApplication<T : ApplicationLayout>(
     return maybeLoadCachedViewClass(viewFullyQualifiedName, controllerClass.java.classLoader)
   }
 
-  fun maybeLoadCachedViewClass(viewFullyQualifiedName: String, classLoader: ClassLoader) =
+  private fun maybeLoadCachedViewClass(viewFullyQualifiedName: String, classLoader: ClassLoader) =
     try {
       @Suppress("UNCHECKED_CAST")
       val clazz = Class.forName(viewFullyQualifiedName, true, classLoader) as Class<ActionView<*>>
@@ -202,7 +193,7 @@ class KalesApplication<T : ApplicationLayout>(
    * Returns "com.example.app"
    */
   @Suppress("NOTHING_TO_INLINE")
-  inline fun <T : ApplicationController> extractAppPackageNameFromControllerClass(
+  private fun <T : ApplicationController> extractAppPackageNameFromControllerClass(
     controllerClass: KClass<T>
   ) =
     (controllerClass.qualifiedName
