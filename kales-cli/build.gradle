@@ -44,8 +44,10 @@ dependencies {
   implementation "org.jetbrains.kotlin:kotlin-script-runtime:$kotlinVersion"
   implementation "org.jetbrains.kotlin:kotlin-scripting-compiler-embeddable:$kotlinVersion"
   implementation "org.jetbrains.kotlin:kotlin-script-util:$kotlinVersion"
-  testImplementation "com.google.truth:truth:$truthVersion"
+  runtime "org.jdbi:jdbi3-postgres:$jdbiVersion"
+  runtime "org.postgresql:postgresql:42.2.6.jre7"
   testRuntime "com.h2database:h2:$h2DBVersion"
+  testImplementation "com.google.truth:truth:$truthVersion"
   testImplementation "org.jdbi:jdbi3-core:$jdbiVersion"
   testImplementation "org.jdbi:jdbi3-kotlin:$jdbiVersion"
   testImplementation gradleTestKit()

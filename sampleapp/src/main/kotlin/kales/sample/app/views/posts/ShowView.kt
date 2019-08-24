@@ -1,8 +1,10 @@
 package kales.sample.app.views.posts
 
 import kales.actionview.ActionView
+import kales.actionview.KalesFormMethod
 import kales.sample.app.views.shared.PostPartialView
 import kotlinx.html.FlowContent
+import kotlinx.html.FormMethod
 import kotlinx.html.div
 import kotlinx.html.h2
 
@@ -17,6 +19,6 @@ class ShowView(
         }
       }
     }
-    renderPartial(PostPartialView(bindings))
+    renderPartial(PostPartialView(bindings, KalesFormMethod.put))
   }
 }

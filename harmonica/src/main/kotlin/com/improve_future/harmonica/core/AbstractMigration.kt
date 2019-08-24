@@ -47,18 +47,18 @@ abstract class AbstractMigration {
 
   @MigrationDsl
   fun createTable(name: String, block: TableBuilder.() -> Unit) {
-    println("Create Table: $name")
     adapter.createTable(name, block)
+    println("Created table: $name")
   }
 
   fun dropTable(name: String) {
-    println("Drop Table: $name")
     adapter.dropTable(name)
+    println("Dropped table: $name")
   }
 
   fun removeColumn(tableName: String, columnName: String) {
-    println("Remove Column: $tableName $columnName")
     adapter.removeColumn(tableName, columnName)
+    println("Removed column: $tableName $columnName")
   }
 
   /**

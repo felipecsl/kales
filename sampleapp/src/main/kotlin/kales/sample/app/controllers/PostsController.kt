@@ -2,13 +2,16 @@ package kales.sample.app.controllers
 
 import io.ktor.application.ApplicationCall
 import io.ktor.request.receiveParameters
+import io.ktor.response.respondRedirect
 import kales.actionpack.ApplicationController
+import kales.actionview.RedirectResult
 import kales.sample.app.models.Comment
 import kales.sample.app.models.Post
+import kales.sample.app.views.posts.IndexView
 import kales.sample.app.views.posts.IndexViewModel
 import kales.sample.app.views.posts.PostViewModel
 
-@Suppress("unused")
+@Suppress("unused", "MemberVisibilityCanBePrivate")
 class PostsController(call: ApplicationCall) : ApplicationController(call) {
   fun index() {
     bindings = IndexViewModel("Foo", Post.all())
@@ -20,6 +23,17 @@ class PostsController(call: ApplicationCall) : ApplicationController(call) {
   }
 
   fun new() {
+  }
+
+  suspend fun update(): RedirectResult {
+    val params = receiveParameters()
+    val id = params["id"]?.toInt() ?: throw IllegalArgumentException("Missing param `id`")
+    // TODO we should be able to construct a post object automatically from the params?
+    //  Check what kind of magic Rails does in this situation.
+    Post.find(id)
+      ?.copy(title = params["post[title]"]!!, content = params["post[content]"]!!)
+      ?.save()
+    return redirectTo(::show)
   }
 
   suspend fun create() {

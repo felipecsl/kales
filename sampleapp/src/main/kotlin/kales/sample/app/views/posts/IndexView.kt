@@ -4,11 +4,12 @@ import kales.actionview.ActionView
 import kales.actionview.formFor
 import kotlinx.html.*
 import kales.actionview.KalesFormMethod.delete
+import kales.actionview.ViewModel
 import kotlinx.html.InputType.*
 
 class IndexView(
-  bindings: IndexViewModel? = IndexViewModel("Unknown", listOf())
-) : ActionView<IndexViewModel>(bindings) {
+  bindings: ViewModel? = IndexViewModel("Unknown", listOf())
+) : ActionView<IndexViewModel>(bindings as IndexViewModel) {
   override fun FlowContent.render() {
     div("container") {
       div("row") {

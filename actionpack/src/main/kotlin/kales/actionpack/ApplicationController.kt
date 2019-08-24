@@ -5,8 +5,11 @@ import io.ktor.request.ApplicationRequest
 import io.ktor.http.Parameters
 import io.ktor.http.plus
 import io.ktor.request.receiveParameters
+import io.ktor.response.respondRedirect
 import io.ktor.routing.RoutingApplicationCall
+import kales.actionview.RedirectResult
 import kales.actionview.ViewModel
+import kotlin.reflect.KFunction
 import kotlin.reflect.full.declaredMemberProperties
 import kotlin.reflect.jvm.isAccessible
 
@@ -43,5 +46,10 @@ abstract class ApplicationController(val call: ApplicationCall) {
     //  String to a List<String>. Apparently `Parameters` already supports this with `getAll()`,
     //  we should just write a test to validate that scenario.
     return parameters + call.parameters
+  }
+
+  /** TODO document */
+  fun redirectTo(action: KFunction<*>): RedirectResult {
+    return RedirectResult(action.name)
   }
 }
