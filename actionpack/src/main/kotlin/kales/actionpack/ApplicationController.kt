@@ -48,7 +48,11 @@ abstract class ApplicationController(val call: ApplicationCall) {
     return parameters + call.parameters
   }
 
-  /** TODO document */
+  /**
+   * Redirects to the action specified by the `action` function parameter. The redirection is purely
+   * server-side, there is no round-trip to the client browser and it's seen strictly as a single
+   * request from the client's perspective.
+   */
   fun redirectTo(action: KFunction<*>): RedirectResult {
     return RedirectResult(action.name)
   }
