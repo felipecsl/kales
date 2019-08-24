@@ -20,12 +20,14 @@ import kotlin.reflect.full.callSuspend
 import kotlin.reflect.full.createInstance
 import kotlin.reflect.full.declaredFunctions
 import kotlin.reflect.full.primaryConstructor
+import kotlin.reflect.jvm.internal.impl.load.kotlin.KotlinClassFinder
 
 class KalesApplication<T : ApplicationLayout>(
   private val application: Application,
   private val layout: KClass<T>
 ) {
   lateinit var routing: Routing
+  private val viewClassCache: MutableMap<String, KClass<ActionView<*>>?> = mutableMapOf()
 
   fun initRoutes(routes: KalesApplication<T>.() -> Unit) {
     application.install(DefaultHeaders)
@@ -43,8 +45,11 @@ class KalesApplication<T : ApplicationLayout>(
     }
   }
 
-  inline fun <reified T : ApplicationController> get(path: String, actionName: String): Route =
-    routing.get(path, defaultRequestHandler(T::class, actionName))
+  inline fun <reified T : ApplicationController> get(path: String, actionName: String): Route {
+    // eagerly load view KClass
+    findViewClass(T::class, actionName)
+    return routing.get(path, defaultRequestHandler(T::class, actionName))
+  }
 
   inline fun <reified T : ApplicationController> post(path: String, actionName: String): Route =
     routing.post(path, defaultRequestHandler(T::class, actionName))
@@ -108,7 +113,7 @@ class KalesApplication<T : ApplicationLayout>(
     }
     // TODO: recursivelyCallAction might end up in a new action and we need to be able to keep
     //  track of which action ran next so we update actionName
-    val renderViewResult = recursivelyCallAction(controllerClass, controller, actionName)
+    val renderViewResult = recursivelyCallAction(controller, actionName)
       as RenderViewResult?
     // If the action returned a non-null View object, we'll use that, otherwise, try to infer the
     // corresponding view class and reflectively instantiate it
@@ -116,15 +121,14 @@ class KalesApplication<T : ApplicationLayout>(
   }
 
   private suspend fun <T : ApplicationController> recursivelyCallAction(
-    controllerClass: KClass<T>,
     controller: T,
     actionName: String
   ): ActionResult? {
-    val controllerClassName = controllerClass.simpleName?.replace("Controller", "")?.toLowerCase()
-      ?: throw RuntimeException("Cannot determine the class name for Controller")
+    val controllerClass = controller::class
+    val modelName = modelNameFromControllerClass(controllerClass)
     val actionMethod = controller::class.declaredFunctions.firstOrNull { it.name == actionName }
       ?: throw RuntimeException("Cannot find Controller action $actionName")
-    logger.info("Calling route $controllerClassName#$actionName")
+    logger.info("Calling route $modelName#$actionName")
     val result = if (actionMethod.isSuspend) {
       actionMethod.callSuspend(controller)
     } else {
@@ -134,26 +138,24 @@ class KalesApplication<T : ApplicationLayout>(
       is RenderViewResult ->
         result
       is RedirectResult ->
-        recursivelyCallAction(controllerClass, controller, result.newActionName)
+        recursivelyCallAction(controller, result.newActionName)
       is ActionView<*> ->
         RenderViewResult(result, actionName)
       else -> {
-        val view = inferView(controllerClass, controller, actionName, controllerClassName)
+        val view = inferView(controller, actionName)
         RenderViewResult(view, actionName)
       }
     }
   }
 
   private fun <T : ApplicationController> inferView(
-    controllerClass: KClass<T>,
     controller: T,
-    actionName: String,
-    controllerClassName: String
+    actionName: String
   ): ActionView<out ViewModel>? {
-    val viewClass = findViewClass(controllerClass, actionName, controllerClassName)
+    val viewClass = findViewClass(controller::class, actionName)
     return if (viewClass != null) {
       try {
-        val viewConstructor = viewClass.kotlin.primaryConstructor()
+        val viewConstructor = viewClass.primaryConstructor()
         println("Calling View ctor: '$viewConstructor' with bindings: '${controller.bindings}'")
         viewConstructor.call(controller.bindings)
       } catch (e: RuntimeException) {
@@ -164,6 +166,11 @@ class KalesApplication<T : ApplicationLayout>(
       null
     }
   }
+
+  /** Eg.: PostsController -> "posts" */
+  fun <T : ApplicationController> modelNameFromControllerClass(controllerClass: KClass<T>) =
+    controllerClass.simpleName?.replace("Controller", "")?.toLowerCase()
+      ?: throw RuntimeException("Cannot determine the class name for Controller")
 
   private fun <T : Any> KClass<T>.primaryConstructor() =
     primaryConstructor ?: throw RuntimeException("Primary constructor not found for $this")
@@ -176,18 +183,31 @@ class KalesApplication<T : ApplicationLayout>(
   @Suppress("NOTHING_TO_INLINE")
   inline fun <T : ApplicationController> findViewClass(
     controllerClass: KClass<T>,
-    actionName: String,
-    controllerClassName: String
-  ): Class<ActionView<*>>? {
+    actionName: String
+  ): KClass<ActionView<*>>? {
+    val modelName = modelNameFromControllerClass(controllerClass)
     val applicationPackage = extractAppPackageNameFromControllerClass(controllerClass)
     val viewClassName = "${actionName.capitalize()}View"
-    val viewFullyQualifiedName = "$applicationPackage.views.$controllerClassName.$viewClassName"
-    return try {
-      @Suppress("UNCHECKED_CAST")
-      Class.forName(viewFullyQualifiedName) as Class<ActionView<*>>
-    } catch (e: ClassNotFoundException) {
-      logger.warning("Unable to find view class $viewFullyQualifiedName")
-      null
+    val viewFullyQualifiedName = "$applicationPackage.views.$modelName.$viewClassName"
+    return maybeLoadCachedViewClass(viewFullyQualifiedName, controllerClass.java.classLoader)
+  }
+
+  fun maybeLoadCachedViewClass(
+    viewFullyQualifiedName: String,
+    classLoader: ClassLoader
+  ): KClass<ActionView<*>>? {
+    return viewClassCache.computeIfAbsent(viewFullyQualifiedName) {
+      try {
+        @Suppress("UNCHECKED_CAST")
+        val clazz = Class.forName(viewFullyQualifiedName, true, classLoader) as Class<ActionView<*>>
+        clazz.kotlin.also { viewClass ->
+          viewClassCache[viewFullyQualifiedName] = viewClass
+          logger.info("Cached Class object for view ${viewClass.qualifiedName}")
+        }
+      } catch (e: ClassNotFoundException) {
+        logger.warning("Unable to find view class $viewFullyQualifiedName")
+        null
+      }
     }
   }
 
