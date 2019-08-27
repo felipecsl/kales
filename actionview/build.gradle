@@ -7,6 +7,7 @@ project.ext.artifact = 'kales-actionview'
 
 dependencies {
   api project(":activemodel")
+  api project(":actionpack")
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
   api "io.ktor:ktor-server-core:$ktorVersion"
   api "io.ktor:ktor-html-builder:$ktorVersion"

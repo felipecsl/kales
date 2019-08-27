@@ -12,14 +12,14 @@ import io.ktor.http.content.staticRootFolder
 import io.ktor.response.respond
 import io.ktor.routing.*
 import io.ktor.util.pipeline.PipelineContext
-import kales.actionpack.ApplicationController
-import kales.actionpack.DynamicParameterRouteSelector
-import kales.actionview.*
+import kales.actionpack.*
+import kales.actionview.ActionView
+import kales.actionview.ApplicationLayout
+import kales.actionview.RenderViewResult
 import java.io.File
 import java.util.logging.Logger
 import kotlin.reflect.KClass
 import kotlin.reflect.full.callSuspend
-import kotlin.reflect.full.createInstance
 import kotlin.reflect.full.declaredFunctions
 import kotlin.reflect.full.primaryConstructor
 
@@ -66,9 +66,12 @@ class KalesApplication<T : ApplicationLayout>(
   ):
     suspend PipelineContext<Unit, ApplicationCall>.(Unit) -> Unit {
     return {
-      val view = callControllerAction(controllerClass, actionName, call)
-      if (view != null) {
-        call.respondHtmlTemplate(layout.createInstance()) {
+      val kalesApplicationCall = KalesApplicationCall(call)
+      val result = callControllerAction(controllerClass, actionName, kalesApplicationCall)
+      if (result.view != null) {
+        val view = result.view!!
+        val applicationLayout = layout.primaryConstructor().call(kalesApplicationCall)
+        call.respondHtmlTemplate(applicationLayout) {
           body {
             view.renderContent(this)
           }
@@ -102,25 +105,24 @@ class KalesApplication<T : ApplicationLayout>(
   private suspend fun <T : ApplicationController> callControllerAction(
     controllerClass: KClass<T>,
     actionName: String,
-    call: ApplicationCall
-  ): ActionView<*>? {
-    @Suppress("UNCHECKED_CAST")
-    val controllerCtor = controllerClass.primaryConstructor()
+    kalesApplicationCall: KalesApplicationCall
+  ): RenderViewResult {
     val controller = try {
-      controllerCtor.call(call)
+      val controllerConstructor = controllerClass.primaryConstructor()
+      println("Instantiating Controller: '$controllerClass'")
+      controllerConstructor.call(kalesApplicationCall)
     } catch (e: RuntimeException) {
       throw RuntimeException("Failed to instantiate controller $controllerClass", e)
     }
-    val renderViewResult = recursivelyCallAction(controller, actionName) as RenderViewResult?
-    // If the action returned a non-null View object, we'll use that, otherwise, try to infer the
-    // corresponding view class and reflectively instantiate it
-    return renderViewResult?.view
+    return recursivelyCallAction(controller, actionName) as RenderViewResult
   }
 
   private suspend fun <T : ApplicationController> recursivelyCallAction(
     controller: T,
     actionName: String
-  ): ActionResult? {
+  ): ActionResult {
+    // TODO: Once we allow redirecting to actions in other controllers, we'll need to move the
+    // controller instantiation logic in here
     val controllerClass = controller::class
     val modelName = modelNameFromControllerClass(controllerClass)
     val actionMethod = controller::class.declaredFunctions.firstOrNull { it.name == actionName }
@@ -142,7 +144,7 @@ class KalesApplication<T : ApplicationLayout>(
   private suspend fun <T : ApplicationController> redirectTo(
     controller: T,
     actionName: String
-  ): ActionResult? {
+  ): ActionResult {
     logger.info("Redirecting to action $actionName")
     return recursivelyCallAction(controller, actionName)
   }
@@ -156,7 +158,7 @@ class KalesApplication<T : ApplicationLayout>(
       try {
         val viewConstructor = viewClass.primaryConstructor()
         println("Calling View ctor: '$viewConstructor' with bindings: '${controller.bindings}'")
-        viewConstructor.call(controller.bindings)
+        viewConstructor.call(controller.call, controller.bindings)
       } catch (e: RuntimeException) {
         throw RuntimeException("Failed to instantiate view $viewClass", e)
       }

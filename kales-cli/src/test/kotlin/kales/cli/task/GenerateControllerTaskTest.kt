@@ -22,11 +22,11 @@ class GenerateControllerTaskTest {
     assertThat(controllerFile.readText()).isEqualTo("""
       package com.example.testapp.app.controllers
 
-      import io.ktor.application.ApplicationCall
       import kales.actionpack.ApplicationController
+      import kales.actionpack.KalesApplicationCall
 
       class BarController(
-        call: ApplicationCall
+        call: KalesApplicationCall
       ) : ApplicationController(call)
 
     """.trimIndent())
@@ -44,12 +44,12 @@ class GenerateControllerTaskTest {
     assertThat(controllerFile.readText()).isEqualTo("""
       package com.example.testapp.app.controllers
 
-      import io.ktor.application.ApplicationCall
       import kales.actionpack.ApplicationController
+      import kales.actionpack.KalesApplicationCall
       import kotlin.Any
 
       class BarController(
-        call: ApplicationCall
+        call: KalesApplicationCall
       ) : ApplicationController(call) {
         fun blah(): Any? = null
 

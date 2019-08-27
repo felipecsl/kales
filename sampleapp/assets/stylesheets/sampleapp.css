@@ -6,3 +6,9 @@
 .row {
   margin-top: 1rem;
 }
+
+.notice {
+  background-color: #e4dcb6;
+  padding: 10px 20px;
+  color: white;
+}

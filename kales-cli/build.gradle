@@ -40,6 +40,7 @@ dependencies {
   implementation project(":activerecord")
   implementation project(":activemodel")
   implementation project(":actionpack")
+  implementation project(":actionview")
   implementation "org.jetbrains.kotlin:kotlin-compiler-embeddable:$kotlinVersion"
   implementation "org.jetbrains.kotlin:kotlin-script-runtime:$kotlinVersion"
   implementation "org.jetbrains.kotlin:kotlin-scripting-compiler-embeddable:$kotlinVersion"

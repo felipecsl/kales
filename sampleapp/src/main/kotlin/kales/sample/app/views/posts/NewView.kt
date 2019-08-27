@@ -1,15 +1,17 @@
 package kales.sample.app.views.posts
 
+import kales.actionpack.KalesApplicationCall
+import kales.actionpack.ViewModel
 import kales.actionview.ActionView
-import kales.actionview.ViewModel
 import kotlinx.html.*
 import kotlinx.html.FormMethod.post
 import kotlinx.html.InputType.text
 import kotlinx.html.attributes.enumEncode
 
 class NewView(
+  call: KalesApplicationCall,
   bindings: ViewModel? = null
-) : ActionView<ViewModel>(bindings) {
+) : ActionView<ViewModel>(call, bindings) {
   override fun FlowContent.render() {
     div("container") {
       div("row") {

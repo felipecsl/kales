@@ -21,12 +21,14 @@ class GenerateViewTaskTest {
     assertThat(viewFile.readText()).isEqualTo("""
       package com.example.testapp.app.views.bar
 
+      import kales.actionpack.KalesApplicationCall
       import kales.actionview.ActionView
       import kotlinx.html.FlowContent
 
       class IndexView(
+        call: KalesApplicationCall,
         bindings: IndexViewModel?
-      ) : ActionView<IndexViewModel>(bindings) {
+      ) : ActionView<IndexViewModel>(call, bindings) {
         override fun FlowContent.render() {
         }
       }
@@ -38,7 +40,7 @@ class GenerateViewTaskTest {
     assertThat(viewModelFile.readText()).isEqualTo("""
       package com.example.testapp.app.views.bar
 
-      import kales.actionview.ViewModel
+      import kales.actionpack.ViewModel
 
       class IndexViewModel : ViewModel
 

@@ -99,10 +99,11 @@ class NewApplicationTask(
     package $appName.app.views.layouts
 
     import io.ktor.html.insert
+    import kales.actionpack.KalesApplicationCall
     import kales.actionview.ApplicationLayout
     import kotlinx.html.*
 
-    class AppLayout : ApplicationLayout() {
+    class AppLayout(call: KalesApplicationCall) : ApplicationLayout(call) {
       override fun HTML.apply() {
         head {
           title { +"Hello world" }

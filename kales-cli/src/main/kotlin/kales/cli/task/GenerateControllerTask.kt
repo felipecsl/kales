@@ -7,6 +7,7 @@ import com.squareup.kotlinpoet.TypeSpec
 import com.squareup.kotlinpoet.asTypeName
 import io.ktor.application.ApplicationCall
 import kales.actionpack.ApplicationController
+import kales.actionpack.KalesApplicationCall
 import java.io.File
 
 /** Generates a controller class */
@@ -44,7 +45,7 @@ class GenerateControllerTask(
   private fun buildFileSpec(controllerName: String): FileSpec {
     val controllerTypeSpec = TypeSpec.classBuilder(controllerName)
       .primaryConstructor(FunSpec.constructorBuilder()
-        .addParameter("call", ApplicationCall::class)
+        .addParameter("call", KalesApplicationCall::class)
         .build())
       .superclass(ApplicationController::class)
       .addSuperclassConstructorParameter("call")
