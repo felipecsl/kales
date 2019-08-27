@@ -5,7 +5,6 @@ import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.FunSpec
 import com.squareup.kotlinpoet.TypeSpec
 import com.squareup.kotlinpoet.asTypeName
-import io.ktor.application.ApplicationCall
 import kales.actionpack.ApplicationController
 import kales.actionpack.KalesApplicationCall
 import java.io.File

@@ -1,7 +1,6 @@
 package kales.actionview
 
 import kales.actionpack.ActionResult
-import kales.actionpack.KalesApplicationCall
 
 /**
  * Represents the result of executing a `ApplicationController` action when a [ActionView] view
