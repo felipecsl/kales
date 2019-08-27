@@ -70,7 +70,6 @@ class KalesApplication<T : ApplicationLayout>(
       if (view != null) {
         call.respondHtmlTemplate(layout.createInstance()) {
           body {
-            // TODO: #70 Respond with 404 when a view was not found
             view.renderContent(this)
           }
         }
