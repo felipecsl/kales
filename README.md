@@ -32,6 +32,7 @@ Ktor supports hot reloading out of the box, simply open a new terminal window an
 ## Deploying the docs website
 
 ```
+$ ./gradlew dokka # Regenerate the API docs
 $ cd website
 $ GIT_USER=felipecsl \
  CURRENT_BRANCH=master \
