@@ -12,6 +12,9 @@ class TestController(call: ApplicationCall) : ApplicationController(call) {
     bindings = IndexViewModel("foo")
   }
 
+  fun actionWithoutView() {
+  }
+
   suspend fun create() {
     val params = receiveParameters()
     bindings = CreateViewModel(params["message"]!!)

@@ -85,6 +85,14 @@ class KalesApplicationIntegrationTest {
     }
   }
 
+  @Test fun `responds with status 404 when view was not found`() {
+    withTestApplication(Application::testModule) {
+      with(handleRequest(HttpMethod.Get, "/should404")) {
+        assertThat(response.status()).isEqualTo(HttpStatusCode.NotFound)
+      }
+    }
+  }
+
   private fun assertSuccessfulResponseWithBody(
     response: TestApplicationResponse,
     expectedContent: String
@@ -108,6 +116,7 @@ class KalesApplicationIntegrationTest {
 fun Application.testModule() {
   kalesApp(TestAppLayout::class) {
     get<TestController>("/", "index")
+    get<TestController>("/should404", "actionWithoutView")
     post<TestController>("/", "create")
     delete<TestController>("/posts/{id}", "destroy")
     put<TestController>("/posts", "put")

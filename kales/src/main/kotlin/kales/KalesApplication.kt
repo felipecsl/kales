@@ -5,9 +5,11 @@ import io.ktor.features.CallLogging
 import io.ktor.features.DefaultHeaders
 import io.ktor.html.respondHtmlTemplate
 import io.ktor.http.HttpMethod
+import io.ktor.http.HttpStatusCode
 import io.ktor.http.content.files
 import io.ktor.http.content.static
 import io.ktor.http.content.staticRootFolder
+import io.ktor.response.respond
 import io.ktor.routing.*
 import io.ktor.util.pipeline.PipelineContext
 import kales.actionpack.ApplicationController
@@ -65,11 +67,15 @@ class KalesApplication<T : ApplicationLayout>(
     suspend PipelineContext<Unit, ApplicationCall>.(Unit) -> Unit {
     return {
       val view = callControllerAction(controllerClass, actionName, call)
-      call.respondHtmlTemplate(layout.createInstance()) {
-        body {
-          // TODO: #70 Respond with 404 when a view was not found
-          view?.renderContent(this)
+      if (view != null) {
+        call.respondHtmlTemplate(layout.createInstance()) {
+          body {
+            // TODO: #70 Respond with 404 when a view was not found
+            view.renderContent(this)
+          }
         }
+      } else {
+        call.respond(HttpStatusCode.NotFound, "Not Found")
       }
     }
   }
@@ -175,10 +181,10 @@ class KalesApplication<T : ApplicationLayout>(
     val applicationPackage = extractAppPackageNameFromControllerClass(controllerClass)
     val viewClassName = "${actionName.capitalize()}View"
     val viewFullyQualifiedName = "$applicationPackage.views.$modelName.$viewClassName"
-    return maybeLoadCachedViewClass(viewFullyQualifiedName, controllerClass.java.classLoader)
+    return loadViewClass(viewFullyQualifiedName, controllerClass.java.classLoader)
   }
 
-  private fun maybeLoadCachedViewClass(viewFullyQualifiedName: String, classLoader: ClassLoader) =
+  private fun loadViewClass(viewFullyQualifiedName: String, classLoader: ClassLoader) =
     try {
       @Suppress("UNCHECKED_CAST")
       val clazz = Class.forName(viewFullyQualifiedName, true, classLoader) as Class<ActionView<*>>
