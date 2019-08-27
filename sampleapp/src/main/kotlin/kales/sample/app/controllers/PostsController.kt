@@ -39,11 +39,12 @@ class PostsController(call: ApplicationCall) : ApplicationController(call) {
     bindings = PostViewModel(Post.create(params["title"]!!, params["content"]!!))
   }
 
-  suspend fun destroy() {
-    // TODO: We should be able to redirectTo another action at this point #71
+  suspend fun destroy(): RedirectResult {
     val params = receiveParameters()
     val post = Post.find(params["id"]!!.toInt())!!
     post.destroy()
+    // TODO #77 add flash notice "post deleted"
+    return redirectTo(::index)
   }
 
   suspend fun writeComment() {

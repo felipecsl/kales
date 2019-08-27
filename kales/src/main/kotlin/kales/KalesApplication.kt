@@ -133,10 +133,18 @@ class KalesApplication<T : ApplicationLayout>(
     }
     return when (result) {
       is RenderViewResult -> result
-      is RedirectResult -> recursivelyCallAction(controller, result.newActionName)
+      is RedirectResult -> redirectTo(controller, result.newActionName)
       is ActionView<*> -> RenderViewResult(result, actionName)
       else -> RenderViewResult(inferView(controller, actionName), actionName)
     }
+  }
+
+  private suspend fun <T : ApplicationController> redirectTo(
+    controller: T,
+    actionName: String
+  ): ActionResult? {
+    logger.info("Redirecting to action $actionName")
+    return recursivelyCallAction(controller, actionName)
   }
 
   private fun <T : ApplicationController> inferView(
