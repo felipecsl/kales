@@ -10,11 +10,12 @@ import java.io.File
 
 class NewApplicationTaskTest {
   @get:Rule val tempDir = TemporaryFolder()
+  private val kalesFatJarPath = System.getProperty("KALES_FAT_JAR_PATH")
 
   @Test fun `creates project files`() {
     val root = tempDir.root
     val appName = "com.example.testapp"
-    NewApplicationTask(root, appName).run()
+    NewApplicationTask(root, appName, kalesFatJarPath).run()
     val appDir = File(root, appName)
     assertThat(File(appDir, "build.gradle").exists()).isTrue()
     assertThat(File(appDir, "gradlew").exists()).isTrue()
@@ -33,7 +34,7 @@ class NewApplicationTaskTest {
   @Test fun `new project builds correctly`() {
     val root = tempDir.root
     val appName = "com.example.testapp2"
-    NewApplicationTask(root, appName).run()
+    NewApplicationTask(root, appName, kalesFatJarPath).run()
     val appDir = File(root, appName)
     val result = GradleRunner.create()
       .withProjectDir(appDir)

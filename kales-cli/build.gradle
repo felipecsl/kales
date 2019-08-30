@@ -27,7 +27,14 @@ startScripts {
 }
 
 test {
-  systemProperty 'KALES_VERSION', VERSION
+  systemProperty("KALES_VERSION", VERSION)
+  def rootProjPath = rootProject.projectDir.absolutePath
+  // When running tests, we inject the local path to a Kales Shadow jar to be used for bootstrapping
+  // test gradle projects. This is so we can test it against local current version of the code
+  // instead of downloading the latest from Maven Central.
+  // This also means we need to run the Gradle kales:shadowJar task before being able to run
+  // kales-cli tests.
+  systemProperty('KALES_FAT_JAR_PATH', "${rootProjPath}/kales/build/libs/kales-${VERSION}-all.jar")
 }
 
 mainClassName = 'kales.cli.CliKt'

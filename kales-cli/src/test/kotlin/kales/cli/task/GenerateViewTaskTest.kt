@@ -10,11 +10,12 @@ import java.io.File
 
 class GenerateViewTaskTest {
   @get:Rule val tempDir = TemporaryFolder()
+  private val kalesFatJarPath = System.getProperty("KALES_FAT_JAR_PATH")
 
   @Test fun `test generate a view`() {
     val appName = "com.example.testapp"
     val root = File(tempDir.root, appName)
-    NewApplicationTask(tempDir.root, appName).run()
+    NewApplicationTask(tempDir.root, appName, kalesFatJarPath).run()
     GenerateViewTask(root, "bar", "IndexView").run()
     val viewFile = File(root, "src/main/kotlin/com/example/testapp/app/views/bar/IndexView.kt")
     assertThat(viewFile.exists()).isTrue()
@@ -50,7 +51,7 @@ class GenerateViewTaskTest {
   @Test fun `project with new view builds correctly`() {
     val appName = "com.example.testapp2"
     val root = File(tempDir.root, appName)
-    NewApplicationTask(root, appName).run()
+    NewApplicationTask(root, appName, kalesFatJarPath).run()
     val appDir = File(root, appName)
     GenerateViewTask(appDir, "bar", "IndexView").run()
     val result = GradleRunner.create()

@@ -13,13 +13,14 @@ import java.util.*
 
 class GenerateModelTaskTest {
   @get:Rule val tempDir = TemporaryFolder()
+  private val kalesFatJarPath = System.getProperty("KALES_FAT_JAR_PATH")
 
   @Test fun `test create model`() {
     val root = tempDir.root
     val appName = "com.example.testapp"
     val date = Date()
     val timestamp = SimpleDateFormat("yyyyMMddhhmmss").format(date)
-    NewApplicationTask(root, appName).run()
+    NewApplicationTask(root, appName, kalesFatJarPath).run()
     val appDir = File(root, appName)
     GenerateModelTask(appDir, "Bar") { date }.run()
     val dbMigrateDir = File(appDir, "src/main/kotlin/com/example/testapp/db/migrate")
@@ -69,7 +70,7 @@ class GenerateModelTaskTest {
     val root = tempDir.root
     val appName = "com.example.testapp2"
     val date = Date()
-    NewApplicationTask(root, appName).run()
+    NewApplicationTask(root, appName, kalesFatJarPath).run()
     val appDir = File(root, appName)
     GenerateModelTask(appDir, "Bar") { date }.run()
     val result = GradleRunner.create()

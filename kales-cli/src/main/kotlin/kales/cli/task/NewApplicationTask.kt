@@ -14,7 +14,8 @@ import java.nio.file.attribute.PosixFilePermissions
 /** "kales new" command: Creates a new Kales application */
 class NewApplicationTask(
   currentDir: File,
-  private val appName: String
+  private val appName: String,
+  private val kalesJarPath: String? = null
 ) : KalesTask {
   private val appRootDir = File(currentDir, appName)
 
@@ -116,6 +117,8 @@ class NewApplicationTask(
     }
   """.trimIndent()
 
+  // TODO: For testing, we want to inject a different version of this build.gradle file so that we
+  // can test it against a local kales jar, not the one from maven central.
   private fun buildFileContents() = """
     buildscript {
       repositories {
@@ -146,11 +149,20 @@ class NewApplicationTask(
 
     mainClassName = '$appName.MainKt'
 
-    dependencies {
-      implementation "com.felipecsl.kales:kales:${kalesVersion()}"
+    dependencies { 
+      implementation ${resolveKalesArtifactDependency()}
       implementation "io.ktor:ktor-server-netty:1.2.2"
     }
   """.trimIndent()
+
+  private fun resolveKalesArtifactDependency(): String {
+    // For testing inject the path to a local Kales fat jar
+    return if (kalesJarPath != null) {
+      "files('$kalesJarPath')"
+    } else {
+      "'com.felipecsl.kales:kales:${kalesVersion()}'"
+    }
+  }
 
   private fun mainAppFileContents() = """
       package $appName
