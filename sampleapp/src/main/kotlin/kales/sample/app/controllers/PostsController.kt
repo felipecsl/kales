@@ -1,16 +1,15 @@
 package kales.sample.app.controllers
 
-import io.ktor.application.ApplicationCall
-import io.ktor.request.receiveParameters
 import kales.actionpack.ApplicationController
-import kales.actionview.RedirectResult
+import kales.actionpack.KalesApplicationCall
+import kales.actionpack.RedirectResult
 import kales.sample.app.models.Comment
 import kales.sample.app.models.Post
 import kales.sample.app.views.posts.IndexViewModel
 import kales.sample.app.views.posts.PostViewModel
 
 @Suppress("unused", "MemberVisibilityCanBePrivate")
-class PostsController(call: ApplicationCall) : ApplicationController(call) {
+class PostsController(call: KalesApplicationCall) : ApplicationController(call) {
   fun index() {
     bindings = IndexViewModel("Foo", Post.all())
   }
@@ -43,7 +42,7 @@ class PostsController(call: ApplicationCall) : ApplicationController(call) {
     val params = receiveParameters()
     val post = Post.find(params["id"]!!.toInt())!!
     post.destroy()
-    // TODO #77 add flash notice "post deleted"
+    flash["notice"] = "Post '${post.title}' deleted"
     return redirectTo(::index)
   }
 

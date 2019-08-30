@@ -1,15 +1,17 @@
 package kales.sample.app.views.posts
 
+import kales.actionpack.KalesApplicationCall
+import kales.actionpack.ViewModel
 import kales.actionview.ActionView
+import kales.actionview.KalesFormMethod.delete
 import kales.actionview.formFor
 import kotlinx.html.*
-import kales.actionview.KalesFormMethod.delete
-import kales.actionview.ViewModel
-import kotlinx.html.InputType.*
+import kotlinx.html.InputType.submit
 
 class IndexView(
+  call: KalesApplicationCall,
   bindings: ViewModel? = IndexViewModel("Unknown", listOf())
-) : ActionView<IndexViewModel>(bindings as IndexViewModel) {
+) : ActionView<IndexViewModel>(call, bindings as IndexViewModel) {
   override fun FlowContent.render() {
     div("container") {
       div("row") {

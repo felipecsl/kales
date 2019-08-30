@@ -17,7 +17,7 @@
 <p><a href="-init-.html">&lt;init&gt;</a></p>
 </td>
 <td>
-<code><span class="identifier">ApplicationController</span><span class="symbol">(</span><span class="identifier" id="kales.actionpack.ApplicationController$<init>(io.ktor.application.ApplicationCall)/call">call</span><span class="symbol">:</span>&nbsp;<span class="identifier">ApplicationCall</span><span class="symbol">)</span></code></td>
+<code><span class="identifier">ApplicationController</span><span class="symbol">(</span><span class="identifier" id="kales.actionpack.ApplicationController$<init>(kales.actionpack.KalesApplicationCall)/call">call</span><span class="symbol">:</span>&nbsp;<a href="../-kales-application-call/index.html"><span class="identifier">KalesApplicationCall</span></a><span class="symbol">)</span></code></td>
 </tr>
 </tbody>
 </table>
@@ -29,14 +29,21 @@
 <p><a href="bindings.html">bindings</a></p>
 </td>
 <td>
-<code><span class="keyword">var </span><span class="identifier">bindings</span><span class="symbol">: </span><span class="identifier">ViewModel</span><span class="symbol">?</span></code></td>
+<code><span class="keyword">var </span><span class="identifier">bindings</span><span class="symbol">: </span><a href="../-view-model.html"><span class="identifier">ViewModel</span></a><span class="symbol">?</span></code></td>
 </tr>
 <tr>
 <td>
 <p><a href="call.html">call</a></p>
 </td>
 <td>
-<code><span class="keyword">val </span><span class="identifier">call</span><span class="symbol">: </span><span class="identifier">ApplicationCall</span></code></td>
+<code><span class="keyword">val </span><span class="identifier">call</span><span class="symbol">: </span><a href="../-kales-application-call/index.html"><span class="identifier">KalesApplicationCall</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="flash.html">flash</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">flash</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-mutable-map/index.html"><span class="identifier">MutableMap</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">,</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html"><span class="identifier">Any</span></a><span class="symbol">&gt;</span></code></td>
 </tr>
 </tbody>
 </table>
@@ -48,18 +55,14 @@
 <p><a href="receive-parameters.html">receiveParameters</a></p>
 </td>
 <td>
-<code><span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">receiveParameters</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Parameters</span></code>
-<p>RoutingApplicationCall wraps another (inner) call (our Kales call), so we need to unwrap it
-and cast it to <a href="../-kales-application-call/index.html">KalesApplicationCall</a> in order to benefit from the memoized <code>receiveParameters</code>
-implementation.</p>
-</td>
+<code><span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">receiveParameters</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Parameters</span></code></td>
 </tr>
 <tr>
 <td>
 <p><a href="redirect-to.html">redirectTo</a></p>
 </td>
 <td>
-<code><span class="keyword">fun </span><span class="identifier">redirectTo</span><span class="symbol">(</span><span class="identifier" id="kales.actionpack.ApplicationController$redirectTo(kotlin.reflect.KFunction((kotlin.Any)))/action">action</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.reflect/-k-function/index.html"><span class="identifier">KFunction</span></a><span class="symbol">&lt;</span><span class="identifier">*</span><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">RedirectResult</span></code>
+<code><span class="keyword">fun </span><span class="identifier">redirectTo</span><span class="symbol">(</span><span class="identifier" id="kales.actionpack.ApplicationController$redirectTo(kotlin.reflect.KFunction((kotlin.Any)))/action">action</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.reflect/-k-function/index.html"><span class="identifier">KFunction</span></a><span class="symbol">&lt;</span><span class="identifier">*</span><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><a href="../-redirect-result/index.html"><span class="identifier">RedirectResult</span></a></code>
 <p>Redirects to the action specified by the <code>action</code> function parameter. The redirection is purely
 server-side, there is no round-trip to the client browser and it's seen strictly as a single
 request from the client's perspective.</p>

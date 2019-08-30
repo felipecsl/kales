@@ -6,7 +6,6 @@ plugins {
 project.ext.artifact = 'kales-actionpack'
 
 dependencies {
-  api project(":actionview")
   api "io.ktor:ktor-server-core:$ktorVersion"
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
   testImplementation "com.google.truth:truth:$truthVersion"

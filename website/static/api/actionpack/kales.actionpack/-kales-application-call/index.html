@@ -9,6 +9,7 @@
 <br/>
 <h1>KalesApplicationCall</h1>
 <code><span class="keyword">class </span><span class="identifier">KalesApplicationCall</span>&nbsp;<span class="symbol">:</span>&nbsp;<span class="identifier">ApplicationCall</span></code>
+<p>TODO document</p>
 <h3>Constructors</h3>
 <table>
 <tbody>
@@ -17,7 +18,9 @@
 <p><a href="-init-.html">&lt;init&gt;</a></p>
 </td>
 <td>
-<code><span class="identifier">KalesApplicationCall</span><span class="symbol">(</span><span class="identifier" id="kales.actionpack.KalesApplicationCall$<init>(io.ktor.application.ApplicationCall)/delegate">delegate</span><span class="symbol">:</span>&nbsp;<span class="identifier">ApplicationCall</span><span class="symbol">)</span></code></td>
+<code><span class="identifier">KalesApplicationCall</span><span class="symbol">(</span><span class="identifier" id="kales.actionpack.KalesApplicationCall$<init>(io.ktor.application.ApplicationCall)/delegate">delegate</span><span class="symbol">:</span>&nbsp;<span class="identifier">ApplicationCall</span><span class="symbol">)</span></code>
+<p>TODO document</p>
+</td>
 </tr>
 </tbody>
 </table>
@@ -37,6 +40,15 @@
 </td>
 <td>
 <code><span class="keyword">val </span><span class="identifier">attributes</span><span class="symbol">: </span><span class="identifier">Attributes</span></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="flash.html">flash</a></p>
+</td>
+<td>
+<code><span class="keyword">val </span><span class="identifier">flash</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-mutable-map/index.html"><span class="identifier">MutableMap</span></a><span class="symbol">&lt;</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">,</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html"><span class="identifier">Any</span></a><span class="symbol">&gt;</span></code>
+<p>The flash provides a way to pass temporary primitive-types (String, List, Map) between actions.</p>
+</td>
 </tr>
 <tr>
 <td>
@@ -77,6 +89,17 @@
 </td>
 <td>
 <code><span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">receiveParameters</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Parameters</span></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="receive-routing-parameters.html">receiveRoutingParameters</a></p>
+</td>
+<td>
+<code><span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">receiveRoutingParameters</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Parameters</span></code>
+<p><a href="#">RoutingApplicationCall</a> wraps another (inner) call (our Kales call), so we need to unwrap it
+and cast it to <a href="./index.html">KalesApplicationCall</a> in order to benefit from the memoized <code>receiveParameters</code>
+implementation.</p>
+</td>
 </tr>
 </tbody>
 </table>

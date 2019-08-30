@@ -1,10 +1,11 @@
 package kales.sample.app.views.layouts
 
 import io.ktor.html.insert
+import kales.actionpack.KalesApplicationCall
 import kales.actionview.ApplicationLayout
 import kotlinx.html.*
 
-class AppLayout : ApplicationLayout() {
+class AppLayout(call: KalesApplicationCall) : ApplicationLayout(call) {
   override fun HTML.apply() {
     head {
       title { +"Kales Demo App" }
@@ -20,6 +21,17 @@ class AppLayout : ApplicationLayout() {
           div("col-sm-12") {
             h1("app-title") {
               a(href = "/") { +"Kales Demo App" }
+            }
+          }
+        }
+      }
+      if (flash["notice"] != null) {
+        div("container") {
+          div("row") {
+            div("col-sm-12") {
+              div("notice") {
+                +flash.getValue("notice").toString()
+              }
             }
           }
         }

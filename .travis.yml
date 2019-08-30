@@ -18,4 +18,4 @@ env:
 after_success:
   - .buildscript/deploy_snapshot.sh
 script:
-  - ./gradlew check --scan
+  - ./gradlew kales:shadowJar check --scan

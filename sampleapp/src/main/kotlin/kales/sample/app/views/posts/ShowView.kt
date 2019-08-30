@@ -1,5 +1,6 @@
 package kales.sample.app.views.posts
 
+import kales.actionpack.KalesApplicationCall
 import kales.actionview.ActionView
 import kales.actionview.KalesFormMethod
 import kales.sample.app.views.shared.PostPartialView
@@ -8,8 +9,9 @@ import kotlinx.html.div
 import kotlinx.html.h2
 
 class ShowView(
+  call: KalesApplicationCall,
   bindings: PostViewModel? = PostViewModel()
-) : ActionView<PostViewModel>(bindings) {
+) : ActionView<PostViewModel>(call, bindings) {
   override fun FlowContent.render() {
     div("container") {
       div("row") {

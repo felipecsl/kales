@@ -1,5 +1,5 @@
 package kales.test.app.views.test
 
-import kales.actionview.ViewModel
+import kales.actionpack.ViewModel
 
 data class CreateViewModel(val message: String) : ViewModel

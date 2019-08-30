@@ -10,13 +10,5 @@
 <h1>receiveParameters</h1>
 <a name="kales.actionpack.ApplicationController$receiveParameters()"></a>
 <code><span class="keyword">suspend</span> <span class="keyword">fun </span><span class="identifier">receiveParameters</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">Parameters</span></code>
-<p>RoutingApplicationCall wraps another (inner) call (our Kales call), so we need to unwrap it
-and cast it to <a href="../-kales-application-call/index.html">KalesApplicationCall</a> in order to benefit from the memoized <code>receiveParameters</code>
-implementation.</p>
-<p>We cannot simply allow users to call <a href="#">RoutingApplicationCall.receiveParameters</a> because that
-is defined as an extension method, which we cannot override like regular class methods.</p>
-<p>Doing that will thus cause <a href="#">ApplicationRequest.receiveChannel</a> to try to read from
-the stream again, failing to read anyting (because we already did so from
-<a href="../-dynamic-parameter-route-selector/index.html">DynamicParameterRouteSelector</a>).</p>
 </BODY>
 </HTML>

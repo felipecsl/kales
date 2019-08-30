@@ -1,9 +1,10 @@
 package kales.cli.task
 
 import com.squareup.kotlinpoet.*
+import kales.actionpack.ViewModel
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
+import kales.actionpack.KalesApplicationCall
 import kales.actionview.ActionView
-import kales.actionview.ViewModel
 import kotlinx.html.FlowContent
 import java.io.File
 
@@ -36,8 +37,10 @@ class GenerateViewTask(
       .parameterizedBy(viewModelClassName)
     val viewTypeSpec = TypeSpec.classBuilder(viewName)
       .superclass(superclass)
+      .addSuperclassConstructorParameter("call")
       .addSuperclassConstructorParameter("bindings")
       .primaryConstructor(FunSpec.constructorBuilder()
+        .addParameter("call", KalesApplicationCall::class)
         .addParameter("bindings", viewModelClassName.copy(nullable = true))
         .build())
       .addFunction(FunSpec.builder("render")
