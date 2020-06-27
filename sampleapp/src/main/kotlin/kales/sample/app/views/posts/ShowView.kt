@@ -16,7 +16,7 @@ class ShowView(
     div("container") {
       div("row") {
         div("col-sm-8 offset-sm-2") {
-          h2 { +"Details" }
+          h2 { +"Post Details" }
         }
       }
     }
