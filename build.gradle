@@ -11,7 +11,7 @@ buildscript {
 
 plugins {
   id 'com.gradle.build-scan' version '2.1'
-  id "org.jetbrains.kotlin.jvm" version "1.3.50"
+  id "org.jetbrains.kotlin.jvm" version "1.3.72"
 }
 
 allprojects {
@@ -23,7 +23,7 @@ allprojects {
 }
 
 subprojects {
-  if (!['sampleapp', 'kales-cli'].contains(project.name)) {
+  if (!['sampleapp', 'kales-cli'].contains(name)) {
     apply from: "$rootDir/gradle/publish.gradle"
   }
 
