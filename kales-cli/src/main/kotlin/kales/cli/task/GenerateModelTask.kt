@@ -14,11 +14,11 @@ class GenerateModelTask(
   override fun run() {
     val modelsDir = File(appDirectory, "models")
     writeModelClassFile(modelsDir)
-    val tableName = if (modelName.endsWith("s")) {
+    val tableName = (if (modelName.endsWith("s")) {
       modelName
     } else {
       "${modelName}s"
-    }.toLowerCase()
+    }).lowercase(Locale.getDefault())
     val migrationName = "Create${modelName.capitalize()}"
     val migrationTask = GenerateMigrationTask(workingDir, migrationName, tableName, dateProvider)
     migrationTask.run()
