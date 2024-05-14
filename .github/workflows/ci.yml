@@ -17,5 +17,4 @@ jobs:
           cache: 'gradle'
           java-version: '17'
       - name: Build and test with Gradle
-        working-directory: backend
         run: ./gradlew check --no-daemon
