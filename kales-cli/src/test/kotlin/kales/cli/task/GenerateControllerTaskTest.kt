@@ -2,7 +2,7 @@ package kales.cli.task
 
 import com.github.ajalt.clikt.core.UsageError
 import com.google.common.truth.Truth.assertThat
-import org.junit.Test
+import kotlin.test.Test
 
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder

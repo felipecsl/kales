@@ -5,6 +5,10 @@ plugins {
 
 project.ext.artifact = 'kales-activerecord'
 
+kotlin {
+  jvmToolchain(11)
+}
+
 dependencies {
   api project(":harmonica")
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"

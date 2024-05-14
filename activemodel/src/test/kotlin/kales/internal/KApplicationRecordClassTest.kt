@@ -3,7 +3,7 @@ package kales.internal
 import com.google.common.truth.Truth.assertThat
 import kales.Foo
 import kales.TestModel
-import org.junit.Test
+import kotlin.test.Test
 
 class KApplicationRecordClassTest {
   @Test fun foreignKeyColumnName() {

@@ -25,5 +25,5 @@ abstract class ActionView<T : ViewModel>(
 
   /** Renders an [ActionPartialView] sub template within the current layout. */
   fun FlowContent.renderPartial(partialView: ActionPartialView<*>) =
-      insert(partialView)
+      this.insert(partialView)
 }

@@ -4,7 +4,7 @@ import kales.ApplicationRecord.Companion.JDBI
 import kales.Foo
 import kales.TestModel
 import kales.activemodel.use
-import org.junit.Test
+import kotlin.test.Test
 
 class RecordUpdaterTest {
   @Test(expected = IllegalArgumentException::class)

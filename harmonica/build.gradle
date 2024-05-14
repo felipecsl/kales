@@ -3,20 +3,11 @@ plugins {
   id "org.jetbrains.kotlin.jvm"
 }
 
-compileKotlin {
-  kotlinOptions {
-    jvmTarget = "1.8"
-    freeCompilerArgs = ["-Xjsr305=strict"]
-  }
-}
-compileTestKotlin {
-  kotlinOptions {
-    jvmTarget = "1.8"
-    freeCompilerArgs = ["-Xjsr305=strict"]
-  }
-}
-
 project.ext.artifact = 'kales-harmonica'
+
+kotlin {
+  jvmToolchain(11)
+}
 
 dependencies {
   compileOnly 'org.jetbrains.exposed:exposed:0.10.2'
@@ -28,7 +19,7 @@ dependencies {
   // https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-script-runtime
   implementation "org.jetbrains.kotlin:kotlin-script-runtime:$kotlinVersion"
   // https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-script-util
-  implementation "org.jetbrains.kotlin:kotlin-script-util:$kotlinVersion"
+  implementation "org.jetbrains.kotlin:kotlin-script-util:1.8.22"
   api 'org.reflections:reflections:0.9.11'
 
   testImplementation "mysql:mysql-connector-java:5.1.44"
@@ -36,5 +27,4 @@ dependencies {
   testImplementation 'org.xerial:sqlite-jdbc:3.21.0.1'
   testImplementation 'com.microsoft.sqlserver:mssql-jdbc:6.2.1.jre7'
   testImplementation "org.jetbrains.kotlin:kotlin-test"
-  testImplementation "org.jetbrains.kotlin:kotlin-test-junit5"
 }
