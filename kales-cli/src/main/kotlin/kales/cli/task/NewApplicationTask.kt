@@ -133,7 +133,7 @@ class NewApplicationTask(
 
     repositories {
       jcenter()
-      maven { url "http://oss.sonatype.org/content/repositories/snapshots" }
+      maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
     }
 
     sourceSets {

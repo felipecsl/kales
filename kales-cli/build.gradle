@@ -51,5 +51,6 @@ dependencies {
   testImplementation "com.google.truth:truth:$truthVersion"
   testImplementation "org.jdbi:jdbi3-core:$jdbiVersion"
   testImplementation "org.jdbi:jdbi3-kotlin:$jdbiVersion"
+  testImplementation "org.jetbrains.kotlin:kotlin-test"
   testImplementation gradleTestKit()
 }

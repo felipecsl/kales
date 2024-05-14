@@ -27,5 +27,4 @@ dependencies {
   testImplementation 'org.xerial:sqlite-jdbc:3.21.0.1'
   testImplementation 'com.microsoft.sqlserver:mssql-jdbc:6.2.1.jre7'
   testImplementation "org.jetbrains.kotlin:kotlin-test"
-  testImplementation "org.jetbrains.kotlin:kotlin-test-junit5"
 }

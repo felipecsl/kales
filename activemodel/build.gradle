@@ -24,4 +24,5 @@ dependencies {
   testImplementation "com.google.truth:truth:$truthVersion"
   testRuntimeOnly "com.h2database:h2:$h2DBVersion"
   testImplementation 'org.slf4j:slf4j-simple:1.8.0-beta4'
+  testImplementation "org.jetbrains.kotlin:kotlin-test"
 }

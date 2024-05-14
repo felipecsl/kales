@@ -18,17 +18,17 @@
 
 package com.improve_future.harmonica.core
 
-import org.junit.jupiter.api.Test
+import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class ConnectionTest {
   @Test
   fun testBuildConnectionUriFromDbConfig() {
-    val method = Connection::class.java
-      .getDeclaredMethod(
-        "buildConnectionUriFromDbConfig",
-        DbConfig::class.java
-      ).also { it.isAccessible = true }
+    Connection::class.java.declaredMethods
+    val method = Connection.Companion::class.java.declaredMethods.find {
+      it.name == "buildConnectionUriFromDbConfig"
+    }
+    method!!.isAccessible = true
     // MySQL
     val mySqlConfig = object : DbConfig({
       dbms = Dbms.MySQL

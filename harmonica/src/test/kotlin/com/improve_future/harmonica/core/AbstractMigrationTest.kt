@@ -19,7 +19,7 @@
 package com.improve_future.harmonica.core
 
 import com.improve_future.harmonica.core.table.column.*
-import org.junit.jupiter.api.Test
+import kotlin.test.Test
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.util.*
