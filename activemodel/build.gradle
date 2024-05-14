@@ -5,10 +5,8 @@ plugins {
 
 project.ext.artifact = 'kales-activemodel'
 
-tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
-  kotlinOptions {
-    jvmTarget = "1.8"
-  }
+kotlin {
+  jvmToolchain(11)
 }
 
 dependencies {
@@ -24,6 +22,6 @@ dependencies {
   //       implementation "org.jdbi:jdbi3-postgres:$jdbiVersion"
   //       implementation "org.postgresql:postgresql:42.2.6.jre7"
   testImplementation "com.google.truth:truth:$truthVersion"
-  testRuntime "com.h2database:h2:$h2DBVersion"
+  testRuntimeOnly "com.h2database:h2:$h2DBVersion"
   testImplementation 'org.slf4j:slf4j-simple:1.8.0-beta4'
 }

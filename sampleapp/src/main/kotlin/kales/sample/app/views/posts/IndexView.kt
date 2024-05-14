@@ -33,10 +33,10 @@ class IndexView(
         div("col-sm-8 offset-sm-2") {
           if (bindings?.posts?.any() == true) {
             ul(classes = "list-group") {
-              bindings.posts.forEach { p ->
+              bindings?.posts?.forEach { p ->
                 li(classes = "list-group-item") {
                   a(href = "/posts/${p.id}") { +p.title }
-                  formFor(p, method = delete, classes = "float-right") {
+                  this.formFor(p, method = delete, classes = "float-right") {
                     input(type = submit, classes = "btn btn-outline-danger btn-sm") {
                       value = "Delete"
                     }
