@@ -4,13 +4,14 @@ import kales.ApplicationRecord
 import kales.activemodel.BelongsToAssociation
 import kales.activemodel.HasManyAssociation
 import java.lang.reflect.ParameterizedType
+import java.util.*
 import kotlin.reflect.KClass
 import kotlin.reflect.KParameter
 import kotlin.reflect.full.primaryConstructor
 import kotlin.reflect.jvm.javaType
 
 class KApplicationRecordClass(val klass: KClass<out ApplicationRecord>) {
-  val asSymbol = klass.simpleName!!.toLowerCase()
+  val asSymbol = klass.simpleName!!.lowercase(Locale.getDefault())
 
   /** Video class -> video
    * TODO Pluralize irregular words (#49)

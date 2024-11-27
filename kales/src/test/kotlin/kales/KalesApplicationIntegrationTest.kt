@@ -9,7 +9,7 @@ import io.ktor.server.testing.setBody
 import io.ktor.server.testing.withTestApplication
 import kales.test.app.TestAppLayout
 import kales.test.app.controllers.TestController
-import org.junit.Test
+import kotlin.test.Test
 
 class KalesApplicationIntegrationTest {
   @Test fun `test GET simple HTML view rendering with bindings`() {

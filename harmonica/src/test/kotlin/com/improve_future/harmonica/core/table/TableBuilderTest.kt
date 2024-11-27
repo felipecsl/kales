@@ -19,10 +19,10 @@
 package com.improve_future.harmonica.core.table.column
 
 import com.improve_future.harmonica.core.table.TableBuilder
-import org.junit.jupiter.api.Test
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.util.*
+import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class TableBuilderTest {
