@@ -1,24 +1,17 @@
 plugins {
   id 'application'
-  id 'com.github.johnrengelman.shadow' version '5.1.0'
+  id 'com.github.johnrengelman.shadow' version '8.0.0'
   id "org.jetbrains.kotlin.jvm"
 }
 
-tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
-  kotlinOptions {
-    jvmTarget = "1.8"
-  }
+kotlin {
+  jvmToolchain(11)
 }
 
 jar {
+  archiveBaseName = 'kales'
   manifest {
     attributes 'Version': VERSION
-  }
-}
-
-distributions {
-  main {
-    baseName = 'kales'
   }
 }
 
@@ -51,12 +44,13 @@ dependencies {
   implementation "org.jetbrains.kotlin:kotlin-compiler-embeddable:$kotlinVersion"
   implementation "org.jetbrains.kotlin:kotlin-script-runtime:$kotlinVersion"
   implementation "org.jetbrains.kotlin:kotlin-scripting-compiler-embeddable:$kotlinVersion"
-  implementation "org.jetbrains.kotlin:kotlin-script-util:$kotlinVersion"
-  runtime "org.jdbi:jdbi3-postgres:$jdbiVersion"
-  runtime "org.postgresql:postgresql:42.2.6.jre7"
-  testRuntime "com.h2database:h2:$h2DBVersion"
+  implementation "org.jetbrains.kotlin:kotlin-script-util:1.8.22"
+  runtimeOnly "org.jdbi:jdbi3-postgres:$jdbiVersion"
+  runtimeOnly "org.postgresql:postgresql:42.2.6.jre7"
+  testRuntimeOnly "com.h2database:h2:$h2DBVersion"
   testImplementation "com.google.truth:truth:$truthVersion"
   testImplementation "org.jdbi:jdbi3-core:$jdbiVersion"
   testImplementation "org.jdbi:jdbi3-kotlin:$jdbiVersion"
+  testImplementation "org.jetbrains.kotlin:kotlin-test"
   testImplementation gradleTestKit()
 }

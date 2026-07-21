@@ -18,7 +18,7 @@
 
 package com.improve_future.harmonica.core.table.column
 
-import org.junit.jupiter.api.Test
+import kotlin.test.Test
 import java.time.LocalDate
 import java.util.*
 import kotlin.test.assertEquals

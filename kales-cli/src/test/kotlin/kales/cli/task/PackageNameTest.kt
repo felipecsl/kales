@@ -2,7 +2,7 @@ package kales.cli.task
 
 import com.google.common.truth.Truth.assertThat
 import kales.cli.PackageName
-import org.junit.Test
+import kotlin.test.Test
 import java.lang.IllegalArgumentException
 import java.lang.IllegalStateException
 

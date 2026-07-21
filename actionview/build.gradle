@@ -5,6 +5,10 @@ plugins {
 
 project.ext.artifact = 'kales-actionview'
 
+kotlin {
+  jvmToolchain(11)
+}
+
 dependencies {
   api project(":activemodel")
   api project(":actionpack")

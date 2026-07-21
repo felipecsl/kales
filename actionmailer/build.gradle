@@ -5,6 +5,10 @@ plugins {
 
 project.ext.artifact = 'kales-actionmailer'
 
+kotlin {
+  jvmToolchain(11)
+}
+
 dependencies {
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
   testImplementation "com.google.truth:truth:$truthVersion"

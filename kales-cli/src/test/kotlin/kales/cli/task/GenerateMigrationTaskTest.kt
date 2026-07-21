@@ -2,7 +2,7 @@ package kales.cli.task
 
 import com.google.common.truth.Truth.assertThat
 import org.junit.Rule
-import org.junit.Test
+import kotlin.test.Test
 import org.junit.rules.TemporaryFolder
 import java.io.File
 import java.text.SimpleDateFormat

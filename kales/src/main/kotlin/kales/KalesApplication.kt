@@ -17,6 +17,7 @@ import kales.actionview.ActionView
 import kales.actionview.ApplicationLayout
 import kales.actionview.RenderViewResult
 import java.io.File
+import java.util.*
 import java.util.logging.Logger
 import kotlin.reflect.KClass
 import kotlin.reflect.full.callSuspend
@@ -170,7 +171,7 @@ class KalesApplication<T : ApplicationLayout>(
 
   /** Eg.: PostsController -> "posts" */
   private fun <T : ApplicationController> modelNameFromControllerClass(controllerClass: KClass<T>) =
-    controllerClass.simpleName?.replace("Controller", "")?.toLowerCase()
+    controllerClass.simpleName?.replace("Controller", "")?.lowercase(Locale.getDefault())
       ?: throw RuntimeException("Cannot determine the class name for Controller")
 
   private fun <T : Any> KClass<T>.primaryConstructor() =

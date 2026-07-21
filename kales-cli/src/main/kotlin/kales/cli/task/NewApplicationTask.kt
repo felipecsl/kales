@@ -10,6 +10,7 @@ import java.nio.file.Files
 import java.nio.file.Files.exists
 import java.nio.file.Path
 import java.nio.file.attribute.PosixFilePermissions
+import java.util.*
 
 /** "kales new" command: Creates a new Kales application */
 class NewApplicationTask(
@@ -75,7 +76,7 @@ class NewApplicationTask(
 
   private fun Path.makeExecutable() {
     if (!exists(this)) {
-      if (System.getProperty("os.name", "").toLowerCase().indexOf("win") >= 0) {
+      if (System.getProperty("os.name", "").lowercase(Locale.getDefault()).indexOf("win") >= 0) {
         Files.createFile(this)
       } else {
         val ownerWritable = PosixFilePermissions.fromString("rwxr--r--")
@@ -128,12 +129,12 @@ class NewApplicationTask(
 
     plugins {
       id 'application'
-      id "org.jetbrains.kotlin.jvm" version "1.3.72"
+      id "org.jetbrains.kotlin.jvm" version "1.9.24"
     }
 
     repositories {
       jcenter()
-      maven { url "http://oss.sonatype.org/content/repositories/snapshots" }
+      maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
     }
 
     sourceSets {
