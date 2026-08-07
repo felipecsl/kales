@@ -1,6 +1,6 @@
 package kales.cli.task
 
-import org.junit.Test
+import kotlin.test.Test
 
 import com.google.common.truth.Truth.assertThat
 import org.gradle.testkit.runner.GradleRunner

@@ -6,10 +6,8 @@ plugins {
 group = GROUP_ID
 version = VERSION
 
-tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
-  kotlinOptions {
-    jvmTarget = "1.8"
-  }
+kotlin {
+  jvmToolchain(11)
 }
 
 mainClassName = 'kales.sample.AppKt'

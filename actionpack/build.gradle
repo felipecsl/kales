@@ -5,6 +5,10 @@ plugins {
 
 project.ext.artifact = 'kales-actionpack'
 
+kotlin {
+  jvmToolchain(11)
+}
+
 dependencies {
   api "io.ktor:ktor-server-core:$ktorVersion"
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"

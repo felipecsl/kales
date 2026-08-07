@@ -2,7 +2,7 @@ package kales
 
 import com.google.common.truth.Truth.assertThat
 import kales.activemodel.RecordId
-import org.junit.Test
+import kotlin.test.Test
 
 class ApplicationRecordTest {
   @Test fun `test no records`() {

@@ -3,6 +3,10 @@ plugins {
   id "org.jetbrains.kotlin.jvm"
 }
 
+kotlin {
+  jvmToolchain(11)
+}
+
 project.ext.artifact = 'kales-activestorage'
 
 dependencies {

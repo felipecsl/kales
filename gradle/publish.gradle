@@ -76,14 +76,9 @@ def customizePom(pom) {
 group = GROUP_ID
 version = VERSION
 
-task sourceJar(type: Jar) {
-  classifier "sources"
-  from sourceSets.main.allJava
-}
-
-task javadocJar(type: Jar, dependsOn: javadoc) {
-  classifier "javadoc"
-  from javadoc.destinationDir
+java {
+  withJavadocJar()
+  withSourcesJar()
 }
 
 signing {
@@ -95,12 +90,6 @@ tasks.withType(Sign) {
   onlyIf { isReleaseVersion }
 }
 
-artifacts {
-  archives jar
-  archives sourceJar
-  archives javadocJar
-}
-
 afterEvaluate {
   publishing {
     publications {
@@ -108,13 +97,6 @@ afterEvaluate {
         customizePom(pom)
         from components.java
         artifactId = project.artifact
-
-        artifact(sourceJar) {
-          classifier = 'sources'
-        }
-        artifact(javadocJar) {
-          classifier = 'javadoc'
-        }
 
         if (isReleaseVersion) {
           // create the signed pom artifact

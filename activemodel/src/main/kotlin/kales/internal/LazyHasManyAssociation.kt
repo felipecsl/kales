@@ -3,6 +3,7 @@ package kales.internal
 import kales.ApplicationRecord
 import kales.activemodel.HasManyAssociationImpl
 import kales.activemodel.use
+import java.util.*
 import kotlin.reflect.KClass
 
 class LazyHasManyAssociation(
@@ -16,7 +17,7 @@ class LazyHasManyAssociation(
         val queryBuilder = RecordQueryBuilder(it, KApplicationRecordClass(toKlass))
         // We're assuming the property name matches the class name - That should always be
         // the case, e.: For table `Posts`, foreign key is `post_id`
-        val clause = mapOf("${fromKlass.simpleName!!.toLowerCase()}_id" to fromModelId)
+        val clause = mapOf("${fromKlass.simpleName!!.lowercase(Locale.getDefault())}_id" to fromModelId)
         queryBuilder.where(clause)
           .mapTo(toKlass.java)
           .list()

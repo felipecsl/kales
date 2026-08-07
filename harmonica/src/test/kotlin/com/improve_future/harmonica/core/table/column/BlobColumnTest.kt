@@ -18,7 +18,7 @@
 
 package com.improve_future.harmonica.core.table.column
 
-import org.junit.jupiter.api.Test
+import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class BlobColumnTest {
